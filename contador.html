@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador de Tiempo</title>
+    <style>
+        /* Estilos generales */
+        body {
+            height: 100vh;
+
+            background-image: url(gatos.jpeg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            margin: 0;
+            padding: 0;
+            padding: 10px;
+            overflow: hidden;
+        }
+
+        .gifs {
+            scale: 0.5;
+            position: absolute;
+        }
+
+        #mheart {
+            transform: translateX(-160%) translateY(-50%);
+        }
+
+        #rheart {
+            transform: translateX(165%) translateY(-62%) scaleX(-1);
+        }
+
+        /* Botón con imagen de fondo */
+        #desgraciado {
+            width: 90px;
+            /* Ajusta el tamaño del botón */
+            height: 90px;
+            background-image: url(ple.png);
+            /* Imagen de play */
+            background-repeat: no-repeat;
+            background-size: contain;
+            padding: 0;
+            border-radius: 50%;
+            border-color: transparent;
+            cursor: pointer;
+            /* Cambia el cursor al pasar sobre el botón */
+            outline: none;
+            /* Elimina el borde al hacer clic */
+            position: absolute;
+            top: 200px;
+            /* Ajusta la posición del botón */
+            left: 120px;
+            /* Ajusta la posición del botón */
+            z-index: 10;
+            /* Asegura que el botón esté sobre otros elementos */
+        }
+
+        .counter-container {
+            text-align: center;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform: translateY(190px);
+        }
+
+        h1 {
+            color: #333;
+            font-size: 1.5rem;
+        }
+
+        .time {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #f020f0;
+            margin: 10px 0;
+        }
+
+        p {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        #botonazo {
+            width: 90px;
+            /* Ajusta el tamaño del botón */
+            height: 90px;
+            background-image: url(candado.png);
+            /* Imagen de play */
+            background-repeat: no-repeat;
+            background-size: contain;
+            padding: 0;
+            border-radius: 50%;
+            border-color: transparent;
+            cursor: pointer;
+            /* Cambia el cursor al pasar sobre el botón */
+            outline: none;
+            /* Elimina el borde al hacer clic */
+            position: absolute;
+            top: 200px;
+            /* Ajusta la posición del botón */
+            right: 120px;
+            /* Ajusta la posición del botón */
+            z-index: 10;
+            /* Asegura que el botón esté sobre otros elementos */
+        }
+
+        #countdown {
+            position: absolute;
+            background-color: white;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: purple;
+            padding: 5px;
+            top: 300px;
+            right: 105px;
+        }
+
+        /* Diseño responsivo para móviles */
+        @media (max-width: 768px) {
+            body {
+                background-image: url(cats.jpg) !important;
+                background-position: center;
+                background-size: auto;
+            }
+
+            #botonazo {
+                transform: translateX(30px) translateY(150px);
+            }
+
+            #mheart {
+                transform: translateX(-50%) translateY(200%);
+            }
+
+            #rheart {
+                transform: translateX(60%) translateY(87%) scaleX(-1);
+            }
+
+            #countdown {
+                transform: translateY(145px) translateX(35px);
+            }
+
+            #desgraciado {
+                transform: translateX(-25px) translateY(150px);
+            }
+
+            .counter-container {
+                max-width: 300px !important;
+                width: 90% !important;
+                padding: 0.5px !important;
+                transform: translateY(-70%);
+            }
+
+            h1 {
+                font-size: 1.2rem !important;
+            }
+
+            .time {
+                font-size: 1.4rem !important;
+            }
+
+            p {
+                font-size: 0.9rem !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Audio en silencio al principio -->
+    <audio id="myAudio" autoplay loop muted>
+        <source src="song.mp3" type="audio/mpeg">
+        No se pudo reproducir la canción :c
+    </audio>
+
+    <!-- Botón con imagen de play -->
+    <button id="desgraciado" onclick="toggleAudio()"></button>
+    <div>
+        <button id="botonazo"></button>
+    </div>
+    <div class="countdown" id="countdown">Cargando...</div>
+    <!--Gifs -->
+    <div class="gifs">
+        <img id="mheart" src="VeC.gif" alt="">
+        <img id="rheart" src="y2.gif" alt="">
+    </div>
+
+    <div class="counter-container">
+        <h1>Han pasado</h1>
+        <div class="time" id="timeCount"></div>
+        <p>Desde que somos novios :)</p>
+    </div>
+
+
+
+    </div>
+    <script>
+        // 🕒 Fecha objetivo para la cuenta regresiva (Cambia esto)
+        const targetDate = new Date("2025-03-04T20:00:00").getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const timeLeft = targetDate - now;
+
+            if (timeLeft > 0) {
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                document.getElementById("countdown").textContent =
+                    `${days}d ${hours}h ${minutes}m ${seconds}s`;
+            } else {
+                document.getElementById("countdown").textContent = "¡Tiempo terminado!";
+                clearInterval(countdownInterval);
+            }
+        }
+
+        // ⏳ Actualizar cada segundo
+        updateCountdown();
+        const countdownInterval = setInterval(updateCountdown, 1000);
+    </script>
+    <script>
+        // Variable de estado para saber si el audio está reproducido o pausado
+        let isPlaying = false;
+
+        // Función para alternar entre play y pause
+        function toggleAudio() {
+            const audio = document.getElementById('myAudio');
+            const button = document.getElementById('desgraciado');
+
+            if (isPlaying) {
+                // Pausar el audio
+                audio.pause();
+                button.style.backgroundImage = "url(ple.png)"; // Cambia a imagen de play
+            } else {
+                // Reproducir el audio
+                audio.muted = false;  // Asegura que no esté silenciado
+                audio.play();
+                button.style.backgroundImage = "url(pause.png)"; // Cambia a imagen de pausa
+            }
+
+            // Cambia el estado
+            isPlaying = !isPlaying;
+        }
+    </script>
+
+    <script>
+        // Fecha de inicio de la relación
+        const startDate = new Date("2025-02-04T20:00:00");
+
+        function updateCounter() {
+            const today = new Date();
+            const timeDifference = today - startDate;
+
+            const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+            document.getElementById("timeCount").textContent =
+                `${days} días, ${hours} horas, ${minutes} minutos, ${seconds} segundos`;
+        }
+
+        // Actualiza el contador cada segundo
+        updateCounter();
+        setInterval(updateCounter, 1000);
+    </script>
+
+</body>
+
+</html>
