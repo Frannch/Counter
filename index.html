@@ -37,31 +37,29 @@
 
         #rheart {
             transform: translateX(165%) translateY(-62%) scaleX(-1);
+            z-index: 1;
         }
 
         /* Botón con imagen de fondo */
         #desgraciado {
-            width: 90px;
-            /* Ajusta el tamaño del botón */
-            height: 90px;
+            width: 15vw;
+            /* Usa un tamaño relativo */
+            max-width: 90px;
+            height: 15vw;
+            max-height: 90px;
             background-image: url(ple.png);
-            /* Imagen de play */
             background-repeat: no-repeat;
             background-size: contain;
             padding: 0;
             border-radius: 50%;
-            border-color: transparent;
+            border: none;
             cursor: pointer;
-            /* Cambia el cursor al pasar sobre el botón */
             outline: none;
-            /* Elimina el borde al hacer clic */
             position: absolute;
-            top: 200px;
-            /* Ajusta la posición del botón */
-            left: 120px;
-            /* Ajusta la posición del botón */
+            top: 15vh;
+            /* Usa unidades relativas */
+            left: 10vw;
             z-index: 10;
-            /* Asegura que el botón esté sobre otros elementos */
         }
 
         .counter-container {
@@ -71,11 +69,11 @@
             border-radius: 12px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             max-width: 600px;
-            width: 90%;
+            width: 80%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            transform: translateY(190px);
+            transform: translateY(30vh);
         }
 
         h1 {
@@ -96,27 +94,24 @@
         }
 
         #botonazo {
-            width: 90px;
-            /* Ajusta el tamaño del botón */
-            height: 90px;
+            width: 15vw;
+            /* Usa un tamaño relativo */
+            max-width: 90px;
+            height: 15vw;
+            max-height: 90px;
             background-image: url(candado.png);
-            /* Imagen de play */
             background-repeat: no-repeat;
             background-size: contain;
             padding: 0;
             border-radius: 50%;
-            border-color: transparent;
+            border: none;
             cursor: pointer;
-            /* Cambia el cursor al pasar sobre el botón */
             outline: none;
-            /* Elimina el borde al hacer clic */
             position: absolute;
-            top: 200px;
-            /* Ajusta la posición del botón */
-            right: 120px;
-            /* Ajusta la posición del botón */
+            top: 25vh;
+            /* Usa unidades relativas */
+            right: 10vw;
             z-index: 10;
-            /* Asegura que el botón esté sobre otros elementos */
         }
 
         #countdown {
@@ -126,9 +121,11 @@
             font-size: 1rem;
             font-weight: bold;
             color: purple;
-            padding: 5px;
-            top: 300px;
-            right: 105px;
+            padding: 5px 10px;
+            top: 20vh;
+            /* Usa unidades relativas */
+            right: 8vw;
+            /* Ajuste relativo */
         }
 
         /* Diseño responsivo para móviles */
@@ -141,7 +138,12 @@
             }
 
             #botonazo {
-                transform: translateX(30px) translateY(200px);
+                width: 50vw;
+                max-width: 100px;
+                height: 50vw;
+                max-height: 100px;
+                top: 10vh;
+                right: 10vw;
             }
 
             #mheart {
@@ -149,22 +151,29 @@
             }
 
             #rheart {
-                transform: translateX(60%) translateY(87%) scaleX(-1);
+                transform: translateX(80%) translateY(87%) scaleX(-1);
             }
 
             #countdown {
-                transform: translateY(200px) translateX(45px);
+                font-size: 0.8rem;
+                padding: 3px 6px;
+                top: 20vh;
+                right: 10vw;
             }
 
             #desgraciado {
-                transform: translateX(-25px) translateY(200px);
+                width: 50vw;
+                max-width: 100px;
+                height: 50vw;
+                max-height: 100px;
+                top: 10vh;
+                left: 10vw;
             }
 
             .counter-container {
-                max-width: 300px !important;
-                width: 90% !important;
-                padding: 0.5px !important;
-                transform: translateY(-70%);
+                transform: translateY(-5vh);
+                width: 100%;
+                padding: 8px;
             }
 
             h1 {
