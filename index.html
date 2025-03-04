@@ -47,7 +47,7 @@
             max-width: 90px;
             height: 15vw;
             max-height: 90px;
-            background-image: url(ple.png);
+            background-image: url(pla.png);
             background-repeat: no-repeat;
             background-size: contain;
             padding: 0;
@@ -198,12 +198,15 @@
         <source src="song.mp3" type="audio/mpeg">
         No se pudo reproducir la canción :c
     </audio>
+    <audio id="myedio" autoplay loop muted>
+        <source src="song2.mp3" type="audio/mpeg">
+    </audio>
 
     <!-- Botón con imagen de play -->
     <button id="desgraciado" onclick="toggleAudio()"></button>
-    <div>
-        <button id="botonazo"></button>
-    </div>
+    <button id="botonazo" onclick="toggleAudioo()"></button>
+
+
     <div class="countdown" id="countdown">Cargando...</div>
     <!--Gifs -->
     <div class="gifs">
@@ -258,7 +261,7 @@
             if (isPlaying) {
                 // Pausar el audio
                 audio.pause();
-                button.style.backgroundImage = "url(ple.png)"; // Cambia a imagen de play
+                button.style.backgroundImage = "url(pla.png)"; // Cambia a imagen de play
             } else {
                 // Reproducir el audio
                 audio.muted = false;  // Asegura que no esté silenciado
@@ -270,7 +273,27 @@
             isPlaying = !isPlaying;
         }
     </script>
+    <script>
+        function toggleAudioo() {
+            const audio = document.getElementById('myedio');
+            const button = document.getElementById('botonazo');
 
+            if (isPlaying) {
+                // Pausar el audio
+                audio.pause();
+                button.style.backgroundImage = "url(pla.png)"; // Cambia a imagen de play
+            } else {
+                // Reproducir el audio
+                audio.muted = false;  // Asegura que no esté silenciado
+                audio.play();
+                button.style.backgroundImage = "url(pause.png)"; // Cambia a imagen de pausa
+            }
+
+            // Cambia el estado
+            isPlaying = !isPlaying;
+        }
+
+    </script>
     <script>
         // Fecha de inicio de la relación
         const startDate = new Date("2025-02-04T20:00:00");
