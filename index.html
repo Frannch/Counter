@@ -114,6 +114,29 @@
             z-index: 10;
         }
 
+        #tp {
+            width: 15vw;
+            /* Usa un tamaño relativo */
+            max-width: 90px;
+            height: 15vw;
+            max-height: 90px;
+            background-image: url(klipartz.com.png);
+            background-repeat: no-repeat;
+            background-size: contain;
+            padding: 0;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            outline: none;
+            position: absolute;
+            top: 15vh;
+            /* Usa unidades relativas */
+            right: 46vw;
+            z-index: 10;
+
+
+        }
+
         #countdown {
             visibility: hidden;
             position: absolute;
@@ -136,6 +159,10 @@
                 background-image: url(cats.jpg) !important;
                 background-position: center;
                 background-size: auto;
+            }
+
+            #tp {
+                visibility: hidden;
             }
 
             #botonazo {
@@ -206,6 +233,7 @@
     <!-- Botón con imagen de play -->
     <button id="desgraciado" onclick="toggleAudio()"></button>
     <button id="botonazo" onclick="toggleAudioo()"></button>
+    <a href="book.html"><button id="tp"></button> </a>
 
 
     <div class="countdown" id="countdown">Cargando...</div>
