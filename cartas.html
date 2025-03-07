@@ -14,7 +14,7 @@
       background-image: url(sprites/arboles.jpg);
       background-position: center;
       background-repeat: no-repeat;
-      background-size: 150vh 150vh;
+      background-size: auto;
 
       font-family: Arial, sans-serif;
       margin: 0;
@@ -69,17 +69,83 @@
       transform: rotateY(180deg);
     }
 
+    #casa {
+      width: 15vw;
+      /* Usa un tamaño relativo */
+      max-width: 80px;
+      height: 15vw;
+      max-height: 80px;
+      background-image: url(sprites/calendario.png);
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-color: pink;
+      padding: 0;
+      border-radius: 30%;
+      border: none;
+      cursor: pointer;
+      outline: none;
+      position: absolute;
+      width: 40vw;
+      max-width: 100px;
+      height: 50vw;
+      max-height: 100px;
+      bottom: 3vh;
+      right: 46.5vw;
+    }
+
+
     @media (max-width: 768px) {
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        background-image: url(sprites/arboles.jpg);
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 150vh 150vh;
+
+        font-family: Arial, sans-serif;
+        margin: 0;
+        flex-direction: column;
+        height: 100vh;
+      }
+
       .cards-container {
         scale: 0.8;
         align-items: center;
         justify-items: center;
+      }
+
+      #casa {
+        width: 15vw;
+        /* Usa un tamaño relativo */
+        max-width: 90px;
+        height: 15vw;
+        max-height: 90px;
+        background-image: url(sprites/calendario.png);
+        background-repeat: no-repeat;
+        background-color: pink;
+
+        padding: 0;
+        border-radius: 30%;
+        border: none;
+        cursor: pointer;
+        outline: none;
+        position: absolute;
+        width: 50vw;
+        max-width: 100px;
+        height: 50vw;
+        max-height: 100px;
+        top: 10vh;
+        right: 38vw;
       }
     }
   </style>
 </head>
 
 <body>
+  <a href="index.html"><button id="casa"></button></a>
   <div class="cards-container">
     <div class="scene" id="scene1">
       <div class="card" id="card1">
