@@ -1,0 +1,83 @@
+/* Asegura que el fondo cubra toda la pantalla */
+
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+IT+Moderna:wght@100..400&display=swap');
+
+body {
+    background-image: url(sprites/gilmore.jpg);
+    background-size: cover;
+    /* Hace que la imagen cubra toda la pantalla */
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    font-family: 'Playwrite IT Moderna', cursive;
+    /* Ocupa el 100% de la altura de la pantalla */
+}
+
+a {
+    height: 33vh;
+}
+
+/* Asegura que los botones cubran la pantalla en 3 partes iguales */
+button {
+    flex: 1;
+    /* Cada botón ocupa 1/3 de la altura */
+    width: 100%;
+    height: 33.8vh;
+    border: none;
+    font-size: 30px;
+    font-weight: bold;
+    color: #F5F5DC;
+    position: relative;
+    overflow: hidden;
+    background: transparent;
+    cursor: pointer;
+    transition: 0.5s;
+    font-family: 'Playwrite IT Moderna', cursive;
+}
+
+/* Efecto de hover con fondo negro expandiéndose */
+button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 0;
+    height: 100%;
+    background: rgba(230, 128, 213, 0.7);
+    /* Negro con transparencia */
+    z-index: -1;
+    transition: width 0.5s ease-in-out;
+
+}
+
+/* Expansión desde distintos lados */
+#contador::before {
+    right: 0;
+}
+
+#pokemon::before {
+    left: 0;
+}
+
+#ruleta::before {
+    right: 0;
+}
+
+#ruleta:hover:before {
+    width: 100%;
+}
+
+/* Al hacer hover, el efecto de color se activa */
+#contador:hover::before,
+#pokemon:hover:before {
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    button {
+        color: beige;
+    }
+}

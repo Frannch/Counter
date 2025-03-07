@@ -1,141 +1,21 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="count.css">
+    <link rel="stylesheet" href="estilo.css">
     <link rel="shorcut icon" href="sprites/favicon.ico">
-    <title>Contador</title>
+    <title>Inicio</title>
+
+
 </head>
 
+
 <body>
-
-    <!-- Audio en silencio al principio -->
-    <audio id="myAudio" autoplay loop muted>
-        <source src="audio/song.mp3" type="audio/mpeg">
-        No se pudo reproducir la canción :c
-    </audio>
-    <audio id="myedio" autoplay loop muted>
-        <source src="audio/song2.mp3" type="audio/mpeg">
-    </audio>
-
-    <!-- Botón con imagen de play -->
-    <button id="desgraciado" onclick="toggleAudio()"></button>
-    <button id="botonazo" onclick="toggleAudioo()"></button>
-    <a href="book.html"><button id="tp"></button> </a>
-    <a href="cartas.html"><button id="cart"></button></a>
-
-
-    <div class="countdown" id="countdown">Cargando...</div>
-    <!--Gifs -->
-    <div class="gifs">
-        <img id="mheart" src="sprites/VeC.gif" alt="">
-        <img id="rheart" src="sprites/y2.gif" alt="">
-    </div>
-
-    <div class="counter-container">
-        <h1>Han pasado</h1>
-        <div class="time" id="timeCount"></div>
-        <p>Desde que somos novios :)</p>
-    </div>
-
-
-
-    </div>
-    <script>
-        // 🕒 Fecha objetivo para la cuenta regresiva (Cambia esto)
-        const targetDate = new Date("2025-03-04T20:00:00").getTime();
-
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const timeLeft = targetDate - now;
-
-            if (timeLeft > 0) {
-                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-
-                document.getElementById("countdown").textContent =
-                    `${days}d ${hours}h ${minutes}m ${seconds}s`;
-            } else {
-                document.getElementById("countdown").textContent = "¡Tiempo terminado!";
-                clearInterval(countdownInterval);
-            }
-        }
-
-        // ⏳ Actualizar cada segundo
-        updateCountdown();
-        const countdownInterval = setInterval(updateCountdown, 1000);
-    </script>
-    <script>
-        // Variable de estado para saber si el audio está reproducido o pausado
-        let isPlaying = false;
-
-        // Función para alternar entre play y pause
-        function toggleAudio() {
-            const audio = document.getElementById('myAudio');
-            const button = document.getElementById('desgraciado');
-
-            if (isPlaying) {
-                // Pausar el audio
-                audio.pause();
-                button.style.backgroundImage = "url(sprites/pla.png)"; // Cambia a imagen de play
-            } else {
-                // Reproducir el audio
-                audio.muted = false;  // Asegura que no esté silenciado
-                audio.play();
-                button.style.backgroundImage = "url(sprites/pause.png)"; // Cambia a imagen de pausa
-            }
-
-            // Cambia el estado
-            isPlaying = !isPlaying;
-        }
-    </script>
-    <script>
-        function toggleAudioo() {
-            const audio = document.getElementById('myedio');
-            const button = document.getElementById('botonazo');
-
-            if (isPlaying) {
-                // Pausar el audio
-                audio.pause();
-                button.style.backgroundImage = "url(sprites/pla.png)"; // Cambia a imagen de play
-            } else {
-                // Reproducir el audio
-                audio.muted = false;  // Asegura que no esté silenciado
-                audio.play();
-                button.style.backgroundImage = "url(sprites/pause.png)"; // Cambia a imagen de pausa
-            }
-
-            // Cambia el estado
-            isPlaying = !isPlaying;
-        }
-
-    </script>
-    <script>
-        // Fecha de inicio de la relación
-        const startDate = new Date("2025-02-04T20:00:00");
-
-        function updateCounter() {
-            const today = new Date();
-            const timeDifference = today - startDate;
-
-            const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
-
-            document.getElementById("timeCount").textContent =
-                `${days} días, ${hours} horas, ${minutes} minutos, ${seconds} segundos`;
-        }
-
-        // Actualiza el contador cada segundo
-        updateCounter();
-        setInterval(updateCounter, 1000);
-    </script>
-
+    <a href="count.html"><button id="contador">Contador</button></a>
+    <a href="cartas.html"><button id="pokemon">Pókemon</button></a>
+    <a href="rulet"><button id="ruleta">Ruleta</button></a>
 </body>
 
 </html>
