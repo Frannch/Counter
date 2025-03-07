@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador de Tiempo</title>
+    <style>
+        /* Estilos generales */
+        body {
+            height: 100vh;
+            background-image: url(gatos.jpeg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 10px;
+            overflow: hidden;
+            flex-direction: column;
+        }
+
+        .gifs img {
+            width: 15vw;
+            max-width: 100px;
+            position: absolute;
+        }
+
+        #mheart {
+            transform: translate(-150%, 123%);
+        }
+
+        #rheart {
+            transform: translate(60%, 110%) scaleX(-1);
+        }
+
+        #pika {
+            transform: translate(125%, 138%) scale(0.9);
+        }
+
+        #trum {
+            transform: translate(-230%, 143%) scaleX(-1) scale(0.7);
+        }
+
+        /* Botón con imagen de fondo */
+        button {
+            width: 15vw;
+            max-width: 90px;
+            height: 15vw;
+            max-height: 90px;
+            background-repeat: no-repeat;
+            background-size: contain;
+            padding: 0;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            position: absolute;
+            z-index: 10;
+        }
+
+        #desgraciado {
+            background-image: url(ple.png);
+            left: 5%;
+            top: 20%;
+        }
+
+        #botonazo {
+            background-image: url(candado.png);
+            right: 5%;
+            top: 20%;
+        }
+
+        #countdown {
+            position: absolute;
+            background-color: white;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: purple;
+            padding: 5px;
+            top: 37%;
+            right: 3.5%;
+        }
+
+        .counter-container {
+            scale: 0.7;
+            text-align: center;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 92vw;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transform: translate(0, 160%);
+        }
+
+        h1 {
+            font-size: 1.5rem;
+        }
+
+        .time {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #f020f0;
+        }
+
+        p {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                background-image: url(cats.jpg) !important;
+                height: 100vh;
+            }
+
+            .counter-container {
+                transform: translateY(-95%) scale(0.9);
+
+            }
+
+            .gifs img {
+                width: 20vw;
+            }
+
+            #countdown {
+                top: 90%;
+                font-size: 0.9rem;
+                transform: translate(-130%, 0);
+            }
+
+            #pika {
+                transform: translate(0, -225%);
+            }
+
+            #mheart {
+                transform: translate(-80%, -195%);
+            }
+
+            #rheart {
+                visibility: hidden
+                transform: translate(135%, -250%) scaleX(-1);
+            }
+
+            #trum {
+                visibility: hidden
+                transform: translate(-235%, -260%) scale(0.8) scaleX(-1);
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+    <audio id="myAudio" autoplay loop muted>
+        <source src="song.mp3" type="audio/mpeg"> No se pudo reproducir la canción :c
+    </audio>
+
+    <button id="desgraciado" onclick="toggleAudio()"></button>
+    <button id="botonazo"></button>
+    <div id="countdown">Cargando...</div>
+    <div class="gifs">
+        <img id="mheart" src="VeC.gif">
+        <img id="rheart" src="y2.gif">
+        <img id="pika" src="meo.gif">
+        <img id="trum" src="rawr.gif">
+    </div>
+    <div class="counter-container">
+        <h1>Han pasado</h1>
+        <div class="time" id="timeCount"></div>
+        <p>Desde que somos novios :)</p>
+    </div>
+
+    <script>
+        const targetDate = new Date("2025-03-04T20:00:00").getTime();
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const timeLeft = targetDate - now;
+            if (timeLeft > 0) {
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                document.getElementById("countdown").textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+            } else {
+                document.getElementById("countdown").textContent = "¡Tiempo terminado!";
+                clearInterval(countdownInterval);
+            }
+        }
+        updateCountdown();
+        const countdownInterval = setInterval(updateCountdown, 1000);
+    </script>
+    <script>
+        let isPlaying = false;
+        function toggleAudio() {
+            const audio = document.getElementById('myAudio');
+            const button = document.getElementById('desgraciado');
+            if (isPlaying) {
+                audio.pause();
+                button.style.backgroundImage = "url(ple.png)";
+            } else {
+                audio.muted = false;
+                audio.play();
+                button.style.backgroundImage = "url(pause.png)";
+            }
+            isPlaying = !isPlaying;
+        }
+    </script>
+    <script>
+        const startDate = new Date("2025-02-04T20:00:00");
+        function updateCounter() {
+            const today = new Date();
+            const timeDifference = today - startDate;
+            const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+            document.getElementById("timeCount").textContent = `${days} días, ${hours} horas, ${minutes} minutos, ${seconds} segundos`;
+        }
+        updateCounter();
+        setInterval(updateCounter, 1000);
+    </script>
+</body>
+
+</html>
