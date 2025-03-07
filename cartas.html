@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cartas Pokémon 3D</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #282c34;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      flex-direction: column;
+    }
+    .cards-container {
+      display: flex;
+      gap: 30px;
+    }
+    .scene {
+      width: 250px;
+      height: 350px;
+      perspective: 800px;
+    }
+    .card {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.6s;
+    }
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 15px;
+      overflow: hidden;
+    }
+    .front { background: url('./Ro.png') center/cover; }
+    .back { background: url('./atras.png') center/cover; transform: rotateY(180deg); }
+    .front2 { background: url('./Fran.png') center/cover; }
+    .back2 { background: url('./atras.png') center/cover; transform: rotateY(180deg); }
+  </style>
+</head>
+<body>
+  <div class="cards-container">
+    <div class="scene" id="scene1">
+      <div class="card" id="card1">
+        <div class="card-face front"></div>
+        <div class="card-face back"></div>
+      </div>
+    </div>
+    <div class="scene" id="scene2">
+      <div class="card" id="card2">
+        <div class="card-face front2"></div>
+        <div class="card-face back2"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function addRotationControl(scene, card) {
+      let startX;
+      scene.addEventListener('mousedown', e => startX = e.clientX);
+      scene.addEventListener('mousemove', e => {
+        if (startX !== undefined) {
+          const rotation = (e.clientX - startX) / 5;
+          card.style.transform = `rotateY(${rotation}deg)`;
+        }
+      });
+      scene.addEventListener('mouseup', () => startX = undefined);
+      scene.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+      scene.addEventListener('touchmove', e => {
+        if (startX !== undefined) {
+          const rotation = (e.touches[0].clientX - startX) / 5;
+          card.style.transform = `rotateY(${rotation}deg)`;
+        }
+      });
+      scene.addEventListener('touchend', () => startX = undefined);
+    }
+    addRotationControl(document.getElementById('scene1'), document.getElementById('card1'));
+    addRotationControl(document.getElementById('scene2'), document.getElementById('card2'));
+  </script>
+</body>
+</html>
