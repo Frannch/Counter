@@ -112,7 +112,7 @@
         max-width: 90px;
         height: 15vw;
         max-height: 90px;
-        background-image: url(sprites/klipartz.com.png);
+        background-image: url(sprites/photo-album_5019980.png);
         background-repeat: no-repeat;
         background-size: contain;
         padding: 0;
@@ -123,9 +123,31 @@
         position: absolute;
         top: 15vh;
         /* Usa unidades relativas */
-        right: 46vw;
+        left: 35vw;
         z-index: 10;
 
+
+    }
+
+    #cart {
+        width: 15vw;
+        /* Usa un tamaño relativo */
+        max-width: 90px;
+        height: 15vw;
+        max-height: 90px;
+        background-image: url(sprites/pokebola.png);
+        background-repeat: no-repeat;
+        background-size: contain;
+        padding: 0;
+        border-radius: 50%;
+        border: none;
+        cursor: pointer;
+        outline: none;
+        position: absolute;
+        top: 15vh;
+        /* Usa unidades relativas */
+        right: 35vw;
+        z-index: 10;
 
     }
 
@@ -169,6 +191,16 @@
             right: 10vw;
         }
 
+        #cart {
+            width: 50vw;
+            max-width: 100px;
+            height: 50vw;
+            max-height: 100px;
+            top: 10vh;
+            right: 38vw;
+
+        }
+
         #mheart {
             transform: translateX(-50%) translateY(200%);
         }
@@ -182,6 +214,8 @@
             padding: 3px 6px;
             top: 25vh;
             right: 10vw;
+            width: 100%;
+
         }
 
         #desgraciado {
@@ -196,7 +230,9 @@
         .counter-container {
             transform: translateY(-5vh);
             width: 100%;
-            padding: 8px;
+            align-items: center;
+            justify-items: center;
+
         }
 
         h1 {
