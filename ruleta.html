@@ -3,173 +3,8 @@
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            overflow: hidden;
-            background-image: url(sprites/N.jpg);
-            background-repeat: no-repeat;
-            background-size: cover;
-            text-align: center;
-            font-family: Arial, sans-serif;
-            overflow: hidden;
-            margin: 0;
-        }
-
-        h1 {
-            font-size: 24px;
-            color: white;
-        }
-
-        .wheel-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-top: 20px;
-            position: relative;
-        }
-
-        canvas {
-            display: block;
-            max-width: 100%;
-            height: auto;
-        }
-
-        .pointer {
-            width: 0;
-            height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-top: 40px solid black;
-            position: absolute;
-            top: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .inputArea {
-
-            margin-top: 20px;
-
-            width: 100%;
-            box-sizing: border-box;
-            left: 10vh;
-        }
-
-        textarea {
-            transform: translateY(-145%) translateX(-60%);
-
-            width: 100%;
-            max-width: 400px;
-            height: 250px;
-            resize: none;
-            background-color: bisque;
-            color: white;
-            border: none;
-
-            box-sizing: border-box;
-        }
-
-        button {
-            margin-top: 10px;
-            padding: 10px;
-
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            border-radius: 30px;
-            width: 100%;
-            max-width: 400px;
-            box-sizing: border-box;
-        }
-
-        #botonazo {
-            border-radius: 30px;
-            transform: translateY(-47.5vh) translateX(-108vh);
-
-
-        }
-
-        #nashe {
-            max-width: 400px;
-        }
-
-        #casa {
-            width: 15vw;
-            /* Usa un tamaño relativo */
-            max-width: 90px;
-            height: 15vw;
-            max-height: 90px;
-            background-image: url(sprites/casa.png);
-            background-repeat: no-repeat;
-
-
-            padding: 0;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            outline: none;
-            position: absolute;
-            width: 50vw;
-            max-width: 100px;
-            height: 50vw;
-            max-height: 100px;
-            top: 50vh;
-            right: 20vw;
-        }
-
-        /* Estilo adaptado para pantallas pequeñas */
-        @media (max-width: 600px) {
-            body {
-                background-size: 100vh 100vh;
-            }
-
-            #botonazo {
-                width: 100vh;
-            }
-
-            h1 {
-                font-size: 18px;
-            }
-
-            textarea {
-
-                width: 100vh;
-            }
-
-            button {
-                width: 90%;
-            }
-
-            .inputArea {
-                width: 90%;
-            }
-
-            #casa {
-                width: 15vw;
-                /* Usa un tamaño relativo */
-                max-width: 90px;
-                height: 15vw;
-                max-height: 90px;
-                background-image: url(sprites/casa.png);
-                background-repeat: no-repeat;
-
-
-                padding: 0;
-                border-radius: 50%;
-                border: none;
-                cursor: pointer;
-                outline: none;
-                position: absolute;
-                width: 50vw;
-                max-width: 100px;
-                height: 50vw;
-                max-height: 100px;
-                transform: translateY(700%);
-
-
-            }
-        }
-    </style>
+    <link rel="shorcut icon" href="sprites/favicon.ico">
+    <link rel="stylesheet" href="ruleta.css">
     <title>Ro`s Book Roulette</title>
 </head>
 
@@ -182,11 +17,12 @@
         <div class="pointer"></div>
         <canvas id="canvas" width="400" height="400"></canvas>
         <button id="nashe" onclick="spin()">Girar Ruleta</button>
+        <button id="botonazo" onclick="updateWheel()">Actualizar Ruleta</button>
     </div>
 
     <div class="inputArea">
         <textarea id="items" placeholder="Ingrese opciones separadas por salto de línea" spellcheck="false"></textarea>
-        <button id="botonazo" onclick="updateWheel()">Actualizar Ruleta</button>
+
     </div>
 
     <script>
@@ -195,7 +31,7 @@
         const centerX = canvas.width / 2;
         const centerY = canvas.height / 2;
         const radius = canvas.width / 2;
-        let items = ["F", "R", "A", "N"];
+        let items = ["L", "A", "U", "C", "H", "A"];
         let colors = [];
         let currentDeg = 0;
         let step;
