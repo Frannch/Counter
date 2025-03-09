@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Heart Animation Effect</title>
+  <link rel="shorcut icon" href="sprites/favicon.ico">
+
+  <style>
+    canvas {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, .2);
+    }
+
+    @media (max-width: 768px) {
+      canvas {
+        width: 200%;
+        height: 200%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <audio autoplay loop>
+    <source src="audio/song3.mp3" type="audio/mpeg">
+  </audio>
+  <canvas id="heart"></canvas>
+
+  <!--JavaScript-->
+  <script src="script.js"></script>
+</body>
+
+</html>
