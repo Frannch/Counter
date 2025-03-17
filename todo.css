@@ -1,8 +1,11 @@
 * {
     box-sizing: border-box;
-    background-color: rgb(231, 231, 207);
+    background-color: rgb(186, 248, 217);
     border: #000000 10px;
     margin: 1px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    background-repeat: no-repeat;
+
 }
 
 ul {
@@ -92,6 +95,7 @@ input {
     padding: 10px;
     float: left;
     font-size: 16px;
+
 }
 
 /* Style the "Add" button */
@@ -112,7 +116,10 @@ input {
     background-color: #bbb;
 }
 
-#myDIV {
+#act {
     color: black;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 30px;
+    z-index: 10;
     background-color: transparent;
 }
