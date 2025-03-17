@@ -194,7 +194,7 @@
         }
 
         #cart {
-
+            visibility: hidden;
             width: 50vw;
             max-width: 100px;
             height: 50vw;
