@@ -26,7 +26,7 @@ button {
     flex: 1;
     /* Cada botón ocupa 1/3 de la altura */
     width: 100%;
-    height: 25vh;
+    height: 20vh;
     border: none;
     font-size: 30px;
     font-weight: bold;
