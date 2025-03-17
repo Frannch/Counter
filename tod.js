@@ -1,54 +1,57 @@
-var myNodelist = document.getElementsByTagName("LI");
-var i;
-for (i = 0; i < myNodelist.length; i++) {
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";
-  span.appendChild(txt);
-  myNodelist[i].appendChild(span);
+document.addEventListener("DOMContentLoaded", loadTasks);
+
+function loadTasks() {
+    var tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    tasks.forEach(task => addTaskToDOM(task.text, task.checked));
 }
 
-// Click on a close button to hide the current list item
-var close = document.getElementsByClassName("close");
-var i;
-for (i = 0; i < close.length; i++) {
-  close[i].onclick = function() {
-    var div = this.parentElement;
-    div.style.display = "none";
-  }
-}
-
-// Add a "checked" symbol when clicking on a list item
-var list = document.querySelector('ul');
-list.addEventListener('click', function(ev) {
-  if (ev.target.tagName === 'LI') {
-    ev.target.classList.toggle('checked');
-  }
-}, false);
-
-// Create a new list item when clicking on the "Add" button
+// Función para añadir una nueva tarea
 function newElement() {
-  var li = document.createElement("li");
-  var inputValue = document.getElementById("myInput").value;
-  var t = document.createTextNode(inputValue);
-  li.appendChild(t);
-  if (inputValue === '') {
-    alert("You must write something!");
-  } else {
-    document.getElementById("myUL").appendChild(li);
-  }
-  document.getElementById("myInput").value = "";
+    var input = document.getElementById("myInput");
+    var inputValue = input.value.trim();
 
-  var span = document.createElement("SPAN");
-  var txt = document.createTextNode("\u00D7");
-  span.className = "close";
-  span.appendChild(txt);
-  li.appendChild(span);
-
-  for (i = 0; i < close.length; i++) {
-    close[i].onclick = function() {
-      var div = this.parentElement;
-      div.style.display = "none";
+    if (inputValue === "") {
+        alert("¡Debes escribir algo!");
+        return;
     }
-  }
+
+    addTaskToDOM(inputValue, false);
+    saveTasks();
+    input.value = "";
+}
+
+// Función para agregar una tarea al DOM
+function addTaskToDOM(text, checked) {
+    var li = document.createElement("li");
+    li.textContent = text;
+    
+    if (checked) {
+        li.classList.add("checked");
+    }
+
+    // Botón de eliminar
+    var span = document.createElement("SPAN");
+    span.className = "close";
+    span.innerHTML = "\u00D7";
+    span.onclick = function() {
+        li.remove();
+        saveTasks();
+    };
+    
+    li.appendChild(span);
+    li.onclick = function() {
+        li.classList.toggle("checked");
+        saveTasks();
+    };
+
+    document.getElementById("myUL").appendChild(li);
+}
+
+// Guarda las tareas en localStorage
+function saveTasks() {
+    var tasks = [];
+    document.querySelectorAll("#myUL li").forEach(li => {
+        tasks.push({ text: li.textContent.replace("\u00D7", "").trim(), checked: li.classList.contains("checked") });
+    });
+    localStorage.setItem("tasks", JSON.stringify(tasks));
 }
