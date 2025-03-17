@@ -107,7 +107,7 @@
     }
 
     #tp {
-        visibility: hidden;
+
         width: 15vw;
         /* Usa un tamaño relativo */
         max-width: 90px;
@@ -131,7 +131,7 @@
     }
 
     #cart {
-
+        visibility: hidden;
         width: 15vw;
         /* Usa un tamaño relativo */
         max-width: 90px;
