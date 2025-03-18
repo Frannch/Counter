@@ -59,6 +59,31 @@
     width: 50%;
 }
 
+#casa {
+
+
+    width: 5vw;
+    /* Usa un tamaño relativo */
+    max-width: 90px;
+    height: 5vw;
+    max-height: 90px;
+    background-image: url(sprites/casa.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    padding: 0;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    position: absolute;
+    bottom: 3vh;
+    /* Usa unidades relativas */
+    right: 46.5vw;
+    z-index: 10;
+
+
+}
+
 @media (max-width: 768px) {
     .slider {
         aspect-ratio: 9/16;
@@ -73,5 +98,14 @@
     #slide-6 {
         scale: 1.2;
         width: 90%;
+    }
+
+    #casa {
+        width: 50vw;
+        max-width: 100px;
+        height: 50vw;
+        max-height: 100px;
+        bottom: 10vh;
+        right: 38vw;
     }
 }

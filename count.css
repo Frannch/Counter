@@ -34,6 +34,7 @@
 
     /* Botón con imagen de fondo */
     #desgraciado {
+        visibility: hidden;
         width: 15vw;
         /* Usa un tamaño relativo */
         max-width: 90px;
@@ -87,6 +88,7 @@
     }
 
     #botonazo {
+        visibility: hidden;
         width: 15vw;
         /* Usa un tamaño relativo */
         max-width: 90px;
@@ -186,6 +188,7 @@
         }
 
         #botonazo {
+            visibility: hidden;
             width: 50vw;
             max-width: 100px;
             height: 50vw;
@@ -223,6 +226,7 @@
         }
 
         #desgraciado {
+            visibility: hidden;
             width: 50vw;
             max-width: 100px;
             height: 50vw;
