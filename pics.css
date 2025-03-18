@@ -1,14 +1,17 @@
 .container {
+
     padding: 2rem;
 }
 
 .slider-wrapper {
+
     position: relative;
     max-width: 48rem;
     margin: 0 auto;
 }
 
 .slider {
+
     display: flex;
     aspect-ratio: 16/9;
 
@@ -20,6 +23,7 @@
 }
 
 .slider img {
+
     height: auto;
     width: auto;
     scroll-snap-align: start;
@@ -48,4 +52,26 @@
 
 .slider-nav a:hover {
     opacity: 1;
+}
+
+#slide-6 {
+    scale: 1.2;
+    width: 50%;
+}
+
+@media (max-width: 768px) {
+    .slider {
+        aspect-ratio: 9/16;
+    }
+
+    .slider-nav a {
+        width: 1rem;
+        height: 1rem;
+
+    }
+
+    #slide-6 {
+        scale: 1.2;
+        width: 90%;
+    }
 }
