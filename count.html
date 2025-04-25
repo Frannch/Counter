@@ -27,7 +27,10 @@
     <a href="index.html"><button id="cart"></button></a>
 
 
-    <div class="countdown" id="countdown">Cargando...</div>
+    <div id="countdown-container">
+        <div class="label">Próxima cita:</div>
+        <div class="countdown" id="countdown">Cargando...</div>
+    </div>
     <!--Gifs -->
     <div class="gifs">
         <img id="mheart" src="sprites/VeC.gif" alt="">
@@ -45,7 +48,7 @@
     </div>
     <script>
         // 🕒 Fecha objetivo para la cuenta regresiva (Cambia esto)
-        const targetDate = new Date("2025-03-04T20:00:00").getTime();
+        const targetDate = new Date("2025-04-27T16:00:00").getTime();
 
         function updateCountdown() {
             const now = new Date().getTime();

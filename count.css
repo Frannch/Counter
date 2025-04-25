@@ -1,257 +1,263 @@
-    /* Estilos generales */
+/* Estilos generales */
+body {
+    height: 100vh;
+
+    background-image: url(sprites/gatos.jpeg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: 0;
+    padding: 0;
+    padding: 10px;
+    overflow: hidden;
+}
+
+.gifs {
+    scale: 0.5;
+    position: absolute;
+}
+
+#mheart {
+    transform: translateX(-150%) translateY(-50%);
+}
+
+#rheart {
+    transform: translateX(145%) translateY(-62%) scaleX(-1);
+    z-index: 1;
+}
+
+/* Botón con imagen de fondo */
+#desgraciado {
+    visibility: hidden;
+    width: 15vw;
+    /* Usa un tamaño relativo */
+    max-width: 90px;
+    height: 15vw;
+    max-height: 90px;
+    background-image: url(sprites/pla.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    padding: 0;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    position: absolute;
+    top: 15vh;
+    /* Usa unidades relativas */
+    left: 10vw;
+    z-index: 10;
+}
+
+.counter-container {
+    text-align: center;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: translateY(30vh);
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+h1 {
+    color: #333;
+    font-size: 1.5rem;
+}
+
+.time {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #f020f0;
+    margin: 10px 0;
+}
+
+p {
+    font-size: 1rem;
+    color: #666;
+}
+
+#botonazo {
+    visibility: hidden;
+    width: 15vw;
+    /* Usa un tamaño relativo */
+    max-width: 90px;
+    height: 15vw;
+    max-height: 90px;
+    background-image: url(sprites/pla.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    padding: 0;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    position: absolute;
+    top: 15vh;
+    /* Usa unidades relativas */
+    right: 10vw;
+    z-index: 10;
+}
+
+#tp {
+
+    width: 15vw;
+    /* Usa un tamaño relativo */
+    max-width: 90px;
+    height: 15vw;
+    max-height: 90px;
+    background-image: url(sprites/photo-album_5019980.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    padding: 0;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    position: absolute;
+    top: 15vh;
+    /* Usa unidades relativas */
+    left: 35vw;
+    z-index: 10;
+
+
+}
+
+#cart {
+    visibility: hidden;
+    width: 15vw;
+    /* Usa un tamaño relativo */
+    max-width: 90px;
+    height: 15vw;
+    max-height: 90px;
+    background-image: url(sprites/casa.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    padding: 0;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    position: absolute;
+    top: 8vh;
+    /* Usa unidades relativas */
+    right: 46.5vw;
+    z-index: 10;
+
+}
+
+#countdown-container {
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 10;
+}
+
+#countdown-container .label {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: purple;
+    background-color: white;
+    border-radius: 50px;
+    margin-bottom: 10px;
+    padding: 5px 10px;
+}
+
+#countdown {
+    background-color: white;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: purple;
+    padding: 5px 10px;
+}
+
+/* Ajustes para dispositivos pequeños */
+@media (max-width: 768px) {
     body {
-        height: 100vh;
-
-        background-image: url(sprites/gatos.jpeg);
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: center;
-
-        font-family: Arial, sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        margin: 0;
-        padding: 0;
-        padding: 10px;
         overflow: hidden;
+        background-image: url(sprites/cats.jpg) !important;
+        background-position: center;
+        background-size: auto;
     }
 
-    .gifs {
-        scale: 0.5;
-        position: absolute;
-    }
-
-    #mheart {
-        transform: translateX(-150%) translateY(-50%);
-    }
-
-    #rheart {
-        transform: translateX(145%) translateY(-62%) scaleX(-1);
-        z-index: 1;
-    }
-
-    /* Botón con imagen de fondo */
-    #desgraciado {
+    #tp {
         visibility: hidden;
-        width: 15vw;
-        /* Usa un tamaño relativo */
-        max-width: 90px;
-        height: 15vw;
-        max-height: 90px;
-        background-image: url(sprites/pla.png);
-        background-repeat: no-repeat;
-        background-size: contain;
-        padding: 0;
-        border-radius: 50%;
-        border: none;
-        cursor: pointer;
-        outline: none;
-        position: absolute;
-        top: 15vh;
-        /* Usa unidades relativas */
-        left: 10vw;
-        z-index: 10;
-    }
-
-    .counter-container {
-        text-align: center;
-        background-color: #fff;
-        padding: 10px;
-        border-radius: 12px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        max-width: 600px;
-        width: 80%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        transform: translateY(30vh);
-        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    }
-
-    h1 {
-        color: #333;
-        font-size: 1.5rem;
-    }
-
-    .time {
-        font-size: 1.8rem;
-        font-weight: bold;
-        color: #f020f0;
-        margin: 10px 0;
-    }
-
-    p {
-        font-size: 1rem;
-        color: #666;
     }
 
     #botonazo {
         visibility: hidden;
-        width: 15vw;
-        /* Usa un tamaño relativo */
-        max-width: 90px;
-        height: 15vw;
-        max-height: 90px;
-        background-image: url(sprites/pla.png);
-        background-repeat: no-repeat;
-        background-size: contain;
-        padding: 0;
-        border-radius: 50%;
-        border: none;
-        cursor: pointer;
-        outline: none;
-        position: absolute;
-        top: 15vh;
-        /* Usa unidades relativas */
+        width: 50vw;
+        max-width: 100px;
+        height: 50vw;
+        max-height: 100px;
+        top: 10vh;
         right: 10vw;
-        z-index: 10;
-    }
-
-    #tp {
-
-        width: 15vw;
-        /* Usa un tamaño relativo */
-        max-width: 90px;
-        height: 15vw;
-        max-height: 90px;
-        background-image: url(sprites/photo-album_5019980.png);
-        background-repeat: no-repeat;
-        background-size: contain;
-        padding: 0;
-        border-radius: 50%;
-        border: none;
-        cursor: pointer;
-        outline: none;
-        position: absolute;
-        top: 15vh;
-        /* Usa unidades relativas */
-        left: 35vw;
-        z-index: 10;
-
-
     }
 
     #cart {
         visibility: hidden;
-        width: 15vw;
-        /* Usa un tamaño relativo */
-        max-width: 90px;
-        height: 15vw;
-        max-height: 90px;
-        background-image: url(sprites/casa.png);
-        background-repeat: no-repeat;
-        background-size: contain;
-        padding: 0;
-        border-radius: 50%;
-        border: none;
-        cursor: pointer;
-        outline: none;
-        position: absolute;
-        top: 8vh;
-        /* Usa unidades relativas */
-        right: 46.5vw;
-        z-index: 10;
+        width: 50vw;
+        max-width: 100px;
+        height: 50vw;
+        max-height: 100px;
+        top: 10vh;
+        right: 38vw;
 
+    }
+
+    #mheart {
+        transform: translateX(-50%) translateY(200%);
+    }
+
+    #rheart {
+        transform: translateX(80%) translateY(87%) scaleX(-1);
     }
 
     #countdown {
+        font-size: 0.8rem;
+        padding: 3px 6px;
+    }
+
+    #desgraciado {
         visibility: hidden;
-        position: absolute;
-        background-color: white;
-        border-radius: 50px;
-        font-size: 1rem;
-        font-weight: bold;
-        color: purple;
-        padding: 5px 10px;
-        top: 30vh;
-        /* Usa unidades relativas */
-        right: 8vw;
-        /* Ajuste relativo */
+        width: 50vw;
+        max-width: 100px;
+        height: 50vw;
+        max-height: 100px;
+        top: 10vh;
+        left: 10vw;
     }
 
-    /* 
-    ===================================================================================================================
+    .counter-container {
+        transform: translateY(-5vh);
+        width: 100%;
+        align-items: center;
+        justify-items: center;
 
-    */
-    @media (max-width: 768px) {
-        body {
-            overflow: hidden;
-            background-image: url(sprites/cats.jpg) !important;
-            background-position: center;
-            background-size: auto;
-        }
-
-        #tp {
-            visibility: hidden;
-        }
-
-        #botonazo {
-            visibility: hidden;
-            width: 50vw;
-            max-width: 100px;
-            height: 50vw;
-            max-height: 100px;
-            top: 10vh;
-            right: 10vw;
-        }
-
-        #cart {
-            visibility: hidden;
-            width: 50vw;
-            max-width: 100px;
-            height: 50vw;
-            max-height: 100px;
-            top: 10vh;
-            right: 38vw;
-
-        }
-
-        #mheart {
-            transform: translateX(-50%) translateY(200%);
-        }
-
-        #rheart {
-            transform: translateX(80%) translateY(87%) scaleX(-1);
-        }
-
-        #countdown {
-            font-size: 0.8rem;
-            padding: 3px 6px;
-            top: 25vh;
-            right: 10vw;
-            width: 100%;
-
-        }
-
-        #desgraciado {
-            visibility: hidden;
-            width: 50vw;
-            max-width: 100px;
-            height: 50vw;
-            max-height: 100px;
-            top: 10vh;
-            left: 10vw;
-        }
-
-        .counter-container {
-            transform: translateY(-5vh);
-            width: 100%;
-            align-items: center;
-            justify-items: center;
-
-        }
-
-        h1 {
-            font-size: 1.2rem !important;
-        }
-
-        .time {
-            font-size: 1.4rem !important;
-        }
-
-        p {
-            font-size: 0.9rem !important;
-        }
     }
+
+    h1 {
+        font-size: 1.2rem !important;
+    }
+
+    .time {
+        font-size: 1.4rem !important;
+    }
+
+    p {
+        font-size: 0.9rem !important;
+    }
+}
