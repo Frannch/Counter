@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <!-- Meta tags recomendados -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+    <!-- PyScript CSS -->
+    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css">
+
+    <!-- PyScript JS -->
+    <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+
+    <!-- Estilos personalizados -->
+    <style>
+        body {
+            background-color: #111;
+            color: white;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .linea {
+            margin: 10px 0;
+            font-size: 1.5rem; /* Tamaño de fuente predeterminado */
+            font-weight: bold; /* Letras más gruesas */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Sombra para resaltar */
+        }
+
+        .morado {
+            color: #b266ff;
+        }
+
+        .turquesa {
+            color: #33ffff;
+        }
+
+        .gris {
+            color: #888888;
+        }
+
+        .naranja {
+            color: #ff9900;
+        }
+
+        #play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #3c84f02a;
+            color: white;
+            font-size: 4rem;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        #play-button:hover {
+            background-color: #d18f2c;
+        }
+
+        /* Ajustes para pantallas pequeñas (como iPhone 11) */
+        @media (max-width: 768px) {
+            .linea {
+                font-size: 2.5rem; /* Aumenta el tamaño de la fuente */
+                word-wrap: break-word; /* Ajusta las palabras largas */
+            }
+
+            body {
+                padding: 10px; /* Reduce el padding para aprovechar más espacio */
+                background-image: url('sprites/fperf.jpg');
+            }
+        }
+    </style>
+
+    <title>Perfect</title>
+</head>
+
+<body>
+    <!-- Botón para iniciar -->
+    <button id="play-button">▶️</button>
+
+    <!-- Contenido principal -->
+    <h1></h1>
+    <div id="contenedor"></div>
+    <audio id="audio" src="audio/1d.mp3" muted></audio>
+
+    <!-- Código PyScript -->
+    <script type="py">
+        from js import document
+        from pyodide.ffi import create_proxy
+        import asyncio
+
+        # Lista de letras con colores y tiempos
+        letra_cancion = [
+            ("morado", "Baby, I'm perfect", 1.0),
+            ("turquesa", "Baby, I'm perfect for you", 0.7),
+            ("gris", "And if you like", 0.2),
+            ("gris", "Midnight driving with the windows down", 0.7),
+            ("morado", "And if you like", 0.2),
+            ("morado", "Going places we can't even pronounce", 1.5),
+            ("turquesa", "If you like to do whatever you've been ", 0.2),
+            ("turquesa", "Dreaming about", 1.0),
+            ("gris", "Then, baby, you're perfect", 0.7),
+            ("morado", "Baby, you're perfect", 0.4),
+            ("turquesa", "🚀 So let's start right now ✨", 1.0),
+            ("naranja", "by Fran 💜", 3.0),
+        ]
+
+        async def escribir_suave(texto, color):
+            # Obtén el contenedor donde se imprimirá la letra
+            contenedor = document.getElementById("contenedor")
+            linea = document.createElement("div")
+            linea.className = f"linea {color}"
+            contenedor.appendChild(linea)
+
+            # Escribe cada carácter con un pequeño retraso
+            for char in texto:
+                linea.innerHTML += char
+                await asyncio.sleep(0.05)
+
+        async def reproducir():
+            # Inicia el audio automáticamente
+            audio = document.getElementById("audio")
+            audio.muted = False
+            audio.play()
+
+            # Imprime cada línea de la canción con el color y el tiempo especificado
+            for color, texto, espera in letra_cancion:
+                await escribir_suave(texto, color)
+                await asyncio.sleep(espera)
+
+        # Función para manejar el clic en el botón
+        def iniciar(event):
+            # Oculta el botón
+            document.getElementById("play-button").style.display = "none"
+            # Inicia la reproducción
+            asyncio.ensure_future(reproducir())
+
+        # Crea un proxy para la función iniciar
+        iniciar_proxy = create_proxy(iniciar)
+
+        # Asocia el evento de clic al botón
+        document.getElementById("play-button").addEventListener("click", iniciar_proxy)
+    </script>
+</body>
+
+</html>
