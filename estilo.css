@@ -10,8 +10,7 @@ body {
     background-position: center;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
+    display: block; /* Quita flex para evitar conflictos */
     height: 100vh;
     font-family: 'Playwrite IT Moderna', cursive;
     /* Ocupa el 100% de la altura de la pantalla */
@@ -26,17 +25,18 @@ button {
     flex: 1;
     /* Cada botón ocupa 1/3 de la altura */
     width: 100%;
-    height: 20vh;
+    height: 100%;
     border: none;
-    font-size: 30px;
+    font-size: 2rem;
     font-weight: bold;
     color: #F5F5DC;
     position: relative;
     overflow: hidden;
-    background: transparent;
+    background: rgba(150, 141, 150, 0.411); /* Fondo oscuro, ajusta el color a tu gusto */
     cursor: pointer;
     transition: 0.5s;
     font-family: 'Playwrite IT Moderna', cursive;
+    border-radius: 16px;
 }
 
 /* Efecto de hover con fondo expandiéndose */
@@ -72,6 +72,37 @@ button:hover::before {
          height: 110vh;
     }
     button {
-        color: rgb(83, 83, 83);
+        color: rgb(255, 252, 252);
+    }
+}
+
+.botonera {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columnas */
+    grid-template-rows: repeat(2, 1fr);    /* 2 filas (ajusta según cantidad de botones) */
+    gap: 20px;
+    width: 90vw;
+    height: 70vh;
+    margin: 5vh auto 0 auto;
+    max-width: 900px;
+}
+
+.botonera a {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+@media (max-width: 600px) {
+    .botonera {
+        grid-template-columns: repeat(2, 1fr); /* 2 columnas en móvil */
+        grid-template-rows: repeat(3, 1fr);    /* 3 filas para 6 botones */
+        aspect-ratio: 2 / 3;                   /* Proporción vertical */
+        width: 98vw;
+        gap: 10px;
+    }
+    button {
+        font-size: 1.2rem;
+        aspect-ratio: 1 / 1;
     }
 }
