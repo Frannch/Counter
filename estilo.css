@@ -12,13 +12,13 @@ body {
     padding: 0;
     display: flex;
     flex-direction: column;
-    height: 109vh;
+    height: 100vh;
     font-family: 'Playwrite IT Moderna', cursive;
     /* Ocupa el 100% de la altura de la pantalla */
 }
 
 a {
-    height: 16vh;
+    height: 20vh;
 }
 
 /* Asegura que los botones cubran la pantalla en 3 partes iguales */
@@ -39,46 +39,30 @@ button {
     font-family: 'Playwrite IT Moderna', cursive;
 }
 
-/* Efecto de hover con fondo negro expandiéndose */
+/* Efecto de hover con fondo expandiéndose */
 button::before {
     content: '';
     position: absolute;
     top: 0;
+    left: 0; /* Por defecto, desde la izquierda */
     width: 0;
     height: 100%;
     background: rgba(230, 128, 213, 0.7);
-    /* Negro con transparencia */
     z-index: -1;
     transition: width 0.5s ease-in-out;
-
 }
 
-/* Expansión desde distintos lados */
-#contador::before {
+/* Expansión desde la derecha para botones específicos */
+
+#pokemon::before,
+#ruleta::before,
+#ruletaHeart::before {
+    left: auto;
     right: 0;
 }
 
-#pokemon::before {
-    left: 0;
-}
-
-#form:before {
-    left: 0;
-}
-
-#ruleta::before {
-    right: 0;
-}
-
-#ruleta:hover:before {
-    width: 100%;
-}
-
-
-/* Al hacer hover, el efecto de color se activa */
-#contador:hover::before,
-#pokemon:hover:before,
-#form:hover:before {
+/* Hover: activa la expansión */
+button:hover::before {
     width: 100%;
 }
 
