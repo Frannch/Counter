@@ -5,11 +5,130 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../juego.css">
     <title>Juegos</title>
+    <style>
+        .botonera {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 0;
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+        }
+        .juego-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+    </style>
 </head>
 <body>
     <div class="botonera">
-        <a href="https://algorat.itch.io/the-ratchelor-a-rat-dating-sim"><button>Juego 2</button></a>
-        <a href="juego2.html"><button>Juego 2</button></a>
+        <div id="juego1-container" class="juego-container">
+            <button id="jugar1" style="width:100%;height:100%;">Jugar Ratchelor</button>
+        </div>
+        <div id="juego2-container" class="juego-container">
+            <button id="jugar2" style="width:100%;height:100%;">HeartStopper</button>
+        </div>
+        <div id="juego3-container" class="juego-container">
+            <button id="jugar3" style="width:100%;height:100%;">Sort the Court</button>
+        </div>
+        <div id="juego4-container" class="juego-container">
+            <button id="jugar4" style="width:100%;height:100%;">Jugar Juego 4</button>
+        </div>
     </div>
+    <script>
+        // Guarda el último juego abierto para restaurar el botón
+        let ultimoJuego = null;
+
+        function restaurarBoton(containerId, btnId, texto) {
+            document.getElementById(containerId).innerHTML = `<button id="${btnId}" style="width:100%;height:100%;">${texto}</button>`;
+            document.getElementById(btnId).onclick = juegosOnClick[btnId];
+        }
+
+        function insertarIframeYFullscreen(containerId, src, iframeId, btnId, texto) {
+            ultimoJuego = {containerId, btnId, texto};
+            document.getElementById(containerId).innerHTML = `
+                <iframe
+                    id="${iframeId}"
+                    frameborder="0"
+                    allowfullscreen="true"
+                    mozallowfullscreen="true"
+                    msallowfullscreen="true"
+                    allow="autoplay; fullscreen *; geolocation; microphone; camera; midi; monetization; xr-spatial-tracking; gamepad; gyroscope; accelerometer; xr; cross-origin-isolated; web-share"
+                    scrolling="no"
+                    src="${src}"
+                    allowtransparency="true"
+                    webkitallowfullscreen="true"
+                    style="width:100%;height:100%;border:none;display:block;">
+                </iframe>
+            `;
+            setTimeout(function() {
+                const iframe = document.getElementById(iframeId);
+                if (iframe.requestFullscreen) {
+                    iframe.requestFullscreen();
+                } else if (iframe.mozRequestFullScreen) {
+                    iframe.mozRequestFullScreen();
+                } else if (iframe.webkitRequestFullscreen) {
+                    iframe.webkitRequestFullscreen();
+                } else if (iframe.msRequestFullscreen) {
+                    iframe.msRequestFullscreen();
+                }
+            }, 100);
+        }
+
+        // Asocia cada botón con su función
+        const juegosOnClick = {
+            'jugar1': function() {
+                insertarIframeYFullscreen('juego1-container', 'https://html-classic.itch.zone/html/3388686/ratchelorItch/index.html?v=1732313786', 'game_drop1', 'jugar1', 'Jugar Ratchelor');
+            },
+            'jugar2': function() {
+                insertarIframeYFullscreen('juego2-container', 'https://html-classic.itch.zone/html/14235865/index.html', 'game_drop2', 'jugar2', 'Jugar Juego 2');
+            },
+            'jugar3': function() {
+                insertarIframeYFullscreen('juego3-container', 'https://html-classic.itch.zone/html/14046430-1302072/index.html', 'game_drop3', 'jugar3', 'Jugar Juego 3');
+            },
+            'jugar4': function() {
+                insertarIframeYFullscreen('juego4-container', 'https://html-classic.itch.zone/html/14235865/index.html', 'game_drop4', 'jugar4', 'Jugar Juego 4');
+            }
+        };
+
+        document.getElementById('jugar1').onclick = juegosOnClick['jugar1'];
+        document.getElementById('jugar2').onclick = juegosOnClick['jugar2'];
+        document.getElementById('jugar3').onclick = juegosOnClick['jugar3'];
+        document.getElementById('jugar4').onclick = juegosOnClick['jugar4'];
+
+        // Detecta cuando se sale de pantalla completa y restaura el botón
+        document.addEventListener('fullscreenchange', function() {
+            if (!document.fullscreenElement && ultimoJuego) {
+                restaurarBoton(ultimoJuego.containerId, ultimoJuego.btnId, ultimoJuego.texto);
+                ultimoJuego = null;
+            }
+        });
+        document.addEventListener('webkitfullscreenchange', function() {
+            if (!document.webkitFullscreenElement && ultimoJuego) {
+                restaurarBoton(ultimoJuego.containerId, ultimoJuego.btnId, ultimoJuego.texto);
+                ultimoJuego = null;
+            }
+        });
+        document.addEventListener('mozfullscreenchange', function() {
+            if (!document.mozFullScreenElement && ultimoJuego) {
+                restaurarBoton(ultimoJuego.containerId, ultimoJuego.btnId, ultimoJuego.texto);
+                ultimoJuego = null;
+            }
+        });
+        document.addEventListener('MSFullscreenChange', function() {
+            if (!document.msFullscreenElement && ultimoJuego) {
+                restaurarBoton(ultimoJuego.containerId, ultimoJuego.btnId, ultimoJuego.texto);
+                ultimoJuego = null;
+            }
+        });
+    </script>
 </body>
 </html>
