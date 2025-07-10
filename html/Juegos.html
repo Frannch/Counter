@@ -26,21 +26,73 @@
             border: none;
             display: block;
         }
+
+        /* Estilo base para todos los botones de juegos */
+        .juego-container button {
+            width: 100%;
+            height: 100%;
+            border: none;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #F5F5DC;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            font-family: 'Playwrite IT Moderna', cursive;
+            border-radius: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        /* Fondo semitransparente encima de la imagen */
+        .juego-container button::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(40, 20, 40, 0.55); /* Ajusta la opacidad aquí */
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* El texto debe estar por encima del fondo semitransparente */
+        .juego-container button span {
+            position: relative;
+            z-index: 3;
+        }
+
+        /* Imagen de fondo para cada botón */
+        #jugar1 {
+            background-image: url('../img/captura1.jpg');
+        }
+        #jugar2 {
+            background-image: url('../img/captura2.jpg');
+        }
+        #jugar3 {
+            background-image: url('../img/captura3.jpg');
+        }
+        #jugar4 {
+            background-image: url('../img/captura4.jpg');
+        }
     </style>
 </head>
 <body>
     <div class="botonera">
         <div id="juego1-container" class="juego-container">
-            <button id="jugar1" style="width:100%;height:100%;">Jugar Ratchelor</button>
+            <button id="jugar1" style="width:100%;height:100%;">Motocross</button>
         </div>
         <div id="juego2-container" class="juego-container">
             <button id="jugar2" style="width:100%;height:100%;">HeartStopper</button>
         </div>
         <div id="juego3-container" class="juego-container">
-            <button id="jugar3" style="width:100%;height:100%;">Sort the Court</button>
+            <button id="jugar3" style="width:100%;height:100%;">Pandemic</button>
         </div>
         <div id="juego4-container" class="juego-container">
-            <button id="jugar4" style="width:100%;height:100%;">Jugar Juego 4</button>
+            <button id="jugar4" style="width:100%;height:100%;">Pool</button>
         </div>
     </div>
     <script>
@@ -86,16 +138,16 @@
         // Asocia cada botón con su función
         const juegosOnClick = {
             'jugar1': function() {
-                insertarIframeYFullscreen('juego1-container', 'https://html-classic.itch.zone/html/3388686/ratchelorItch/index.html?v=1732313786', 'game_drop1', 'jugar1', 'Jugar Ratchelor');
+                insertarIframeYFullscreen('juego1-container', 'https://www.addictinggames.com/embed/html5-games/19997', 'game_drop1', 'jugar1', 'Motocross');
             },
             'jugar2': function() {
-                insertarIframeYFullscreen('juego2-container', 'https://html-classic.itch.zone/html/14235865/index.html', 'game_drop2', 'jugar2', 'Jugar Juego 2');
+                insertarIframeYFullscreen('juego2-container', 'https://html-classic.itch.zone/html/14235865/index.html', 'game_drop2', 'jugar2', 'HeartStopper');
             },
             'jugar3': function() {
-                insertarIframeYFullscreen('juego3-container', 'https://html-classic.itch.zone/html/14046430-1302072/index.html', 'game_drop3', 'jugar3', 'Jugar Juego 3');
+                insertarIframeYFullscreen('juego3-container', 'https://www.addictinggames.com/embed/html5-games/20449', 'game_drop3', 'jugar3', 'Pandemic');
             },
             'jugar4': function() {
-                insertarIframeYFullscreen('juego4-container', 'https://html-classic.itch.zone/html/14235865/index.html', 'game_drop4', 'jugar4', 'Jugar Juego 4');
+                insertarIframeYFullscreen('juego4-container', 'https://www.addictinggames.com/embed/html5-games/10000733', 'game_drop4', 'jugar4', 'Pool');
             }
         };
 
