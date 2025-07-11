@@ -78,13 +78,13 @@ button:hover::before {
 
 .botonera {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 columnas */
-    grid-template-rows: repeat(2, 1fr);    /* 2 filas (ajusta según cantidad de botones) */
+    grid-template-columns: repeat(4, 1fr); /* 4 columnas */
+    grid-template-rows: 1fr 1fr;           /* 2 filas (ajusta si tienes más botones) */
     gap: 20px;
     width: 90vw;
     height: 70vh;
     margin: 5vh auto 0 auto;
-    max-width: 900px;
+    max-width: 1200px; /* puedes aumentar el ancho máximo */
 }
 
 .botonera a {
