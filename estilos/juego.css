@@ -73,16 +73,16 @@ iframe {
 
 /* Imagen de fondo para cada botón */
 #jugar1 {
-    background-image: url('../moto.webp');
+    background-image: url('../sprites/moto.webp');
 }
 #jugar2 {
-    background-image: url('../hst.webp');
+    background-image: url('../sprites/hst.webp');
 }
 #jugar3 {
-    background-image: url('../cat.avif');
+    background-image: url('../sprites/cat.avif');
 }
 #jugar4 {
-    background-image: url('../pool.webp');
+    background-image: url('../sprites/pool.webp');
 }
 
 /* Efecto hover para todos los botones */
