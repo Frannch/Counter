@@ -67,7 +67,7 @@
     max-width: 90px;
     height: 5vw;
     max-height: 90px;
-    background-image: url(sprites/casa.png);
+    background-image: url(../sprites/casa.png);
     background-repeat: no-repeat;
     background-size: contain;
     padding: 0;

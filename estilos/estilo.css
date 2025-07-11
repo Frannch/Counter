@@ -3,7 +3,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Playwrite+IT+Moderna:wght@100..400&display=swap');
 
 body {
-    background-image: url(sprites/gilmore.jpg);
+    background-image: url(../sprites/gilmore.jpg);
     background-size: cover;
     /* Hace que la imagen cubra toda la pantalla */
     background-repeat: no-repeat;
