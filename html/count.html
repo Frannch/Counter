@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="estilos/count.css">
+    <link rel="stylesheet" href="../estilos/count.css">
     <link rel="shorcut icon" href="sprites/favicon.ico">
     <title>Contador</title>
 </head>
@@ -13,11 +13,11 @@
 
     <!-- Audio en silencio al principio -->
     <audio id="myAudio" autoplay loop muted>
-        <source src="audio/song.mp3" type="audio/mpeg">
+        <source src="../audio/song.mp3" type="audio/mpeg">
         No se pudo reproducir la canción :c
     </audio>
     <audio id="myedio" autoplay loop muted>
-        <source src="audio/song2.mp3" type="audio/mpeg">
+        <source src="../audio/song2.mp3" type="audio/mpeg">
     </audio>
 
     <!-- Botón con imagen de play -->
@@ -33,8 +33,8 @@
     </div>
     <!--Gifs -->
     <div class="gifs">
-        <img id="mheart" src="sprites/VeC.gif" alt="">
-        <img id="rheart" src="sprites/y2.gif" alt="">
+        <img id="mheart" src="../sprites/VeC.gif" alt="">
+        <img id="rheart" src="../sprites/y2.gif" alt="">
     </div>
 
     <div class="counter-container">
@@ -84,12 +84,12 @@
             if (isPlaying) {
                 // Pausar el audio
                 audio.pause();
-                button.style.backgroundImage = "url(sprites/pla.png)"; // Cambia a imagen de play
+                button.style.backgroundImage = "url(../sprites/pla.png)"; // Cambia a imagen de play
             } else {
                 // Reproducir el audio
                 audio.muted = false;  // Asegura que no esté silenciado
                 audio.play();
-                button.style.backgroundImage = "url(sprites/pause.png)"; // Cambia a imagen de pausa
+                button.style.backgroundImage = "url(../sprites/pause.png)"; // Cambia a imagen de pausa
             }
 
             // Cambia el estado
@@ -104,12 +104,12 @@
             if (isPlaying) {
                 // Pausar el audio
                 audio.pause();
-                button.style.backgroundImage = "url(sprites/pla.png)"; // Cambia a imagen de play
+                button.style.backgroundImage = "url(../sprites/pla.png)"; // Cambia a imagen de play
             } else {
                 // Reproducir el audio
                 audio.muted = false;  // Asegura que no esté silenciado
                 audio.play();
-                button.style.backgroundImage = "url(sprites/pause.png)"; // Cambia a imagen de pausa
+                button.style.backgroundImage = "url(../sprites/pause.png)"; // Cambia a imagen de pausa
             }
 
             // Cambia el estado
