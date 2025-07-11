@@ -10,7 +10,10 @@
 </head>
 
 <body>
-    <button id="ch" onclick="document.body.style.backgroundImage = 'url(../sprites/tet.jpg)'">Click me</button>
+    <button id="ch" onclick="handleClickActions()">Click me</button>
+
+    <h1 id="tet">Fototeta?</h1>
+
     <!-- Audio en silencio al principio -->
     <audio id="myAudio" autoplay loop muted>
         <source src="../audio/song.mp3" type="audio/mpeg">
@@ -116,6 +119,25 @@
             isPlaying = !isPlaying;
         }
 
+
+    function handleClickActions() {
+    // Cambiar imagen
+   document.body.style.backgroundImage = 'url(../sprites/tet.jpg)'
+    
+    // Cambiar fondo
+    document.getElementById('tet').style.visibility = 'visible';
+
+    // Mostrar mensaje
+    document.getElementById('countdown-container').style.visibility='hidden';
+    document.getElementById('timeCount').style.visibility='hidden';
+    document.getElementsByClassName('counter-container')[0].style.visibility='hidden';
+    document.getElementById('ch').style.visibility = 'hidden';
+    document.getElementById('mheart').style.visibility = 'hidden';
+    document.getElementById('rheart').style.visibility = 'hidden';
+}
+
+// Asignar al botón
+document.getElementById('miBoton').addEventListener('click', handleClickActions);
     </script>
     <script>
         // Fecha de inicio de la relación
