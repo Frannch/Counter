@@ -87,6 +87,14 @@
 @media (max-width: 768px) {
     .slider {
         aspect-ratio: 9/16;
+        width: 100vw;
+        height: 60vh;
+    }
+
+    .slider img {
+        width: 100vw;
+        height: 60vh;
+        object-fit: cover;
     }
 
     .slider-nav a {
@@ -95,12 +103,14 @@
 
     }
 
-    #slide-1 {
-        visibility: hidden;
+    #slide-1,
+    #slide-2 {
+        display: none !important;
     }
 
-    #slide-2 {
-        visibility: hidden;
+    .slider-nav a[href="#slide-1"],
+    .slider-nav a[href="#slide-2"] {
+        display: none !important;
     }
 
     #slide-6 {
@@ -109,27 +119,22 @@
     }
 
     #casa {
-
         width: 15vw;
-        /* Usa un tamaño relativo */
         max-width: 70px;
         height: 15vw;
         max-height: 70px;
         background-image: url(../sprites/casa.png);
         background-repeat: no-repeat;
         background-color: pink;
-
+        background-size: contain;
         padding: 0;
         border-radius: 50%;
         border: none;
         cursor: pointer;
         outline: none;
         position: absolute;
-        width: 50vw;
-        max-width: 100px;
-        height: 50vw;
-        max-height: 100px;
         bottom: 5vh;
         right: 38vw;
+        z-index: 10;
     }
 }
