@@ -64,7 +64,7 @@ body {
 }
 
 #tapa {
-    background-image: url(sprites/tappa.jpg);
+    background-image: url(../sprites/tappa.jpg);
     font-size: 45px;
     color: antiquewhite;
 
@@ -78,6 +78,6 @@ body {
 }
 
 #atras {
-    background-image: url(sprites/atras.jpg);
+    background-image: url(../sprites/atras.jpg);
     font-size: 35px;
 }
