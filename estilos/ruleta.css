@@ -1,11 +1,11 @@
 body {
-    overflow: hidden;
+  
     background-image: url(../sprites/N.jpg);
-    background-repeat: no-repeat;
+    background-repeat: repeat;
     background-size: cover;
     text-align: center;
     font-family: Arial, sans-serif;
-    overflow: hidden;
+   
     margin: 0;
 }
 
@@ -32,11 +32,13 @@ canvas {
     margin-top: 20px;
     width: 100%;
     box-sizing: border-box;
-    left: 10vh;
 }
 
 textarea {
-    transform: translateY(-170%) translateX(-110%);
+      position: absolute;
+    top: 150px;    /* distancia desde arriba */
+    left: 60px;   /* distancia desde la izquierda */
+  
     width: 100%;
     max-width: 400px;
     height: 250px;
@@ -45,6 +47,7 @@ textarea {
     color: white;
     border: none;
     box-sizing: border-box;
+    margin-bottom: 10px;
 }
 
 button {
@@ -68,97 +71,95 @@ button {
 #casa {
     visibility: hidden;
     width: 15vw;
-    /* Usa un tamaño relativo */
     max-width: 90px;
     height: 15vw;
     max-height: 90px;
     background-image: url(../sprites/casa.png);
     background-repeat: no-repeat;
+    background-size: contain;
     padding: 0;
     border-radius: 50%;
     border: none;
     cursor: pointer;
     outline: none;
     position: absolute;
-    width: 50vw;
-    max-width: 100px;
-    height: 50vw;
-    max-height: 100px;
     top: 50vh;
     right: 20vw;
 }
 
 #Ganador {
-    background-color: beige;
-    justify-self: center;
-    align-content: center;
-    width: 25vh;
-    height: 10vh;
+    display: none;
 }
 
 #botonazo {
-    position: absolute;
-    left: 7vh;
-    bottom: 18vh;
+    position: static;
+    width: 100%;
+    max-width: 400px;
     height: 7vh;
+    margin: 0 auto 20px auto;
+    left: auto;
+    bottom: auto;
 }
 
-/*=====================================================================================================*/
+/* =================== Responsive para celulares =================== */
 @media (max-width: 768px) {
-    body {
-        background-size: 100vh 100vh;
+    html, body {
+        height: 100vh;
+        min-height: 100vh;
+        background-size: cover;
+        background-position: center;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
     }
 
-    #botonazo {
-
-        width: 100vh;
-        height: 4vh;
-        left: 0.5vh;
-        bottom: -32vh;
+    body {
+        background-size: cover;
     }
 
     h1 {
         font-size: 18px;
     }
 
-    textarea {
-        width: 100%;
-        height: 230px;
-        resize: none;
-        background-color: bisque;
-        color: white;
-        border: none;
-        box-sizing: border-box;
-        transform: translateX(5%) translateY(-3%);
+    .wheel-container {
+        margin-top: 10px;
     }
 
-    button {
-        width: 90%;
+    textarea {
+        width: 95vw;
+        max-width: 95vw;
+        height: 160px;
+        font-size: 1rem;
+        margin-bottom: 10px;
+        transform: none;
+    }
+
+    button, #botonazo {
+        width: 95vw;
+        max-width: 95vw;
+        font-size: 1rem;
+        height: 44px;
+        margin: 0 auto 10px auto;
+        border-radius: 24px;
     }
 
     .inputArea {
-        width: 90%;
+        width: 95vw;
+        max-width: 95vw;
     }
 
     #casa {
         visibility: hidden;
         width: 15vw;
-        /* Usa un tamaño relativo */
-        max-width: 90px;
+        max-width: 70px;
         height: 15vw;
-        max-height: 90px;
+        max-height: 70px;
         background-image: url(../sprites/casa.png);
         background-repeat: no-repeat;
-        padding: 0;
-        border-radius: 50%;
-        border: none;
-        cursor: pointer;
-        outline: none;
+        background-size: contain;
         position: absolute;
-        width: 50vw;
-        max-width: 100px;
-        height: 50vw;
-        max-height: 100px;
-        transform: translateY(700%);
+        top: 80vh;
+        right: 10vw;
+        transform: none;
     }
 }
