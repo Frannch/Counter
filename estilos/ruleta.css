@@ -126,12 +126,15 @@ button {
     }
 
     textarea {
+         position: absolute;
+        top: 550px;  /* más abajo que antes */
+        left: 10px;  /* ajustalo si es necesario */
         width: 95vw;
         max-width: 95vw;
         height: 160px;
         font-size: 1rem;
         margin-bottom: 10px;
-        transform: none;
+        
     }
 
     button, #botonazo {
