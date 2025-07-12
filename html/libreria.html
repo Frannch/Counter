@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Mis libros</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 1rem;
+      background: #f8f8f8;
+    }
+    .filtros {
+      margin-bottom: 1rem;
+    }
+    .filtros input, .filtros select {
+      padding: 0.5rem;
+      margin-right: 1rem;
+      font-size: 1rem;
+    }
+    .libros {
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-height: 500px;
+      overflow-y: auto;
+    }
+    .libro {
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #ccc;
+    }
+    .libro h3 {
+      margin: 0;
+    }
+    .libro p {
+      margin: 0.25rem 0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Lista de libros</h1>
+
+  <div class="filtros">
+    <input type="text" id="busqueda" placeholder="Buscar por título o autor...">
+    <select id="filtroLeido">
+      <option value="todos">Todos</option>
+      <option value="si">Leídos</option>
+      <option value="no">No leídos</option>
+    </select>
+  </div>
+
+  <div class="libros" id="contenedorLibros">
+    Cargando...
+  </div>
+
+  <script>
+    const contenedor = document.getElementById('contenedorLibros');
+    const busquedaInput = document.getElementById('busqueda');
+    const filtroLeido = document.getElementById('filtroLeido');
+    let librosOriginales = [];
+
+    // 🔁 Función que renderiza los libros según filtros
+    function renderizarLibros() {
+      const texto = busquedaInput.value.toLowerCase();
+      const filtro = filtroLeido.value;
+
+      const filtrados = librosOriginales.filter(libro => {
+        const coincideTexto =
+          libro.Título.toLowerCase().includes(texto) ||
+          libro.Autor.toLowerCase().includes(texto);
+
+        const leido = (libro.Leído || "").toLowerCase();
+        const coincideFiltro =
+          filtro === "todos" ||
+          (filtro === "si" && leido === "si") ||
+          (filtro === "no" && leido !== "si");
+
+        return coincideTexto && coincideFiltro;
+      });
+
+      contenedor.innerHTML = "";
+      if (filtrados.length === 0) {
+        contenedor.innerHTML = "<p>No se encontraron libros.</p>";
+        return;
+      }
+
+      filtrados.forEach(libro => {
+        const div = document.createElement('div');
+        div.className = 'libro';
+        div.innerHTML = `
+          <h3>${libro.Título}</h3>
+          <p><strong>Autor:</strong> ${libro.Autor}</p>
+          <p><strong>Editorial:</strong> ${libro.Editorial || "—"}</p>
+          <p><strong>Año:</strong> ${libro.Año || "—"}</p>
+          <p><strong>Leído:</strong> ${libro.Leído}</p>
+        `;
+        contenedor.appendChild(div);
+      });
+    }
+
+    // 🔁 Cargar datos desde JSONBin
+    fetch("https://api.jsonbin.io/v3/b/6872dc6eb179427992de1629", {
+      method: "GET",
+      headers: {
+        "X-Master-Key": "$2a$10$dlcDq7Dl/zLIeuwgLLbzBefyE8zNLNAc8HDbq3Lg3xP/x9JYdCgXS"
+      }
+    })
+    .then(res => res.json())
+    .then(data => {
+      librosOriginales = data.record;
+      renderizarLibros();
+    })
+    .catch(err => {
+      contenedor.innerHTML = "Error al cargar los datos.";
+      console.error(err);
+    });
+
+    // 🔁 Agregar eventos a los filtros
+    busquedaInput.addEventListener("input", renderizarLibros);
+    filtroLeido.addEventListener("change", renderizarLibros);
+  </script>
+
+</body>
+</html>
