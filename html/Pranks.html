@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hola Gonza</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      align-items: center;
+      padding: 1rem;
+    }
+    header {
+      width: 100%;
+      padding: 1rem 0;
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: bold;
+      background-color: #0077cc;
+      color: white;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      flex-shrink: 0;
+    }
+    main {
+      flex-grow: 1;
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 2rem;
+      gap: 1.5rem;
+      position: relative;
+    }
+    button {
+      padding: 0.75rem 2rem;
+      font-size: 1.25rem;
+      color: white;
+      background-color: #0077cc;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover,
+    button:focus {
+      background-color: #005fa3;
+      outline: none;
+    }
+    #frase {
+      min-height: 3rem;
+      font-size: 1.25rem;
+      text-align: center;
+      padding: 0 1rem;
+      color: #222;
+      user-select: none;
+    }
+    iframe {
+      width: 100%;
+      max-width: 681px;
+      height: 383px;
+      border: none;
+      border-radius: 8px;
+      display: none; /* Oculto al inicio */
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
+
+    /* Popup */
+    #popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 320px;
+      max-width: 90vw;
+      background: white;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+      border-radius: 10px;
+      display: none; /* Oculto inicialmente */
+      z-index: 1000;
+    }
+    #popup img {
+      width: 100%;
+      border-radius: 10px 10px 0 0;
+      display: block;
+    }
+    #popup .close-btn {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+      cursor: pointer;
+      user-select: none;
+      background: rgba(255,255,255,0.8);
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      line-height: 30px;
+      text-align: center;
+      box-shadow: 0 0 5px rgba(0,0,0,0.2);
+      transition: background-color 0.3s ease;
+    }
+    #popup .close-btn:hover {
+      background-color: #eee;
+    }
+
+    /* Fondo semi-transparente detrás del popup */
+    #overlay {
+      position: fixed;
+      top:0; left:0; right:0; bottom:0;
+      background: rgba(0,0,0,0.4);
+      display: none;
+      z-index: 999;
+    }
+    #imagenMovil {
+  display: none; /* Oculta en desktop */
+  width: 100%;
+  max-width: 600px;
+  margin-top: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.15);
+}
+
+    @media (max-width: 400px) {
+      header { font-size: 2rem; }
+      button { font-size: 1rem; padding: 0.6rem 1.5rem; }
+      #frase { font-size: 1rem; }
+      iframe { height: 215px; }
+      #popup {
+        width: 90vw;
+      }
+    }
+    @media (max-width: 600px) {
+  #imagenMovil {
+    display: block; /* Se muestra en móvil */
+  }
+}
+  </style>
+</head>
+<body>
+
+  <header>Hola Gonza</header>
+
+  <main>
+    <button type="button" id="btnGenerar" aria-label="Generar frase">Generar Frase</button>
+    <div id="frase" aria-live="polite" aria-atomic="true"></div>
+
+    <iframe
+      id="ytVideo"
+      src=""
+      title="Video de YouTube"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      allowfullscreen
+      referrerpolicy="strict-origin-when-cross-origin"
+    ></iframe>
+    <img id="imagenMovil" src="qa30a23jghq91.webp" alt="Imagen para móvil" />
+  </main>
+
+  <!-- Overlay para popup -->
+  <div id="overlay"></div>
+
+  <!-- Popup con imagen y botón cerrar -->
+  <div id="popup">
+    <div class="close-btn" aria-label="Cerrar anuncio" role="button" tabindex="0">&times;</div>
+    <img src="momo.webp" alt="Anuncio divertido" />
+  </div>
+<script>
+  const btn = document.getElementById('btnGenerar');
+  const divFrase = document.getElementById('frase');
+  const ytVideo = document.getElementById('ytVideo');
+  const popup = document.getElementById('popup');
+  const overlay = document.getElementById('overlay');
+  const closeBtn = popup.querySelector('.close-btn');
+
+  const VIDEO_ID = 'C0fytYVZ_mQ';
+
+  // 🎉 Tus frases personalizadas van acá
+  const frases = [
+    "¿Por qué los pájaros no usan Facebook? Porque ya tienen Twitter.",
+    "¿Qué hace una abeja en el gimnasio? ¡Zum-ba!",
+    "¿Qué le dice una iguana a su hermana gemela? ¡Iguanita!",
+    "¿Cuál es el colmo de Aladdín? Tener mal genio.",
+    "¿Qué hace un pez? ¡Nada!",
+    "¿Cómo se despiden los químicos? Ácido un placer.",
+    "¿Qué hace un leñador en la computadora? Corta y pega.",
+    "¿Por qué los esqueletos no pelean entre ellos? Porque no tienen agallas.",
+    "¿Cómo se llama un campeón de buceo japonés? Tokofondo.",
+    "¿Y el subcampeón? Kasitoko.",
+  "¿Por qué los pájaros no usan Facebook? Porque ya tienen Twitter.",
+  "¿Qué hace una abeja en el gimnasio? ¡Zum-ba!",
+  "¿Qué le dice una iguana a su hermana gemela? ¡Iguanita!",
+  "¿Cuál es el colmo de Aladdín? Tener mal genio.",
+  "¿Por qué los esqueletos no pelean entre ellos? Porque no tienen agallas.",
+  "¿Cómo se despiden los químicos? Ácido un placer.",
+  "¿Qué hace un pez? ¡Nada!",
+  "¿Qué hace una vaca en un terremoto? ¡Leche agitada!",
+  "¿Qué le dice una cebolla a otra? Nos vemos en la sartén.",
+  "¿Por qué lloraba el libro de matemáticas? Porque tenía muchos problemas.",
+  "¿Qué hace un plátano en el hospital? ¡Banana de baja!",
+  "¿Qué hace un tomate en una carrera? ¡Ketchup!",
+  "¿Por qué los perros no bailan? Porque tienen dos patas izquierdas.",
+  "¿Por qué los fantasmas no mienten? Porque se les ve a través.",
+  "¿Qué le dice una impresora a otra? ¿Esa hoja es tuya o es una impresión mía?",
+  "¿Qué le dice el café al azúcar? Sin ti mi vida es amarga.",
+  "¿Qué hace una caja hablando con otra? ¡Caja de sorpresas!",
+  "¿Por qué el mar nunca se seca? Porque no trabaja.",
+  "¿Qué hace un león escribiendo? Está redactando su rugido.",
+  "¿Por qué los pájaros no usan WhatsApp? Porque ya tienen pío-pío.",
+  "¿Qué le dice una escoba a otra? ¡Nos vemos en la esquina!",
+  "¿Qué hace un zapato en la luna? Explorando suela nueva.",
+  "¿Qué hace un pez en la biblioteca? Nada que leer.",
+  "¿Cuál es el animal más antiguo? La cebra, porque está en blanco y negro.",
+  "¿Por qué el semáforo nunca juega a las escondidas? Porque siempre lo están mirando.",
+  "¿Qué hace una naranja en la parada del bus? Espera su jugo.",
+  "¿Qué hace un pato con una pata rota? Pato cojo.",
+  "¿Por qué el pasto nunca se pierde? Porque siempre está en el campo.",
+  "¿Qué le dice un jardinero a otro? ¡Disfrutemos mientras podamos!",
+  "¿Qué hace una pelota en el espacio? Da vueltas sin parar.",
+  "¿Por qué las focas miran siempre hacia arriba? ¡Porque ahí están los focos!",
+  "¿Cómo se llama el campeón de buceo japonés? Tokofondo.",
+  "¿Y el subcampeón? Kasitoko.",
+  "¿Qué le dice el hielo al agua? ¡No me derritas!",
+  "¿Qué hace un cocodrilo con un GPS? Croconduce.",
+  "¿Por qué los esqueletos no van a fiestas? Porque no tienen cuerpo.",
+  "¿Qué hace una cuchara en un partido? Revuelve el juego.",
+  "¿Qué hace un gato con un teléfono? Miau-liza.",
+  "¿Qué hace un loro con un bate? Pega un grito.",
+  "¿Por qué no se puede discutir con un número impar? Porque siempre tiene un punto medio.",
+  "¿Por qué los peces no usan Facebook? Porque ya tienen red social.",
+  "¿Qué hace un teclado en una fiesta? Toca todas las teclas.",
+  "¿Qué hace un teléfono en la ducha? Se moja los datos.",
+  "¿Cómo se llama un león peluquero? Leónidas.",
+  "¿Qué hace un caracol en una carrera? Deja rastro.",
+  "¿Qué hace una silla en la playa? Toma asiento.",
+  "¿Por qué el pan se fue al hospital? Porque estaba tostado.",
+  "¿Qué hace un semáforo con miedo? Se pone rojo.",
+  "¿Qué hace un reloj en el gimnasio? Marca el tiempo.",
+  "¿Qué hace un fantasma con una computadora? Espanta virus.",
+  "¿Qué hace un libro triste? Llora letras.",
+  "¿Qué hace un diente en la cárcel? Cumple condena.",
+  "¿Qué hace un plátano en una fiesta? Da la nota.",
+  "¿Qué hace una estrella en el suelo? Se cayó del cielo.",
+  "¿Qué le dice una sandía a otra? ¡No te rindas, sigue siendo dulce!",
+  "¿Qué hace una nube enojada? Truena.",
+  "¿Qué le dice un pez a otro pez? Nada.",
+  "¿Qué hace una calculadora en un restaurante? Saca la cuenta.",
+  "¿Qué hace un gato viendo una película? Miau-rmura.",
+  "¿Qué le dice el viento a las hojas? ¡Nos vemos al rato!",
+  "¿Qué hace un dragón cocinando? Fuego lento.",
+  "¿Qué hace un globo en la universidad? Sube nota.",
+  "¿Qué hace una mosca en el cine? Ve Mosquitoman.",
+  "¿Qué hace un ratón en un teclado? Clic.",
+  "¿Qué hace un calendario en la cama? Cuenta ovejas.",
+  "¿Qué hace un astronauta perdido? Llama a la NASA.",
+  "¿Qué hace un marciano en la Tierra? Busca señal.",
+  "¿Qué hace un helado al sol? Llora.",
+  "¿Qué hace un zombi con sueño? Se muere de cansancio.",
+  "¿Qué hace un burro estudiando? Saca orejas.",
+  "¿Qué hace una guitarra sin cuerdas? Llora en silencio.",
+  "¿Qué hace un kiwi con frío? Se encoge.",
+  "¿Qué hace un auto con sueño? Se estaciona.",
+  "¿Qué hace un pez viendo Netflix? Nada y nada.",
+  "¿Qué hace una taza deprimida? Se siente vacía.",
+  "¿Qué hace una moneda en el suelo? Espera cambio.",
+  "¿Qué hace una foto enojada? Se revela.",
+  "¿Qué hace una jirafa en un ascensor? Se agacha.",
+  "¿Qué hace un camello con calor? Se derrite el jorobón.",
+  "¿Qué hace un pastel en una fiesta? Se parte de risa.",
+  "¿Qué hace una estrella triste? Se apaga.",
+  "¿Qué hace un chicle en una silla? Se queda pegado.",
+  "¿Qué hace una luna curiosa? Mira por telescopio.",
+  "¿Qué hace un pingüino en el Sahara? Se derrite.",
+  "¿Qué hace un ciego con una linterna? Busca sentido.",
+  "¿Qué hace un mosquito con hambre? Pica algo.",
+  "¿Qué hace un tomate enojado? Se pone rojo.",
+  "¿Qué hace una sombra perdida? Se va a buscar luz.",
+  "¿Qué hace una letra sin palabra? Se siente sola.",
+  "¿Qué hace un robot enamorado? Tiene chips en el corazón.",
+  "¿Qué hace una escalera triste? No tiene pasos firmes.",
+  "¿Qué hace un lápiz sin punta? No tiene sentido.",
+  "¿Qué hace una pizza llorando? Le falta un pedazo.",
+  "¿Qué hace una oveja en el micro? Baaa-ja en la próxima.",
+  "¿Qué hace una pelota triste? Rebota en la vida.",
+  "¿Qué hace un tren cansado? Descarrila.",
+  "¿Qué hace un banco con frío? Da intereses congelados.",
+  "¿Qué hace una nariz en huelga? No respira más.",
+  "¿Qué hace un wifi deprimido? Se desconecta del mundo.",
+  "¿Qué hace un filete en una carrera? Corre por su vida."
+
+
+  ];
+
+  btn.addEventListener('click', () => {
+    divFrase.textContent = 'Cargando...';
+
+    setTimeout(() => {
+      if (frases.length === 0) {
+        divFrase.textContent = 'No hay frases disponibles.';
+        return;
+      }
+
+      const indice = Math.floor(Math.random() * frases.length);
+      divFrase.textContent = frases[indice];
+
+      // Mostrar video con autoplay
+      ytVideo.style.display = 'block';
+      ytVideo.src = `https://www.youtube.com/embed/${VIDEO_ID}?autoplay=1&rel=0`;
+
+      // Mostrar popup y overlay
+      popup.style.display = 'block';
+      overlay.style.display = 'block';
+    }, 300); // Pequeña espera opcional
+  });
+
+  // Cerrar popup
+  function cerrarPopup() {
+    popup.style.display = 'none';
+    overlay.style.display = 'none';
+  }
+
+  closeBtn.addEventListener('click', cerrarPopup);
+  overlay.addEventListener('click', cerrarPopup);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && popup.style.display === 'block') {
+      cerrarPopup();
+    }
+  });
+</script>
+
+</body>
+</html>
