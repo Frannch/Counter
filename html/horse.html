@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Carrera de Caballos</title>
+  <style>
+    body {
+      background-color: #0e0e0e;
+      color: white;
+      font-family: sans-serif;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
+
+    input, button {
+      padding: 0.5em;
+      margin: 0.5em;
+      font-size: 1em;
+    }
+
+    svg {
+      margin-top: 20px;
+      border: 2px solid #fff;
+      background: linear-gradient(to bottom, #4CAF50 70%, #654321 30%);
+    }
+
+    .racer {
+      transition: transform linear;
+    }
+
+    #raceResult {
+      font-size: 1.5em;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="setup">
+    <h2>Configuración de la carrera</h2>
+    <label>Cantidad de caballos:
+      <input type="number" id="horseCount" min="1" max="10" value="3">
+    </label>
+    <button onclick="generateHorseInputs()">Siguiente</button>
+    <div id="horseInputs"></div>
+  </div>
+
+  <div id="raceResult"></div>
+
+  <svg id="track" viewBox="0 0 600 300" width="100%" height="300">
+    <defs>
+      <g id="horse">
+        <circle r="8" />
+        <text x="12" y="4" font-size="10" fill="white">🐎</text>
+      </g>
+    </defs>
+    <g id="playerArea"></g>
+  </svg>
+
+  <script>
+    const raceLength = 500;
+    const maxRaceTime = 3000;
+    const maxRaceDiff = 1200;
+
+    let ridersStore = [];
+    const finishOrder = [];
+
+    function randInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function getRandomColor() {
+      const colors = ["red", "blue", "green", "purple", "orange", "brown", "pink", "teal", "lime", "gray"];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    function generateHorseInputs() {
+      const count = parseInt(document.getElementById("horseCount").value);
+      const horseInputsDiv = document.getElementById("horseInputs");
+      horseInputsDiv.innerHTML = "";
+
+      for (let i = 0; i < count; i++) {
+        const input = document.createElement("input");
+        input.type = "text";
+        input.placeholder = `Nombre del caballo ${i + 1}`;
+        input.id = `horseName${i}`;
+        horseInputsDiv.appendChild(input);
+        horseInputsDiv.appendChild(document.createElement("br"));
+      }
+
+      const startButton = document.createElement("button");
+      startButton.textContent = "Iniciar carrera";
+      startButton.onclick = () => {
+        ridersStore = [];
+        for (let i = 0; i < count; i++) {
+          const name = document.getElementById(`horseName${i}`).value || `Caballo ${i + 1}`;
+          ridersStore.push({ name: name, color: getRandomColor(), number: i });
+        }
+        document.getElementById("setup").style.display = "none";
+        go();
+      };
+      horseInputsDiv.appendChild(startButton);
+    }
+
+    function go() {
+      const playerArea = document.getElementById("playerArea");
+      playerArea.innerHTML = "";
+      const numRiders = ridersStore.length;
+      const finishLine = raceLength - 100;
+
+      for (let i = 0; i < ridersStore.length; i++) {
+        const rider = ridersStore[i];
+        const time = randInt(maxRaceTime - maxRaceDiff, maxRaceTime);
+        const riderX = finishLine + randInt(-10, 10);
+        const riderY = 40 + i * 30;
+
+        const horse = document.createElementNS("http://www.w3.org/2000/svg", "use");
+        horse.setAttribute("href", "#horse");
+        horse.setAttribute("fill", rider.color);
+        horse.setAttribute("class", "racer");
+        horse.setAttribute("transform", `translate(0 ${riderY})`);
+        playerArea.appendChild(horse);
+
+        setTimeout(() => {
+          horse.setAttribute("transform", `translate(${riderX} ${riderY})`);
+          finishOrder.push(rider);
+          if (finishOrder.length === numRiders) {
+            mostrarGanadores();
+          }
+        }, time);
+      }
+    }
+
+    function mostrarGanadores() {
+      const result = document.getElementById("raceResult");
+      const [primero, segundo, tercero] = finishOrder;
+      let mensaje = `🏁 Resultados:<br>`;
+
+      if (primero) mensaje += `🥇 ${primero.name}<br>`;
+      if (segundo) mensaje += `🥈 ${segundo.name}<br>`;
+      if (tercero) mensaje += `🥉 ${tercero.name}<br>`;
+
+      result.innerHTML = mensaje;
+    }
+  </script>
+</body>
+</html>
