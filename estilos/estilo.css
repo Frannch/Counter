@@ -65,7 +65,21 @@ button::before {
 button:hover::before {
     width: 100%;
 }
+.fondo-index-tema1 {
+  background-image: url("../sprites/lec.jpg");
+}
 
+.fondo-contador-tema1 {
+  background-image: url("../sprites/max.jpeg");
+}
+
+.fondo-index-tema2 {
+  background-image: url("../sprites/gilmore.jpg");
+}
+
+.fondo-contador-tema2 {
+  background-image: url("../sprites/gatos.jpeg");
+}
 /*=====================================================================================================*/
 @media (max-width: 768px) {
     body{

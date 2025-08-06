@@ -13,6 +13,14 @@
 
 
 <body>
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <h2>Elegí un tema</h2>
+    <button onclick="seleccionarTema('tema1')">Fran</button>
+    <button onclick="seleccionarTema('tema2')">Ro</button>
+  </div>
+</div>
+
     <div class="botonera">
         <a href="html/count.html"><button id="contador">Contador</button></a>
         <a href="html/cartas.html"><button id="pokemon">Pókemon</button></a>
@@ -26,5 +34,89 @@
         <a href="html/creaciones.html"><button>Creaciones</button></a>
     </div>
 </body>
+<script>
+function seleccionarTema(tema) {
+    localStorage.setItem('tema', tema);
+    document.getElementById('modal').style.display = 'none';
+    aplicarTema();
+}
+function aplicarTema() {
+  const tema = localStorage.getItem('tema');
+  const pagina = window.location.pathname.split("/").pop(); // ej: "index.html"
+
+  document.body.classList.remove(
+    'fondo-index-tema1', 'fondo-index-tema2',
+    'fondo-contador-tema1', 'fondo-contador-tema2'
+  );
+
+  if (tema === 'tema1') {
+    if (pagina === 'index.html') {
+      document.body.classList.add('fondo-index-tema1');
+    } else if (pagina === '../html/count.html') {
+      document.body.classList.add('fondo-contador-tema1');
+    }
+  } else if (tema === 'tema2') {
+    if (pagina === 'index.html') {
+      document.body.classList.add('fondo-index-tema2');
+    } else if (pagina === 'count.html') {
+      document.body.classList.add('fondo-contador-tema2');
+    }
+  }
+}
+
+window.addEventListener('DOMContentLoaded', aplicarTema);
+window.addEventListener('DOMContentLoaded', () => {
+  aplicarTema();
+  const tema = localStorage.getItem('tema');
+  if (tema && document.getElementById('modal')) {
+    document.getElementById('modal').style.display = 'none';
+  }
+})
+</script>
+
+<style>
+.modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(30, 20, 40, 0.7); /* Fondo oscuro */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: #fff;
+    border-radius: 1.5rem;
+    padding: 2rem 2.5rem;
+    box-shadow: 0 0 30px #0008;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.modal-content h2 {
+    margin: 0 0 1rem 0;
+    font-size: 2rem;
+}
+
+.modal-content button {
+    margin: 0.5rem 0;
+    padding: 0.7em 2em;
+    font-size: 1.2rem;
+    border-radius: 1em;
+    border: none;
+    background: #c2185b;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.modal-content button:hover {
+    background: #ad1457;
+}
+</style>
 
 </html>

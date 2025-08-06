@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../estilos/count.css">
-    <link rel="shorcut icon" href="sprites/favicon.ico">
+    <link rel="shorcut icon" href="../sprites/favicon.ico">
     <title>Contador</title>
 </head>
 
@@ -35,9 +35,12 @@
         <div class="countdown" id="countdown">Cargando...</div>
     </div>
     <!--Gifs -->
+    
     <div class="gifs">
+        <img id="h" src="../sprites/logro.png">
         <img id="mheart" src="../sprites/VeC.gif" alt="">
         <img id="rheart" src="../sprites/y2.gif" alt="">
+        
     </div>
 
     <div class="counter-container">
@@ -197,7 +200,35 @@ document.getElementById('miBoton').addEventListener('click', handleClickActions)
         checkSpecialDate();
         setInterval(checkSpecialDate, 60000);
     </script>
+<script>
+function aplicarTema() {
+  const tema = localStorage.getItem('tema');
+  const pagina = window.location.pathname.split("/").pop();
 
+  document.body.classList.remove(
+    'fondo-index-tema1', 'fondo-index-tema2',
+    'fondo-contador-tema1', 'fondo-contador-tema2'
+    // ...agrega más clases si tienes más páginas
+  );
+
+  if (tema === 'tema1') {
+    if (pagina === 'index.html') {
+      document.body.classList.add('fondo-index-tema1');
+    } else if (pagina === 'count.html') {
+      document.body.classList.add('fondo-contador-tema1');
+    }
+    // ...más páginas
+  } else if (tema === 'tema2') {
+    if (pagina === 'index.html') {
+      document.body.classList.add('fondo-index-tema2');
+    } else if (pagina === 'count.html') {
+      document.body.classList.add('fondo-contador-tema2');
+    }
+    // ...más páginas
+  }
+}
+window.addEventListener('DOMContentLoaded', aplicarTema);
+</script>
 </body>
 
 </html>
