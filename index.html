@@ -33,6 +33,7 @@
         <a href="html/extr.html"><button id="ruleta">Extras</button></a>
         <a href="html/creaciones.html"><button>Creaciones</button></a>
     </div>
+<button id="cambiar-tema" title="Cambiar tema">🎨</button>
 </body>
 <script>
 function seleccionarTema(tema) {
@@ -72,6 +73,9 @@ window.addEventListener('DOMContentLoaded', () => {
     document.getElementById('modal').style.display = 'none';
   }
 })
+document.getElementById('cambiar-tema').addEventListener('click', function() {
+    document.getElementById('modal').style.display = 'flex';
+});
 </script>
 
 <style>
@@ -115,6 +119,28 @@ window.addEventListener('DOMContentLoaded', () => {
     transition: background 0.2s;
 }
 .modal-content button:hover {
+    background: #ad1457;
+}
+#cambiar-tema {
+    position: fixed;
+    bottom: 2.5vh;
+    left: 2vw;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #c2185b;
+    color: #fff;
+    border: none;
+    box-shadow: 0 2px 8px #0005;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1100;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+#cambiar-tema:hover {
     background: #ad1457;
 }
 </style>
