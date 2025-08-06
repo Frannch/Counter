@@ -3,9 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+     <link rel="stylesheet" href="../estilos/estilo.css">
+    <link rel="shortcut icon" href="../sprites/favicon.ico">
+    <title>Lab</title>
+   
 </head>
+<style>
+    body{
+        overflow: hidden;
+        background-image: url(../sprites/max.jpeg);
+    }
+    .botonera {
+        grid-template-columns: repeat(2, 1fr); /* 2 columnas en móvil */
+        grid-template-rows: repeat(2, 1fr);    /* 3 filas para 6 botones */
+        aspect-ratio: 1/2;                   /* Proporción vertical */
+        
+    }
+    button::before {
+      background: rgba(0, 38, 255, 0.363)  ;
+    }
+</style>
 <body>
-    
+    <div class="botonera">
+        <a><button id="heart">1</button></a>
+        <a><button id="heart">2</button></a>
+    </div>
 </body>
 </html>
