@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="../pict/lizo.ico">
+    <title>Lizard</title>
+</head>
+<style>
+    body {
+        background-color: #f0f0f0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    #botno {
+        font-size: 17vh;
+        cursor: pointer;
+        width: 40vh;
+        height: 40vh;
+        border-radius: 50%;
+        padding: 10px 10px;
+        box-shadow:  0 0 10px rgba(0, 0, 0, 0.2);
+        background-color: rgba(255, 255, 255, 0.253);
+        
+    }
+    #botno:active {
+         filter: brightness(98%);
+    }
+</style>
+<body>
+    <button onmousedown="sonido.play()" id="botno">🦎</button>
+</body>
+<script>
+    const sonido = new Audio('../audio/lizard_lizard_meme.mp3');
+    sonido.volume = 0.5; // Set volume to 50%
+</script>
+</html>
