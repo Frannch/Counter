@@ -46,7 +46,7 @@
 <body>
     <div class="center-col">
         <div id="showdata">Clicks</div>
-        <button onmousedown="sonido.play()" id="botno">🦎</button>
+        <button id="botno">🦎</button>
     </div>
     <script>
         const sonido = new Audio('../audio/lizard_lizard_meme.mp3');
@@ -57,6 +57,7 @@
         let clicks = 0;
         boton.addEventListener('click', printrClick);
         function printrClick() {
+            sonido.currentTime = 0;
             sonido.play();
             clicks++;
             showclicks.innerHTML = `Clicks: ${clicks}`;
