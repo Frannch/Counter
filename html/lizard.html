@@ -62,6 +62,51 @@
             clicks++;
             showclicks.innerHTML = `Clicks: ${clicks}`;
             showclicks.style.display = 'block';
+
+            // Crea entre 3 y 6 lagartos flotantes por click
+            const cuantos = 3 + Math.floor(Math.random() * 4);
+            for (let i = 0; i < cuantos; i++) {
+                crearLizardFlotante();
+            }
+        }
+
+        function crearLizardFlotante() {
+            const btn = document.getElementById('botno');
+            const rect = btn.getBoundingClientRect();
+            const container = document.body;
+
+            // Crea el emoji
+            const emoji = document.createElement('span');
+            emoji.textContent = '🦎';
+            emoji.style.position = 'fixed';
+            emoji.style.fontSize = '2.5rem';
+            emoji.style.pointerEvents = 'none';
+            emoji.style.zIndex = 1000;
+
+            // Posición inicial aleatoria alrededor del botón
+            const angle = Math.random() * 2 * Math.PI;
+            const radius = 80 + Math.random() * 40; // distancia desde el centro del botón
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            emoji.style.left = `${centerX + Math.cos(angle) * radius}px`;
+            emoji.style.top = `${centerY + Math.sin(angle) * radius}px`;
+            emoji.style.opacity = 1;
+
+            // Animación: flotar y desvanecer
+            const floatY = -40 - Math.random() * 40;
+            emoji.animate([
+                { transform: 'translateY(0)', opacity: 1 },
+                { transform: `translateY(${floatY}px)`, opacity: 0 }
+            ], {
+                duration: 1000,
+                easing: 'ease-out'
+            });
+
+            container.appendChild(emoji);
+
+            setTimeout(() => {
+                emoji.remove();
+            }, 1000);
         }
     </script>
 </body>
