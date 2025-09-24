@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Razones por las que te amo</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+        }
+        
+        .main-container {
+            max-width: 800px;
+            padding: 40px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .date-info {
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .day-number {
+            font-size: 4em;
+            font-weight: bold;
+            margin: 20px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .daily-message {
+            font-size: 1.5em;
+            line-height: 1.6;
+            margin: 30px 0;
+            font-style: italic;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ffd700, #ff6b6b);
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+        
+        .year-progress {
+            margin-top: 15px;
+            font-size: 1em;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="date-info" id="dateInfo"></div>
+        <div class="day-number" id="dayNumber"></div>
+        <div class="daily-message" id="dailyMessage"></div>
+        <div style="margin-top: 20px; font-size: 1.1em; color: rgba(255,255,255,0.8);">
+            💕 Una razón más para amarte cada día 💕
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div class="year-progress" id="yearProgress"></div>
+    </div>
+
+    <script>
+        // Array con 366 razones únicas por las que amo a mi novia
+        const dailyMessages = [
+            "Porque tu sonrisa ilumina hasta el día más oscuro de mi vida.",
+            "Porque cuando me abrazas, siento que estoy en casa.",
+            "Porque tu risa es la melodía más hermosa que he escuchado.",
+            "Porque haces que cada día ordinario se sienta extraordinario.",
+            "Porque tu forma de verme me hace sentir especial e importante.",
+            "Porque tienes la capacidad de calmarme con solo tu presencia.",
+            "Porque compartes tus sueños conmigo y me incluyes en ellos.",
+            "Porque tu bondad y compasión hacia otros me inspiran a ser mejor.",
+            "Porque me apoyas en mis locuras y aventuras sin juzgarme.",
+            "Porque tu inteligencia y perspectiva sobre la vida me fascina.",
+            "Porque sabes exactamente qué decir cuando más lo necesito.",
+            "Porque me haces reír incluso cuando no tengo ganas de sonreír.",
+            "Porque tus ojos me cuentan historias sin necesidad de palabras.",
+            "Porque tu paciencia conmigo es infinita y nunca la doy por sentada.",
+            "Porque haces que hasta las tareas más aburridas sean divertidas.",
+            "Porque tu forma de ser me hace admirarte más cada día.",
+            "Porque me escuchas realmente, no solo esperas tu turno para hablar.",
+            "Porque tu creatividad y imaginación me sorprenden constantemente.",
+            "Porque me haces sentir valiente cuando tengo miedo.",
+            "Porque tus pequeños gestos de amor significan más que mil palabras.",
+            "Porque compartes tu comida favorita conmigo sin dudarlo.",
+            "Porque tu forma de dormir acurrucada junto a mí es mi lugar favorito.",
+            "Porque celebras mis logros como si fueran tuyos propios.",
+            "Porque me das la libertad de ser yo mismo completamente.",
+            "Porque tu forma de cuidarme cuando estoy enfermo es puro amor.",
+            "Porque tus abrazos tienen el poder de arreglar cualquier mal día.",
+            "Porque haces que las peleas se conviertan en oportunidades para crecer juntos.",
+            "Porque tu forma de decir mi nombre suena como una canción.",
+            "Porque me inspiraste a creer en el amor.",
+            "Porque compartes tus miedos conmigo y me permites consolarte.",
+            "Porque tu determinación y fuerza me motivan a ser mejor persona.",
+            "Porque haces que cada 'te amo' se sienta como la primera vez.",
+            "Porque tu forma de ver la belleza en las cosas simples me enseña a apreciar la vida.",
+            "Porque me das razones para despertarme cada mañana con una sonrisa.",
+            "Porque tu lealtad y compromiso conmigo son inquebrantables.",
+            "Porque sabes cómo hacerme sentir mejor cuando todo va mal.(Álgebra)",
+            "Porque tu forma de planear nuestro futuro juntos me emociona.",
+            "Porque me haces querer ser la mejor versión de mí mismo.",
+            "Porque tu forma de amarme es única e irreemplazable.",
+            "Porque haces que hasta los días lluviosos se sientan soleados.",
+            "Porque tu honestidad y transparencia conmigo construyen nuestra confianza.",
+            "Porque me das el espacio que necesito pero siempre estás ahí cuando te busco.",
+            "Porque tu forma de resolver problemas me enseña nuevas perspectivas.",
+            "Porque haces que cada aventura, por pequeña que sea, sea memorable.",
+            "Porque tu optimismo es contagioso y mejora mi visión de la vida.",
+            "Porque me perdonas mis errores y me ayudas a aprender de ellos.",
+            "Porque tu forma de amar a tu familia me muestra tu gran corazón.",
+            "Porque me haces sentir seguro para ser vulnerable contigo.",
+            "Porque cada día contigo es un regalo que atesoro profundamente."
+        ];
+
+        // Generar más razones de amor para completar los 366 días
+        function generateAllMessages() {
+            const physicalLove = [
+                "Porque la forma en que juegas con tu cabello me hipnotiza.",
+                "Porque tus besos tienen el sabor del paraíso.",
+                "Porque la forma en que caminas es pura elegancia.",
+                "Porque tus manos encajan perfectamente con las mías.(bueno casi)",
+                "Porque tu voz es lo último que quiero escuchar antes de dormir.",
+                "Porque el brillo en tus ojos cuando me miras me derrite el corazón.",
+                "Porque tu forma de vestirte siempre me deja sin aliento.",
+                "Porque tus abrazos sorpresa son mi debilidad favorita.",
+                "Porque tu forma de recibirme por las mañanas es adorable.",
+                "Porque tus caricias tienen el poder de curar cualquier dolor.",
+                "Porque la forma en que te ríes con todo tu cuerpo es contagiosa.",
+                "Porque me gusta cómo te acurrucas cuando tienes frío.",
+                "Porque tus lunares son como constelaciones en tu piel.",
+                "Porque tus pestañas son las más hermosas que he visto."
+            ];
+
+            const emotionalLove = [
+                "Porque me comprendes sin necesidad de explicaciones.",
+                "Porque celebras mi individualidad en lugar de intentar cambiarme.",
+                "Porque me das fuerzas cuando me siento débil.",
+                "Porque confías en mí completamente y eso me hace sentir valioso.",
+                "Porque me muestras nuevas formas de ver el mundo.",
+                "Porque tu empatía hacia otros me enseña sobre la compasión.",
+                "Porque me haces sentir que puedo conquistar cualquier cosa.",
+                "Porque respetas mis espacios y tiempos personales.",
+                "Porque me ayudas a crecer como persona sin presionarme.",
+                "Porque tu amor incondicional me da seguridad.",
+                "Porque compartes conmigo tus pensamientos más profundos.",
+                "Porque me motivas a perseguir mis sueños.",
+                "Porque tu presencia calma todas mis ansiedades.",
+                "Porque me haces sentir que soy suficiente tal como soy.",
+                "Porque tu forma de amar es generosa y desinteresada.",
+                "Porque me inspiras a ser más bondadoso con otros.",
+                "Porque confías en mis decisiones incluso cuando dudas.",
+                "Porque me das la libertad de expresar mis sentimientos.",
+                "Porque tu amor me ha sanado de heridas del pasado.",
+                "Porque me haces creer en nosotros y en nuestro futuro."
+            ];
+
+            const dailyLifeLove = [
+                "Porque preparas mi café exactamente como me gusta.",
+                "Porque recuerdas detalles pequeños que menciono de pasada.",
+                "Porque organizas nuestras citas con tanto amor y detalle.",
+                "Porque me mandas memes que sabes que me harán reír.",
+                "Porque eliges películas que sabes que disfrutaremos juntos.(A veces)",
+                "Porque haces que hasta esperar en la fila sea divertido.",
+                "Porque me traes sorpresas pequeñas sin razón especial.",
+                "Porque planificas aventuras para nosotros dos.",
+                "Porque me acompañas a lugares que no te emocionan tanto.",
+                ];
+
+            // Combinar todas las razones de amor
+            let allMessages = [...dailyMessages];
+            
+            // Agregar diferentes categorías de amor hasta completar 366
+            let currentCategory = 0;
+            const allCategories = [...physicalLove, ...emotionalLove, ...dailyLifeLove];
+            
+            while (allMessages.length < 366) {
+                if (currentCategory < allCategories.length) {
+                    allMessages.push(allCategories[currentCategory]);
+                    currentCategory++;
+                } else {
+                    // Reciclar mensajes si es necesario, pero variando ligeramente
+                    const baseMessage = allCategories[allMessages.length % allCategories.length];
+                    allMessages.push(baseMessage);
+                }
+            }
+            
+            return allMessages;
+        }
+
+        function getDayOfYear(date) {
+            const start = new Date(date.getFullYear(), 0, 0);
+            const diff = date - start;
+            const oneDay = 1000 * 60 * 60 * 24;
+            return Math.floor(diff / oneDay);
+        }
+
+        function isLeapYear(year) {
+            return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+        }
+
+        function updateDailyContent() {
+            const today = new Date();
+            const dayOfYear = getDayOfYear(today);
+            const totalDaysInYear = isLeapYear(today.getFullYear()) ? 366 : 365;
+            const progressPercentage = (dayOfYear / totalDaysInYear) * 100;
+            
+            const allMessages = generateAllMessages();
+            const todayMessage = allMessages[dayOfYear - 1] || allMessages[0];
+            
+            // Actualizar elementos del DOM
+            document.getElementById('dateInfo').textContent = 
+                today.toLocaleDateString('es-ES', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                });
+            
+            document.getElementById('dayNumber').textContent = `Razón #${dayOfYear}`;
+            document.getElementById('dailyMessage').textContent = todayMessage;
+            document.getElementById('progressFill').style.width = `${progressPercentage}%`;
+            document.getElementById('yearProgress').textContent = 
+                `${progressPercentage.toFixed(1)}% del año completado`;
+        }
+
+        // Actualizar contenido al cargar la página
+        updateDailyContent();
+        
+        // Actualizar cada medianoche
+        setInterval(() => {
+            const now = new Date();
+            if (now.getHours() === 0 && now.getMinutes() === 0 && now.getSeconds() === 0) {
+                updateDailyContent();
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

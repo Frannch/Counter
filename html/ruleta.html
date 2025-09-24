@@ -6,6 +6,21 @@
     <link rel="shorcut icon" href="../sprites/favicon.ico">
     <link rel="stylesheet" href="../estilos/ruleta.css">
     <title>Ro`s Book Roulette</title>
+    <style>
+        .pointer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-bottom: 25px solid #333;
+            transform: translate(50%, 260px);
+            rotate: 180deg;
+            z-index: 10;
+        }
+    </style>
 </head>
 
 <body>
@@ -21,7 +36,7 @@
     </div>
 
     <div class="inputArea">
-        <textarea id="items" placeholder="Ingrese opciones separadas por salto de línea" spellcheck="false"></textarea>
+        <textarea id="items" placeholder="Ingrese opciones separadas por salto de línea; Si actualiza estando vacio se gira en blanco :c" spellcheck="false"></textarea>
 
     </div>
 
