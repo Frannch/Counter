@@ -1,0 +1,371 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Acertijos - Combinación</title>
+<style>
+  :root{--accent:#c2185b;--bg:#f6f6f8;--card:#fff}
+
+  /* Reset / layout principal */
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    box-sizing: border-box;
+  }
+
+  /* Centrar todo en pantalla (desktop y móvil) y quitar scrollbar lateral */
+  body {
+    display: flex;
+    align-items: center;       /* centra vertical */
+    justify-content: center;   /* centra horizontal */
+    min-height: 100vh;
+    overflow: hidden;          /* elimina scrollbar lateral */
+    font-family: system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: #111;
+  }
+
+  /* Contenedor adaptable */
+  .wrap {
+    width: 100%;
+    max-width: 720px;
+    padding: 1.2rem;
+    box-sizing: border-box;
+  }
+
+  /* Tarjeta con tamaño controlado para que quepa en pantalla */
+  .card {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 1.2rem;
+    box-shadow: 0 6px 18px rgba(0,0,0,.08);
+    max-height: calc(100vh - 3rem); /* evita exceder la altura de la ventana */
+    overflow: auto;                 /* si algo excede, solo la tarjeta hace scroll interno */
+  }
+
+  h1{ margin:.2rem 0 1rem; font-size:1.4rem; }
+
+  .riddle{ font-size:1.05rem; margin-bottom:.8rem; }
+  .controls{ display:flex; gap:.6rem; align-items:center; }
+  input[type="text"]{ flex:1; padding:.6rem .8rem; border-radius:8px; border:1px solid #ddd; font-size:1rem; min-width:0; }
+  button{ background:var(--accent); color:#fff; border:0; padding:.6rem .9rem; border-radius:8px; cursor:pointer; flex:0 0 auto; }
+
+  .feedback{ height:1.4rem; margin-top:.5rem; color:#b00020; font-weight:600; }
+  .combo{ display:flex; gap:.5rem; margin-top:1rem; justify-content:center; }
+  .digit{
+    width:3.4rem; height:3.4rem; border-radius:.6rem;
+    background:transparent; display:grid; place-items:center; font-weight:700;
+    color:transparent; border:2px dashed #ddd;
+  }
+  .digit.revealed{ background:linear-gradient(180deg,#fff,#f1f1f1); color:#111; border-style:solid; }
+
+  /* estilo para dígitos bloqueados hasta la fecha de desbloqueo */
+  .digit.locked{
+    opacity: 0.45;
+    color: transparent;
+    background: repeating-linear-gradient(45deg,#fff,#fff 6px,#f6f6f8 6px,#f6f6f8 12px);
+    border-color: #e0e0e0;
+    position: relative;
+  }
+  .digit.locked::after{
+    content: '🔒';
+    position: absolute;
+    font-size: 1rem;
+    color: #777;
+  }
+
+  .hint{ margin-top:.8rem; font-size:.9rem; color:#444; text-align:center; }
+  .done{ margin-top:1rem; padding:.8rem; border-radius:8px; background:#e6ffe9; color:#064a14; font-weight:700; display:none; text-align:center; }
+  .done.visible{ display:block; }
+
+  /* Overlay que bloquea toda la página hasta la fecha */
+  .blocked-overlay{
+    position:fixed;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background: rgba(0,0,0,0.75);
+    color:#fff;
+    z-index:9999;
+    padding:2rem;
+    text-align:center;
+  }
+  .blocked-card{
+    background: rgba(255,255,255,0.06);
+    border-radius:12px;
+    padding:1.4rem 1.6rem;
+    max-width:560px;
+    width:100%;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+  }
+  .blocked-card h2{margin:0 0 .4rem;font-size:1.3rem}
+  .blocked-card p{margin:0;font-size:1rem;opacity:0.95}
+  .muted-small{opacity:0.85;font-size:0.95rem;margin-top:.6rem}
+
+  /* Ajustes responsivos para móviles pequeños */
+  @media (max-width:420px) {
+    .wrap { padding: 0.8rem; }
+    .card { padding: 0.9rem; max-height: calc(100vh - 2rem); }
+    h1 { font-size: 1.1rem; }
+    input[type="text"]{ font-size:0.95rem; padding:.5rem .6rem; }
+    button{ padding:.5rem .7rem; font-size:.95rem; }
+    .digit{ width:2.6rem; height:2.6rem; }
+    .digit.locked::after { font-size: 0.9rem; }
+  }
+
+  /* Evitar mostrar barras de desplazamiento en el body en navegadores que lo soportan */
+  body::-webkit-scrollbar { display: none; }
+  html { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
+</head>
+<body>
+  <!-- Overlay que bloquea la página hasta la fecha -->
+  <div id="blockedOverlay" class="blocked-overlay" style="display:none">
+    <div class="blocked-card">
+      <h2>Página bloqueada</h2>
+      <p id="blockedMessage">Esta sección estará disponible próximamente.</p>
+      <div class="muted-small" id="blockedCountdown"></div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="card">
+      <h1>Acertijos — Consigue la combinación (4 dígitos)</h1>
+      <div id="riddleBox">
+        <div class="riddle" id="riddleText">Cargando acertijo...</div>
+        <div class="controls">
+          <input id="answerInput" type="text" placeholder="Escribe tu respuesta aquí" autocomplete="off" />
+          <button id="submitBtn">Comprobar</button>
+        </div>
+        <div class="feedback" id="feedback"></div>
+      </div>
+
+      <div class="combo" id="combo">
+        <div class="digit" data-index="0">•</div>
+        <div class="digit" data-index="1">•</div>
+        <div class="digit" data-index="2">•</div>
+        <div class="digit" data-index="3">•</div>
+      </div>
+
+      <div class="hint muted" id="progressHint">Resuelve cada acertijo para revelar un dígito.</div>
+      <div class="done" id="doneBox">Combinación completa: <span id="finalCombo"></span></div>
+    </div>
+  </div>
+
+<script>
+/* ---- CONTROL DE BLOQUEO POR FECHA ---- */
+/* Fecha en formato YYYY-MM-DD (modificar aquí) */
+const pageUnlockDateStr = '2025-10-03';
+
+/* Devuelve fecha local en formato YYYY-MM-DD */
+function todayLocalISO(){
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const day = String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
+
+/* Comprueba si ya está desbloqueado (fecha local) */
+function isPageUnlocked(){
+  return todayLocalISO() >= pageUnlockDateStr;
+}
+
+/* Muestra overlay con mensaje y cuenta regresiva */
+function showBlockedOverlay(){
+  const overlay = document.getElementById('blockedOverlay');
+  const msg = document.getElementById('blockedMessage');
+  const countdown = document.getElementById('blockedCountdown');
+  overlay.style.display = 'flex';
+  msg.textContent = `Esta página estará disponible a partir del ${formatDisplayDate(pageUnlockDateStr)}.`;
+  updateCountdown();
+  // actualizar cada minuto por si el usuario deja la pestaña abierta
+  window._blockedInterval = setInterval(updateCountdown, 60000);
+  function updateCountdown(){
+    const now = new Date();
+    const target = new Date(pageUnlockDateStr + 'T00:00:00');
+    const diff = target - now;
+    if(diff <= 0){
+      // desbloquea
+      overlay.style.display = 'none';
+      clearInterval(window._blockedInterval);
+      startApp(); // iniciar la app cuando se desbloquee
+      return;
+    }
+    const days = Math.floor(diff / (1000*60*60*24));
+    const hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+    const mins = Math.floor((diff % (1000*60*60)) / (1000*60));
+    countdown.textContent = `Faltan ${days}d ${hours}h ${mins}m para desbloquear.`;
+  }
+}
+
+/* Formatea YYYY-MM-DD -> DD/MM/YYYY */
+function formatDisplayDate(iso){
+  const [y,m,d] = iso.split('-');
+  return `${d}/${m}/${y}`;
+}
+
+/* Si está desbloqueado, arranca ya, si no muestra overlay */
+if(isPageUnlocked()){
+  // ejecuta la lógica normal
+  startApp();
+} else {
+  showBlockedOverlay();
+}
+
+/* ---- A partir de aquí: función que contiene el código original de la página ---- */
+function startApp(){
+  /* Lista de acertijos: question, answer (sin acentos, en minúsculas), digit */
+  const riddles = [
+    {q: "Cómo se va a llamar nuestro gato? 🧐 ", a: "krypto", d: "6"},
+    {q: "Cuál es mi color favorito ?", a: "naranja", d: "8"},
+    {q: "Que número de día fue nuestro primer beso? ", a: "10", d: "1"},
+    {q: "De que marca es mi (estúpida) motc ?", a: "gilera", d: "4"} // ajusta la respuesta si prefieres otra
+  ];
+
+  const storageKey = 'saw_progress_v1';
+  let progress = JSON.parse(localStorage.getItem(storageKey) || '[]');
+  if (!Array.isArray(progress) || progress.length !== riddles.length) {
+    progress = Array(riddles.length).fill(false);
+  }
+
+  const riddleText = document.getElementById('riddleText');
+  const answerInput = document.getElementById('answerInput');
+  const submitBtn = document.getElementById('submitBtn');
+  const feedback = document.getElementById('feedback');
+  const digitsEls = Array.from(document.querySelectorAll('.digit'));
+  const doneBox = document.getElementById('doneBox');
+  const finalCombo = document.getElementById('finalCombo');
+
+  /* Fecha de desbloqueo para los últimos 2 dígitos (formato YYYY-MM-DD) */
+  const unlockDateStr = '2025-10-01';
+
+  /* Comprueba si hoy ya se ha alcanzado la fecha de desbloqueo */
+  function isUnlockedNow(){
+    const today = new Date();
+    const todayStr = today.toISOString().slice(0,10);
+    return todayStr >= unlockDateStr;
+  }
+
+  /* Determina si un índice está bloqueado */
+  function isLockedIndex(index){
+    // últimos 2 dígitos (índices 2 y 3) están bloqueados hasta la fecha
+    return index >= riddles.length - 2 && !isUnlockedNow();
+  }
+
+  function normalize(s){
+    return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+  }
+
+  function revealDigit(index){
+    const el = digitsEls[index];
+    el.classList.remove('locked');
+    el.classList.add('revealed');
+    el.textContent = riddles[index].d;
+  }
+
+  function updateUI(){
+    // reveal solved digits and show locked state for those blocked
+    for(let i=0;i<riddles.length;i++){
+      if(progress[i]){
+        revealDigit(i);
+      } else if(isLockedIndex(i)){
+        digitsEls[i].classList.remove('revealed');
+        digitsEls[i].classList.add('locked');
+        digitsEls[i].textContent = '•';
+      } else {
+        digitsEls[i].classList.remove('revealed','locked');
+        digitsEls[i].textContent = '•';
+      }
+    }
+
+    // find next unsolved and unlocked
+    let nextIndex = null;
+    for(let i=0;i<riddles.length;i++){
+      if(!progress[i] && !isLockedIndex(i)){ nextIndex = i; break; }
+    }
+
+    if(nextIndex === null){
+      // either all solved OR remaining unsolved are locked
+      const anyLockedUnsovled = progress.some((p,i)=>!p && isLockedIndex(i));
+      if(anyLockedUnsovled && !isUnlockedNow()){
+        // show informative message about unlock date
+        riddleText.textContent = `Los últimos 2 dígitos estarán disponibles a partir de mañana.😋`;
+        answerInput.style.display = 'none';
+        submitBtn.style.display = 'none';
+        feedback.textContent = '';
+        doneBox.classList.remove('visible');
+        finalCombo.textContent = '';
+        return;
+      }
+
+      // all solved
+      doneBox.classList.add('visible');
+      finalCombo.textContent = riddles.map(r=>r.d).join('');
+      riddleText.textContent = "¡Felicidades! descubriste la combinación. ❤️";
+      answerInput.style.display = 'none';
+      submitBtn.style.display = 'none';
+      feedback.textContent = '';
+      return;
+    }
+
+    // next available riddle
+    riddleText.textContent = riddles[nextIndex].q;
+    answerInput.style.display = '';
+    submitBtn.style.display = '';
+    answerInput.value = '';
+    answerInput.focus();
+    feedback.textContent = '';
+  }
+
+  function formatUnlockDate(isoStr){
+    // convierte 'YYYY-MM-DD' a 'DD/MM/YYYY' para mostrar
+    const [y,m,d] = isoStr.split('-');
+    return `${d}/${m}/${y}`;
+  }
+
+  submitBtn.addEventListener('click', handleSubmit);
+  answerInput.addEventListener('keydown', (e)=>{ if(e.key === 'Enter') handleSubmit(); });
+
+  function handleSubmit(){
+    // determine current next unsolved and unlocked
+    let nextIndex = null;
+    for(let i=0;i<riddles.length;i++){
+      if(!progress[i] && !isLockedIndex(i)){ nextIndex = i; break; }
+    }
+    if(nextIndex === null) return;
+
+    const user = normalize(answerInput.value || '');
+    const correct = normalize(riddles[nextIndex].a);
+    if(user === correct){
+      progress[nextIndex] = true;
+      localStorage.setItem(storageKey, JSON.stringify(progress));
+      feedback.style.color = '#0a6'; feedback.textContent = 'Correcto, Bien amor :)';
+      revealDigit(nextIndex);
+      setTimeout(()=>{ updateUI(); }, 700);
+    } else {
+      feedback.style.color = '#b00020';
+      feedback.textContent = 'Incorrecto, :c. Vos podés';
+      answerInput.animate([{transform:'translateX(0)'},{transform:'translateX(-6px)'},{transform:'translateX(6px)'},{transform:'translateX(0)'}],{duration:300});
+    }
+  }
+
+  window.addEventListener('keydown', (e)=>{
+    if(e.ctrlKey && e.key === 'r'){
+      localStorage.removeItem(storageKey);
+      progress = Array(riddles.length).fill(false);
+      updateUI();
+    }
+  });
+
+  updateUI();
+}
+/* ---- fin startApp ---- */
+</script>
+</body>
+</html>
