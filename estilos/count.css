@@ -196,6 +196,7 @@ p {
     font-weight: bold;
     color: purple;
     padding: 5px 10px;
+    visibility: hidden;
 }
 #h{
     position: absolute;
@@ -247,6 +248,7 @@ p {
     #countdown {
         font-size: 0.8rem;
         padding: 3px 6px;
+        visibility: hidden;
     }
 
     #desgraciado {
