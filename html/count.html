@@ -1,15 +1,54 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../estilos/count.css">
     <link rel="shorcut icon" href="../sprites/favicon.ico">
     <title>Contador</title>
+    <!-- Estilos mínimos para centrar el botón -->
+    <style>
+      .center-overlay {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        z-index: 9998;
+        pointer-events: none; /* evita bloquear otros clics, el botón tiene eventos */
+      }
+      #countdownBtn {
+        pointer-events: auto;
+        width: 96px;
+        height: 96px;
+        border-radius: 50%;
+        border: 1px solid rgba(255,255,255,.25);
+        background: rgba(40,40,48,.9);
+        color: #fff;
+        font-size: 2rem;
+        font-weight: 700;
+        box-shadow: 0 12px 28px rgba(0,0,0,.45);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        transform: scale(0.5); /* reduce al 50% */
+      }
+      #countdownBtn::after{
+        content:""; position:absolute; left:0; bottom:0; width:100%; height:0%;
+        background: linear-gradient(180deg, rgba(194,24,91,0.28), rgba(194,24,91,.55));
+        transition: height .35s ease;
+      }
+      #countdownBtn:hover::after{ height:100% }
+      /* Ocultar todos los elementos cuando termina */
+      .hidden-all * { visibility: hidden !important; }
+    </style>
 </head>
 
 <body>
+    <!-- Botón centrado con cuenta regresiva -->
+    <div class="center-overlay">
+      <button id="countdownBtn">3</button>
+    </div>
+
     <button id="ch" onclick="handleClickActions()">Click me</button>
 
     <h1 id="tet">Fototeta?</h1>
@@ -19,6 +58,9 @@
         <source src="../audio/song.mp3" type="audio/mpeg">
         No se pudo reproducir la canción :c
     </audio>
+    <audio id="max" autoplay loop muted>
+        <source src="../audio/max.mp3" type="audio/mpeg">
+        </audio>
     <audio id="myedio" autoplay loop muted>
         <source src="../audio/song2.mp3" type="audio/mpeg">
     </audio>
@@ -26,21 +68,16 @@
     <!-- Botón con imagen de play -->
     <button id="desgraciado" onclick="toggleAudio()"></button>
     <button id="botonazo" onclick="toggleAudioo()"></button>
-    <!--<a href="book.html"><button id="tp"></button> </a>-->
     <a href="index.html"><button id="cart"></button></a>
 
-
     <div id="countdown-container">
-        <!--<div class="label">Próxima cita:</div>-->
         <div class="countdown" id="countdown">Cargando...</div>
     </div>
-    <!--Gifs -->
-    
+
     <div class="gifs">
         <img id="h" src="../sprites/logro2.png">
         <img id="mheart" src="../sprites/VeC.gif" alt="">
         <img id="rheart" src="../sprites/y2.gif" alt="">
-        
     </div>
 
     <div class="counter-container">
@@ -49,9 +86,6 @@
         <p>Desde que somos novios :)</p>
     </div>
 
-
-
-    </div>
     <script>
         // 🕒 Fecha objetivo para la cuenta regresiva (Cambia esto)
         const targetDate = new Date("2025-09-26T22:00:00").getTime();
@@ -229,6 +263,41 @@ function aplicarTema() {
 }
 window.addEventListener('DOMContentLoaded', aplicarTema);
 </script>
-</body>
+    <!-- Lógica del botón de cuenta regresiva -->
+    <script>
+      (function(){
+        const btn = document.getElementById('countdownBtn');
+        let value = 3;
 
+        function hideEverythingAndPlay(){
+          // Oculta todo el contenido visual
+          document.body.classList.add('hidden-all');
+          // Pone la foto de fondo
+          document.body.style.backgroundImage = 'url(../sprites/max.jpeg)';
+          document.body.style.backgroundSize = 'cover';
+          document.body.style.backgroundPosition = 'center';
+
+          // Reproducir la canción principal (desmutea y play)
+          const audio = document.getElementById('max');
+          if (audio) {
+            audio.muted = false;
+            audio.currentTime = 0;
+            audio.play().catch(()=>{ /* ignorar errores de autoplay */ });
+          }
+
+          // Elimina el botón y su overlay
+          const overlay = document.querySelector('.center-overlay');
+          if (overlay) overlay.remove();
+        }
+
+        btn.addEventListener('click', () => {
+          value = Math.max(0, value - 1);
+          btn.textContent = value;
+          if (value === 0) {
+            hideEverythingAndPlay();
+          }
+        });
+      })();
+    </script>
+</body>
 </html>

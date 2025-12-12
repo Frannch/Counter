@@ -2,29 +2,49 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-     <link rel="stylesheet" href="../estilos/estilo.css">
-    <link rel="shorcut icon" href="../sprites/favicon.ico">
+    <link rel="stylesheet" href="../estilos/estilo.css">
+    <link rel="shortcut icon" href="../sprites/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gambling</title>
+    <title>Extras</title>
 </head>
-<style>
-    body{
-        overflow: hidden;
-        background-image: url(../sprites/lec.jpg);
-    }
-    .botonera {
-        grid-template-columns: repeat(2, 1fr); /* 2 columnas en móvil */
-        grid-template-rows: repeat(2, 1fr);    /* 3 filas para 6 botones */
-        aspect-ratio: 1/2;                   /* Proporción vertical */
-        
-    }
-</style>
 <body>
-    <div class="botonera">
-        <a href="Pranks.html"><button id="heart">SI o NO?</button></a>
-        <a href="ruleta.html"><button id="cancion">Ruleta</button></a>
-        <a href="Dice.html"><button id="dice">Dados</button></a>
-        <a href="lizard.html"><button id="lizard">Lizard</button></a>
+  <header class="site-header">
+    <div class="brand">
+      <img src="../sprites/favicon.ico" alt="Logo" class="brand-logo">
+      <h1 class="brand-title">Extras</h1>
     </div>
+  </header>
+
+  <main class="container">
+    <section class="grid">
+      <a class="card" id="card-heart" href="Pranks.html">
+        <div class="card-body">
+          <h3>SI o NO?</h3>
+          <p>Juego de decisión rápida.</p>
+        </div>
+      </a>
+
+      <a class="card" id="card-ruleta" href="ruleta.html">
+        <div class="card-body">
+          <h3>Ruleta</h3>
+          <p>Gira y elige al azar.</p>
+        </div>
+      </a>
+
+      <a class="card" id="card-dice" href="Dice.html">
+        <div class="card-body">
+          <h3>Dados</h3>
+          <p>Tira los dados y juega.</p>
+        </div>
+      </a>
+
+      <a class="card" id="card-lizard" href="lizard.html">
+        <div class="card-body">
+          <h3>Lizard</h3>
+          <p>Click con efectos de 🦎.</p>
+        </div>
+      </a>
+    </section>
+  </main>
 </body>
 </html>

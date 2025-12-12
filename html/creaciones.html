@@ -1,32 +1,38 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <link rel="stylesheet" href="../estilos/estilo.css">
-    <link rel="shortcut icon" href="../sprites/favicon.ico">
-    <title>Lab</title>
-   
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../estilos/estilo.css">
+  <link rel="shortcut icon" href="../sprites/favicon.ico">
+  <title>Lab</title>
 </head>
-<style>
-    body{
-        overflow: hidden;
-        background-image: url(../sprites/max.jpeg);
-    }
-    .botonera {
-        grid-template-columns: repeat(2, 1fr); /* 2 columnas en móvil */
-        grid-template-rows: repeat(2, 1fr);    /* 3 filas para 6 botones */
-        aspect-ratio: 1/2;                   /* Proporción vertical */
-        
-    }
-    button::before {
-      background: rgba(0, 38, 255, 0.363)  ;
-    }
-</style>
 <body>
-    <div class="botonera">
-        <a><button id="heart">1</button></a>
-        <a><button id="heart">2</button></a>
+  <header class="site-header">
+    <div class="brand">
+      <img src="../sprites/favicon.ico" alt="Logo" class="brand-logo">
+      <h1 class="brand-title">Creaciones</h1>
     </div>
+  </header>
+
+  <main class="container">
+    <section class="grid">
+      <a class="card" id="card-lab-1" href="#">
+        <div class="card-body">
+          <h3>Proyecto 1</h3>
+          <p>Explora el primer experimento.</p>
+        </div>
+      </a>
+
+      <a class="card" id="card-lab-2" href="#">
+        <div class="card-body">
+          <h3>Proyecto 2</h3>
+          <p>Otra prueba interesante.</p>
+        </div>
+      </a>
+
+      <!-- Agrega más tarjetas según necesites -->
+    </section>
+  </main>
 </body>
 </html>
