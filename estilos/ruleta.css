@@ -1,73 +1,108 @@
+/* Fondo y tipografía */
 body {
-  
     background-image: url(../sprites/N.jpg);
     background-repeat: repeat;
     background-size: cover;
     text-align: center;
     font-family: Arial, sans-serif;
-   
     margin: 0;
+    /* capa sutil para mejorar legibilidad */
+    backdrop-filter: saturate(1.02);
 }
 
-h1 {
-    font-size: 24px;
-    color: white;
-}
+/* Título y ganador */
+h1, .title { font-size: 24px; color: white; margin: 16px 0 6px }
+.winner { color: #ddd; font-size: 14px; margin: 0 0 8px }
 
+/* Contenedor de la ruleta */
 .wheel-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 20px;
+    margin-top: 12px;
     position: relative;
+    padding: 14px 12px;
+    border-radius: 18px;
+    background: rgba(0,0,0,0.35);            /* efecto glass suave */
+    box-shadow: 0 18px 50px rgba(0,0,0,.35);
+    border: 1px solid rgba(255,255,255,.12);
 }
 
+/* Canvas con sombra */
 canvas {
     display: block;
     max-width: 100%;
     height: auto;
+    border-radius: 50%;
+    box-shadow: 0 14px 28px rgba(0,0,0,.45), inset 0 0 0 1px rgba(255,255,255,.08);
+    background: rgba(10,10,14,.35);
 }
 
+/* Área de entrada */
 .inputArea {
-    margin-top: 20px;
+    margin-top: 16px;
     width: 100%;
     box-sizing: border-box;
+    display: flex;
+    justify-content: center;
 }
-
 textarea {
-      position: absolute;
-    top: 150px;    /* distancia desde arriba */
-    left: 60px;   /* distancia desde la izquierda */
-  
+    position: absolute;
+    top: 150px;
+    left: 60px;
     width: 100%;
     max-width: 400px;
     height: 250px;
     resize: none;
-    background-color: bisque;
-    color: white;
-    border: none;
+    background-color: rgba(255,255,255,.14); /* más moderno */
+    color: #fff;
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 12px;
+    padding: .8rem .9rem;
     box-sizing: border-box;
     margin-bottom: 10px;
+    outline: none;
+}
+textarea::placeholder { color: #eee }
+textarea:focus {
+    border-color: rgba(255,255,255,.35);
+    box-shadow: 0 0 0 4px rgba(255,255,255,.12);
 }
 
+/* Botones modernos con efecto “agua” */
 button {
     margin-top: 10px;
     padding: 10px;
     border: none;
     cursor: pointer;
     font-size: 16px;
-    border-radius: 30px;
+    border-radius: 14px;
     width: 100%;
     max-width: 400px;
     box-sizing: border-box;
+    color: #fff;
+    background: rgba(40,40,48,.85);
+    border: 1px solid rgba(255,255,255,.18);
+    position: relative;
+    overflow: hidden;
+    transition: transform .15s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease;
+}
+button::after{
+    content:""; position:absolute; left:0; bottom:0; width:100%; height:0%;
+    background: linear-gradient(180deg, rgba(194,24,91,0.28), rgba(194,24,91,.55));
+    transition: height .45s ease;
+}
+button:hover::after{ height:100% }
+button:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px rgba(0,0,0,.45);
+    border-color: rgba(255,255,255,.35);
 }
 
+/* Botón principal destacado */
+#nashe { background: rgba(194,24,91,.85); border-color: rgba(255,255,255,.28) }
 
-
-#nashe {
-    max-width: 400px;
-}
-
+/* Botón volver (icon redondo) */
 #casa {
     visibility: hidden;
     width: 15vw;
@@ -85,12 +120,13 @@ button {
     position: absolute;
     top: 50vh;
     right: 20vw;
+    box-shadow: 0 8px 20px rgba(0,0,0,.4);
 }
 
-#Ganador {
-    display: none;
-}
+/* Estado ganador oculto */
+#Ganador { display: none }
 
+/* Botón actualizar */
 #botonazo {
     position: static;
     width: 100%;
@@ -101,7 +137,7 @@ button {
     bottom: auto;
 }
 
-/* =================== Responsive para celulares =================== */
+/* =================== Responsive =================== */
 @media (max-width: 768px) {
     html, body {
         height: 100vh;
@@ -112,29 +148,20 @@ button {
         padding: 0;
         overflow: hidden;
     }
+    h1 { font-size: 18px }
 
-    body {
-        background-size: cover;
-    }
-
-    h1 {
-        font-size: 18px;
-    }
-
-    .wheel-container {
-        margin-top: 10px;
-    }
+    .wheel-container { margin-top: 10px; padding: 12px }
 
     textarea {
-         position: absolute;
-        top: 550px;  /* más abajo que antes */
-        left: 10px;  /* ajustalo si es necesario */
+        position: absolute;
+        top: 550px;
+        left: 10px;
         width: 95vw;
         max-width: 95vw;
         height: 160px;
         font-size: 1rem;
         margin-bottom: 10px;
-        
+        border-radius: 12px;
     }
 
     button, #botonazo {
@@ -143,26 +170,21 @@ button {
         font-size: 1rem;
         height: 44px;
         margin: 0 auto 10px auto;
-        border-radius: 24px;
+        border-radius: 14px;
     }
 
-    .inputArea {
-        width: 95vw;
-        max-width: 95vw;
-    }
+    .inputArea { width: 95vw; max-width: 95vw }
 
     #casa {
         visibility: hidden;
-        width: 15vw;
-        max-width: 70px;
-        height: 15vw;
-        max-height: 70px;
+        width: 15vw; max-width: 70px;
+        height: 15vw; max-height: 70px;
         background-image: url(../sprites/casa.png);
         background-repeat: no-repeat;
         background-size: contain;
         position: absolute;
-        top: 80vh;
-        right: 10vw;
+        top: 80vh; right: 10vw;
         transform: none;
+        box-shadow: 0 8px 20px rgba(0,0,0,.4);
     }
 }

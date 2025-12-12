@@ -1,24 +1,35 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-     <link rel="stylesheet" href="../estilos/estilo.css">
-    <link rel="shorcut icon" href="../sprites/favicon.ico">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galería De Animaciones</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="../estilos/estilo.css">
+  <link rel="shortcut icon" href="../sprites/favicon.ico">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galería de Animaciones</title>
 </head>
-<style>
-    .botonera {
-        grid-template-columns: repeat(2, 1fr); /* 2 columnas en móvil */
-        grid-template-rows: repeat(2, 1fr);    /* 3 filas para 6 botones */
-        aspect-ratio: 1/2;                   /* Proporción vertical */
-        
-    }
-</style>
 <body>
-    <div class="botonera">
-        <a href="heart.html"><button id="heart">Animación Heart</button></a>
-        <a href="cancion.html"><button id="cancion">Animación 1D</button></a>
+  <header class="site-header">
+    <div class="brand">
+      <img src="../sprites/favicon.ico" alt="Logo" class="brand-logo">
+      <h1 class="brand-title">Galería de Animaciones</h1>
     </div>
+  </header>
+
+  <main class="container">
+    <section class="grid">
+      <a class="card" href="heart.html">
+        <div class="card-body">
+          <h3>Animación Heart</h3>
+          <p>Latido y efectos.</p>
+        </div>
+      </a>
+      <a class="card" href="cancion.html">
+        <div class="card-body">
+          <h3>Animación 1D</h3>
+          <p>Movimiento y ritmo.</p>
+        </div>
+      </a>
+    </section>
+  </main>
 </body>
 </html>

@@ -1,43 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shorcut icon" href="../sprites/favicon.ico">
+    <link rel="shortcut icon" href="../sprites/favicon.ico">
     <link rel="stylesheet" href="../estilos/ruleta.css">
     <title>Ro`s Book Roulette</title>
     <style>
+        /* Puntero moderno (aprovecha tu posición actual) */
         .pointer {
             position: absolute;
             top: 50%;
             left: 50%;
             width: 0;
             height: 0;
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-bottom: 25px solid #333;
+            border-left: 14px solid transparent;
+            border-right: 14px solid transparent;
+            border-bottom: 24px solid #ffeb3b;
             transform: translate(50%, 260px);
             rotate: 180deg;
             z-index: 10;
+            filter: drop-shadow(0 3px 6px rgba(0, 0, 0, .45));
         }
     </style>
 </head>
 
 <body>
-    <a href="../index.html"><button id="casa">Volver</button></a>
-    <h1>Veamos tu próximo libro</h1>
-    <p id="Ganador">Ganador: Nadie</p>
+    <a href="../index.html"><button id="casa" class="btn icon">Volver</button></a>
+
+    <h1 class="title">Veamos tu próximo libro</h1>
+    <p id="Ganador" class="winner">Ganador: Nadie</p>
 
     <div class="wheel-container">
         <div class="pointer"></div>
         <canvas id="canvas" width="400" height="400"></canvas>
-        <button id="nashe" onclick="spin()">Girar Ruleta</button>
-        <button id="botonazo" onclick="updateWheel()">Actualizar Ruleta</button>
+
+        <button id="nashe" class="btn primary" onclick="spin()">Girar Ruleta</button>
+        <button id="botonazo" class="btn" onclick="updateWheel()">Actualizar Ruleta</button>
     </div>
 
     <div class="inputArea">
         <textarea id="items" placeholder="Ingrese opciones separadas por salto de línea; Si actualiza estando vacio se gira en blanco :c" spellcheck="false"></textarea>
-
     </div>
 
     <script>
