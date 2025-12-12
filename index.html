@@ -1,151 +1,146 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="sprites/favicon.ico">
     <link rel="stylesheet" href="estilos/estilo.css">
-    <link rel="shorcut icon" href="sprites/favicon.ico">
     <title>Inicio</title>
-
-
 </head>
 
-
 <body>
-<div id="modal" class="modal">
-  <div class="modal-content">
-    <h2>Elegí un tema</h2>
-    <button onclick="seleccionarTema('tema1')">Fran</button>
-    <button onclick="seleccionarTema('tema2')">Ro</button>
-  </div>
-</div>
-
-    <div class="botonera">
-        <a href="html/count.html"><button id="contador">Contador</button></a>
-        <a href="html/reasons.html"><button id="ruleta">Reasons</button></a>
-        <a href="html/saw.html"><button id="ruleta">Codex (nuevo)</button></a>
-        <a href="html/cartas.html"><button id="pokemon">Pókemon</button></a>
-        <a href="html/Juegos.html"><button>Juegos</button> </a>
-        <!-- <a href="https://forms.gle/gj8prD1YdoZY7uTM9"><button id="form">Temario</button></a>-->
-        <a href="html/anim.html"><button id="ruleta1d">Galería De Animaciones</button></a>
-        <a href="https://frannch.github.io/Fonemas"><button id="ruleta">Fonemas</button></a>
-        <a href="https://frannch.github.io/Base-date/"><button id="ruleta">Libros</button></a>
-        <a href="html/ruleta.html"><button id="ruleta">Ruleta</button></a>
-        <a href="html/extr.html"><button id="ruleta">Extras</button></a>
-        <a href="html/creaciones.html"><button>Creaciones</button></a>
-        
+  <!-- Modal de tema -->
+  <div id="modal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <h2>Elegí un tema</h2>
+      <div class="theme-actions">
+        <button class="btn primary" onclick="seleccionarTema('tema1')">Fran</button>
+        <button class="btn primary" onclick="seleccionarTema('tema2')">Ro</button>
+      </div>
     </div>
-<button id="cambiar-tema" title="Cambiar tema">🎨</button>
-</body>
-<script>
-function seleccionarTema(tema) {
+  </div>
+
+  <!-- Encabezado moderno -->
+  <header class="site-header">
+    <div class="brand">
+      <img src="sprites/favicon.ico" alt="Logo" class="brand-logo">
+      <h1 class="brand-title">Counter Hub</h1>
+    </div>
+    <div class="header-actions">
+      <button id="cambiar-tema" class="fab" title="Cambiar tema">🎨</button>
+    </div>
+  </header>
+
+  <!-- Contenido principal -->
+  <main class="container">
+    <section class="grid">
+      <a class="card" href="html/count.html">
+        <div class="card-body">
+          <h3>Contador</h3>
+          <p>Registra y controla tus conteos.</p>
+        </div>
+      </a>
+      <a class="card" href="html/reasons.html">
+        <div class="card-body">
+          <h3>Reasons</h3>
+          <p>Motivos y ruleta de razones.</p>
+        </div>
+      </a>
+      <a class="card" href="html/saw.html">
+        <div class="card-body">
+          <h3>Codex (nuevo)</h3>
+          <p>Acertijos y combinación secreta.</p>
+        </div>
+      </a>
+      <a class="card" href="html/cartas.html">
+        <div class="card-body">
+          <h3>Pókemon</h3>
+          <p>Cartas y diversión.</p>
+        </div>
+      </a>
+      <a class="card" href="html/Juegos.html">
+        <div class="card-body">
+          <h3>Juegos</h3>
+          <p>Mini juegos para pasar el rato.</p>
+        </div>
+      </a>
+      <a class="card" href="html/anim.html">
+        <div class="card-body">
+          <h3>Galería de Animaciones</h3>
+          <p>Animaciones y efectos.</p>
+        </div>
+      </a>
+      <a class="card" href="https://frannch.github.io/Fonemas">
+        <div class="card-body">
+          <h3>Fonemas</h3>
+          <p>Recursos de fonética.</p>
+        </div>
+      </a>
+      <a class="card" href="https://frannch.github.io/Base-date/">
+        <div class="card-body">
+          <h3>Libros</h3>
+          <p>Base de datos de libros.</p>
+        </div>
+      </a>
+      <a class="card" href="html/ruleta.html">
+        <div class="card-body">
+          <h3>Ruleta</h3>
+          <p>Gira y descubre.</p>
+        </div>
+      </a>
+      <a class="card" href="html/extr.html">
+        <div class="card-body">
+          <h3>Extras</h3>
+          <p>Contenido adicional.</p>
+        </div>
+      </a>
+      <a class="card" href="html/creaciones.html">
+        <div class="card-body">
+          <h3>Creaciones</h3>
+          <p>Proyectos y arte.</p>
+        </div>
+      </a>
+    </section>
+  </main>
+
+  <script>
+  function seleccionarTema(tema) {
     localStorage.setItem('tema', tema);
     document.getElementById('modal').style.display = 'none';
     aplicarTema();
-}
-function aplicarTema() {
-  const tema = localStorage.getItem('tema');
-  const pagina = window.location.pathname.split("/").pop(); // ej: "index.html"
-
-  document.body.classList.remove(
-    'fondo-index-tema1', 'fondo-index-tema2',
-    'fondo-contador-tema1', 'fondo-contador-tema2'
-  );
-
-  if (tema === 'tema1') {
-    if (pagina === 'index.html') {
-      document.body.classList.add('fondo-index-tema1');
-    } else if (pagina === '../html/count.html') {
-      document.body.classList.add('fondo-contador-tema1');
-    }
-  } else if (tema === 'tema2') {
-    if (pagina === 'index.html') {
-      document.body.classList.add('fondo-index-tema2');
-    } else if (pagina === 'count.html') {
-      document.body.classList.add('fondo-contador-tema2');
+  }
+  function aplicarTema() {
+    const tema = localStorage.getItem('tema');
+    const pagina = window.location.pathname.split("/").pop();
+    document.body.classList.remove(
+      'fondo-index-tema1', 'fondo-index-tema2',
+      'fondo-contador-tema1', 'fondo-contador-tema2'
+    );
+    if (tema === 'tema1') {
+      if (pagina === 'index.html' || pagina === '') {
+        document.body.classList.add('fondo-index-tema1');
+      } else if (pagina === 'count.html') {
+        document.body.classList.add('fondo-contador-tema1');
+      }
+    } else if (tema === 'tema2') {
+      if (pagina === 'index.html' || pagina === '') {
+        document.body.classList.add('fondo-index-tema2');
+      } else if (pagina === 'count.html') {
+        document.body.classList.add('fondo-contador-tema2');
+      }
     }
   }
-}
-
-window.addEventListener('DOMContentLoaded', aplicarTema);
-window.addEventListener('DOMContentLoaded', () => {
-  aplicarTema();
-  const tema = localStorage.getItem('tema');
-  if (tema && document.getElementById('modal')) {
-    document.getElementById('modal').style.display = 'none';
-  }
-})
-document.getElementById('cambiar-tema').addEventListener('click', function() {
-    document.getElementById('modal').style.display = 'flex';
-});
-</script>
-
-<style>
-.modal {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(30, 20, 40, 0.7); /* Fondo oscuro */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
-
-.modal-content {
-    background: #fff;
-    border-radius: 1.5rem;
-    padding: 2rem 2.5rem;
-    box-shadow: 0 0 30px #0008;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.modal-content h2 {
-    margin: 0 0 1rem 0;
-    font-size: 2rem;
-}
-
-.modal-content button {
-    margin: 0.5rem 0;
-    padding: 0.7em 2em;
-    font-size: 1.2rem;
-    border-radius: 1em;
-    border: none;
-    background: #c2185b;
-    color: #fff;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-.modal-content button:hover {
-    background: #ad1457;
-}
-#cambiar-tema {
-    position: fixed;
-    bottom: 2.5vh;
-    left: 2vw;
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: #c2185b;
-    color: #fff;
-    border: none;
-    box-shadow: 0 2px 8px #0005;
-    font-size: 2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1100;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-#cambiar-tema:hover {
-    background: #ad1457;
-}
-</style>
+  window.addEventListener('DOMContentLoaded', () => {
+    aplicarTema();
+    const tema = localStorage.getItem('tema');
+    const modal = document.getElementById('modal');
+    if (tema && modal) modal.style.display = 'none';
+    document.getElementById('cambiar-tema').addEventListener('click', () => {
+      modal.style.display = 'flex';
+    });
+  });
+  </script>
+</body>
 
 </html>
