@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contador 2</title>
+  <title>Contador</title>
   <link rel="stylesheet" href="../estilos/count.css">
   <link rel="shortcut icon" href="../sprites/favicon.ico">
+   <link rel="shorcut icon" href="../sprites/favicon.ico">
   <style>
     /* Fondo degradado translúcido */
     body {
@@ -43,6 +44,15 @@
       background-position: center;
     }
 
+    /* Ajuste fino: mueve la 4ta imagen un poco hacia abajo */
+    #cell-4{
+      background-position: center 13%; /* baja el encuadre (ajusta 60–75% según necesites) */
+      /* opcional: si aún se corta, prueba:
+         background-size: contain; 
+         background-color: rgba(0,0,0,.15); 
+      */
+    }
+
     /* Contador al frente, siempre centrado */
     .counter-overlay {
       position: fixed; /* por encima de la rejilla */
@@ -68,26 +78,59 @@
     .card h1 { margin: 0 0 .1rem; line-height: 1.1; font-size: 1.4rem; font-weight: 700; letter-spacing: .3px }
     .countdown { margin-top: 0; line-height: 1.2; font-size: 1.8rem; font-weight: 800; letter-spacing: .6px; color: #1b1b24 }
     .time { margin-top: .3rem; font-size: 1rem; font-weight: 600; color: #33363f }
-    .muted { color: #4a4d59; opacity: .95 }
+    .muted{
+      color: #1b1b24;
+      font-weight: 700;
+      font-size: 1.1rem;
+      line-height: 1.35;
+      letter-spacing: .2px;
+      background: rgba(255,255,255,.75);
+      padding: .35rem .6rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.12);
+    }
 
-    /* Móvil: contador ocupa todo el ancho */
-    @media (max-width: 600px){
+    @media (max-width:600px){
       .card{ width: 100vw; border-radius: 0; border-left: none; border-right: none; padding: 1.4rem 1rem }
       .card h1{ font-weight: 800; font-size: 1.6rem }
       .countdown{ font-weight: 900; font-size: 2rem }
       .time{ font-weight: 700; font-size: 1.1rem }
+      .muted{ font-size: 1.2rem }
     }
+
+    /* Imagenes internas para poder rotar */
+    .cell img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;   /* llena el cuadro */
+      display: block;
+    }
+    /* Rotar la segunda a horizontal */
+    #cell-2{
+      position: relative;
+    }
+    #cell-2 img{
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%) rotate(270deg);
+      width: 100%;       /* llena el ancho del cuadrado */
+      height: auto;      /* mantiene proporción */
+      object-fit: cover; /* recorta si sobra */
+    }
+
+    /* Si se recorta demasiado, usa contain solo en la segunda: */
+    /* #cell-2 img{ object-fit: contain; background: rgba(0,0,0,.12) } */
   </style>
 </head>
 <body>
   <!-- Rejilla 3x2 para tu collage (coloca fotos como fondo de cada .cell) -->
   <main class="grid-3x2">
-    <div class="cell" id="cell-1" style="background-image: url('../sprites/tu1.jpg')"></div>
-    <div class="cell" id="cell-2" style="background-image: url('../sprites/tu2.jpg')"></div>
-    <div class="cell" id="cell-3" style="background-image: url('../sprites/tu3.jpg')"></div>
-    <div class="cell" id="cell-4" style="background-image: url('../sprites/tu4.jpg')"></div>
-    <div class="cell" id="cell-5" style="background-image: url('../sprites/tu5.jpg')"></div>
-    <div class="cell" id="cell-6" style="background-image: url('../sprites/tu6.jpg')"></div>
+    <div class="cell" id="cell-1" style="background-image: url('../pict/Ai1.png')"></div>
+    <div class="cell" id="cell-2"><img src="../pict/AI2.png" alt="Foto 2"></div> <!-- rotada -->
+    <div class="cell" id="cell-3" style="background-image: url('../pict/AI3.png')"></div>
+    <div class="cell" id="cell-4" style="background-image: url('../pict/AI4.jpg')"></div>
+    <div class="cell" id="cell-5" style="background-image: url('../pict/AI5.png')"></div>
+    <div class="cell" id="cell-6" style="background-image: url('../pict/AI6.png')"></div>
   </main>
 
   <!-- Contador al frente de todo, centrado -->
@@ -177,6 +220,49 @@
       else if (tema === 'tema2') { if (pagina === 'count2.html') document.body.classList.add('fondo-contador-tema2'); }
     }
     window.addEventListener('DOMContentLoaded', aplicarTema);
+  </script>
+  <script>
+    // Cartel de aniversario (copiado de count.html)
+    const ANNIV_DAY = 4;             // día del mes (4 = día 4)
+    // const ANNIV_MONTH = 1;        // opcional: 0=Ene, 1=Feb... para fijar mes
+
+    function checkSpecialDate() {
+      const now = new Date();
+      const day = now.getDate();
+      // const month = now.getMonth();
+
+      let popup = document.getElementById("anniv-popup");
+      const shouldShow = day === ANNIV_DAY /* && month === ANNIV_MONTH */;
+
+      if (shouldShow) {
+        if (!popup) {
+          document.body.insertAdjacentHTML("beforeend", `
+            <div id="anniv-popup" style="
+              position:fixed;top:0;left:0;width:100vw;height:100vh;
+              background:rgba(0,0,0,0.7);display:flex;
+              align-items:center;justify-content:center;z-index:9999;">
+              <div style="
+                background:#fff;color:#c2185b;padding:40px 30px;
+                border-radius:20px;box-shadow:0 0 20px #000a;
+                text-align:center;max-width:90vw;">
+                <h2 style="margin-bottom:20px;font-size:2.2rem;">🎉 ¡Feliz Aniversario! 🎉</h2>
+                <p style="font-size:1.2rem;">Gracias por este tiempo juntos 💖</p>
+                <button onclick="document.getElementById('anniv-popup').remove()" style="
+                  margin-top:25px;padding:10px 30px;font-size:1rem;
+                  background:#c2185b;color:#fff;border:none;border-radius:8px;cursor:pointer;">
+                  Cerrar
+                </button>
+              </div>
+            </div>
+          `);
+        }
+      } else {
+        if (popup) popup.remove();
+      }
+    }
+
+    checkSpecialDate();
+    setInterval(checkSpecialDate, 60000); // verifica cada minuto
   </script>
 </body>
 </html>
