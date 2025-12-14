@@ -120,6 +120,48 @@
 
     /* Si se recorta demasiado, usa contain solo en la segunda: */
     /* #cell-2 img{ object-fit: contain; background: rgba(0,0,0,.12) } */
+
+    /* Mejora de legibilidad y tamaño para countdown y time */
+    .countdown{
+      margin-top: 0 !important;
+      font-size: clamp(2rem, 4vw, 2.6rem);
+      font-weight: 900;
+      letter-spacing: .4px;
+      color: #1b1b24;
+    }
+    .countdown .chunk{
+      display: inline-flex;
+      align-items: baseline;
+      gap: .18rem;
+      margin: 0 .28rem;
+      padding: .12rem .22rem;
+      border-radius: 10px;
+      background: rgba(255,255,255,.65);
+      box-shadow: 0 4px 10px rgba(0,0,0,.08);
+    }
+    .countdown .num{ font-weight: 900 }
+    .countdown .lab{ font-size: .7em; font-weight: 800; color: #c2185b }
+
+    .time{
+      margin-top: .35rem !important;
+      font-size: clamp(1.1rem, 2.6vw, 1.4rem);
+      font-weight: 800;
+      color: #1b1b24;
+    }
+    .time .num{ font-weight: 900; color: #ad1457 }
+
+    /* Móvil: ocultar la rejilla y usar solo la imagen 5 como fondo */
+    @media (max-width: 600px){
+      .grid-3x2 { display: none; } /* oculta las múltiples fotos */
+      body {
+        background: url('../pict/AI5.png') center / cover no-repeat fixed; /* único fondo */
+      }
+      .card{ width: 100vw; border-radius: 0; border-left: none; border-right: none; padding: 1.4rem 1rem }
+      .card h1{ font-weight: 800; font-size: 1.6rem }
+      .countdown{ font-weight: 900; font-size: 2rem }
+      .time{ font-weight: 700; font-size: 1.1rem }
+      .muted{ font-size: 1.2rem }
+    }
   </style>
 </head>
 <body>
@@ -172,8 +214,11 @@
         const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
         const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-        document.getElementById("countdown").textContent =
-          `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        document.getElementById("countdown").innerHTML =
+          `<span class="chunk"><span class="num">${days}</span><span class="lab">d</span></span>` +
+          `<span class="chunk"><span class="num">${hours}</span><span class="lab">h</span></span>` +
+          `<span class="chunk"><span class="num">${minutes}</span><span class="lab">m</span></span>` +
+          `<span class="chunk"><span class="num">${seconds}</span><span class="lab">s</span></span>`;
       } else {
         document.getElementById("countdown").textContent = "¡Tiempo terminado!";
         clearInterval(countdownInterval);
@@ -206,8 +251,11 @@
       const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-      document.getElementById("timeCount").textContent =
-        `${days} días, ${hours} horas, ${minutes} minutos, ${seconds} segundos`;
+      document.getElementById("timeCount").innerHTML =
+        `<span class="num">${days}</span> días, ` +
+        `<span class="num">${hours}</span> horas, ` +
+        `<span class="num">${minutes}</span> minutos, ` +
+        `<span class="num">${seconds}</span> segundos`;
     }
     updateCounter();
     setInterval(updateCounter, 1000);
