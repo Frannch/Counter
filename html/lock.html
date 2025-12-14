@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Caja Fuerte</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="../sprites/favicon.ico">
+  <link rel="stylesheet" href="../estilos/estilo.css">
+  <style>
+    :root{
+      --metal:#2a2a36; --metal-2:#1f1f28; --ring:#ffffff22; --accent:#c2185b;
+    }
+    body{
+      margin:0; min-height:100vh;
+      display:flex; align-items:center; justify-content:center;
+      background:#0f0f14;
+      background-image:
+        radial-gradient(1200px 800px at 20% -10%, #c2185b18 0%, transparent 60%),
+        radial-gradient(1200px 800px at 80% 110%, #6a1b9a18 0%, transparent 60%);
+      color:#e7e7ee; font-family: Inter, system-ui, Segoe UI, Roboto, Arial;
+      transition: background 1.2s ease, background-image 1.2s ease; /* transición suave */
+    }
+
+    /* Fondo rosa degradado */
+    body.safe-open-bg {
+      background: #ffebf2;
+      background-image:
+        radial-gradient(1200px 800px at 20% -10%, rgba(255,105,180,0.35) 0%, transparent 60%),
+        radial-gradient(1200px 800px at 80% 110%, rgba(255,20,147,0.35) 0%, transparent 60%);
+    }
+    .safe-wrap{ display:grid; gap:1rem; justify-items:center }
+    .safe{
+      position:relative; width:min(380px, 92vw); height:min(420px, 92vh);
+      border-radius:22px;
+      background: linear-gradient(180deg, #1a1a22, #14141b);
+      border: 1px solid var(--ring);
+      box-shadow: 0 18px 50px #0008, inset 0 0 0 1px #ffffff10;
+      overflow:hidden;
+    }
+    .safe .back{
+      position:absolute; inset:0;
+      background:#0c0c12;
+    }
+    .safe .back img{
+      width:100%; height:100%; object-fit:cover;
+      opacity:.0; transition: opacity .6s ease .35s;
+    }
+    .safe .door{
+      position:absolute; inset:0;
+      background: linear-gradient(160deg, var(--metal), var(--metal-2));
+      border-right: 3px solid #0008;
+      box-shadow:
+        inset 0 0 0 1px #ffffff12,
+        inset 0 -40px 100px #0006,
+        0 12px 28px #0006;
+      transform-origin: left center;
+      transform: rotateY(0deg);
+      transition: transform .7s cubic-bezier(.22,.9,.34,1.02);
+    }
+    .door.open{ transform: rotateY(-105deg) }
+    .bolts{
+      position:absolute; inset:16px; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr;
+    }
+    .bolt{ width:12px; height:12px; border-radius:50%; background:#ddd3; border:1px solid #ffffff25 }
+    .bolt.tl{ justify-self:start; align-self:start }
+    .bolt.tr{ justify-self:end; align-self:start }
+    .bolt.bl{ justify-self:start; align-self:end }
+    .bolt.br{ justify-self:end; align-self:end }
+
+    .panel{
+      position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+      width:70%; border-radius:16px;
+      background:#111a; border:1px dashed #ffffff22;
+      padding: 1rem 1rem 5.2rem; /* más espacio inferior */
+      overflow: visible;         /* permite que se vea lo que sale del panel */
+    }
+    .panel h2{ margin:.2rem 0 .8rem; font-size:1rem; color:#b9b9c7; text-align:center }
+
+    .dials{ display:flex; gap:.8rem; justify-content:center; margin-bottom:.6rem; }
+    .dial{
+      width:86px; height:86px; border-radius:50%;
+      background: radial-gradient(120px 120px at 50% 20%, #ffffff12, transparent 60%), var(--metal);
+      border:1px solid #ffffff25; box-shadow: inset 0 8px 20px #0006, 0 6px 18px #0006;
+      position:relative; display:grid; place-items:center;
+    }
+    .dial .value{
+      font-weight:700; font-size:1.4rem; z-index:2;
+      text-shadow: 0 1px 0 #0008;
+    }
+    .dial .indicator{
+      position:absolute; width:4px; height:26px; border-radius:2px;
+      background:#ffeb3b; top:8px; left:50%; transform-origin:50% 100%;
+      transform: translateX(-50%) rotate(var(--deg, 0deg));
+      filter: drop-shadow(0 1px 4px rgba(0,0,0,.4));
+    }
+    .dial-controls{
+      position:absolute;
+      bottom: -26px !important;  /* forzar a bajar más */
+      left:50%;
+      transform:translateX(-50%);
+      display:flex; gap:.4rem;
+    }
+
+    /* Si quieres más separación respecto al borde inferior del panel,
+       aumenta el padding-bottom del panel: */
+    .panel{
+      padding: 1rem 1rem 5.2rem; /* más espacio inferior */
+    }
+    .btn-mini{
+      width:28px; height:28px; border-radius:8px; border:1px solid #ffffff22;
+      background:#2a2a36; color:#fff; cursor:pointer;
+      display:grid; place-items:center; font-weight:700;
+      transition: transform .12s ease, border-color .2s ease, background .2s ease;
+    }
+    .btn-mini:hover{ transform: translateY(-1px); border-color:#ffffff33; background:#343442 }
+
+    .actions{
+      position:absolute;
+      left:50%;
+      bottom: -44px;             /* más abajo */
+      transform:translateX(-50%);
+      display:flex; gap:.6rem;
+    }
+    .btn{
+      padding:.7rem 1rem; border-radius:12px; border:1px solid #ffffff22;
+      background:#2a2a36; color:#fff; cursor:pointer; font-weight:600;
+      transition: transform .12s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .btn.primary{ background: var(--accent); border-color:#ffffff33 }
+    .btn:hover{ transform: translateY(-2px); box-shadow: 0 12px 24px #0006; border-color:#ffffff44 }
+
+    .status{ text-align:center; font-size:.95rem; color:#b9b9c7 }
+  </style>
+</head>
+<body>
+  <div class="safe-wrap">
+    <div class="safe" id="safe">
+      <div class="back">
+        <img id="secretPhoto" src="../pict/gatoF.jpg" alt="Secreto">
+      </div>
+
+      <div class="door" id="door">
+        <div class="bolts">
+          <div class="bolt tl"></div><div class="bolt tr"></div>
+          <div class="bolt bl"></div><div class="bolt br"></div>
+        </div>
+
+        <div class="panel">
+          <h2>Introduce la combinación</h2>
+          <div class="dials" id="dials">
+            <div class="dial" data-index="0" style="--deg:0deg">
+              <div class="indicator"></div>
+              <div class="value">0</div>
+              <div class="dial-controls">
+                <button class="btn-mini minus">−</button>
+                <button class="btn-mini plus">+</button>
+              </div>
+            </div>
+            <div class="dial" data-index="1" style="--deg:0deg">
+              <div class="indicator"></div>
+              <div class="value">0</div>
+              <div class="dial-controls">
+                <button class="btn-mini minus">−</button>
+                <button class="btn-mini plus">+</button>
+              </div>
+            </div>
+            <div class="dial" data-index="2" style="--deg:0deg">
+              <div class="indicator"></div>
+              <div class="value">0</div>
+              <div class="dial-controls">
+                <button class="btn-mini minus">−</button>
+                <button class="btn-mini plus">+</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button id="openBtn" class="btn primary">Abrir</button>
+            <div class="status" id="statusMsg"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // Configura combinación y foto
+  const COMBO = [0, 6, 7]; // cambia aquí la combinación
+  const photoEl = document.getElementById('secretPhoto');
+  // photoEl.src = "../sprites/tu-foto.jpg"; // si quieres otra imagen
+
+  const door = document.getElementById('door');
+  const dialsEl = document.getElementById('dials');
+  const statusMsg = document.getElementById('statusMsg');
+  const current = [0,0,0];
+
+  // Actualiza un dial y su indicador de rotación
+  function updateDial(index, delta){
+    current[index] = (current[index] + delta + 10) % 10;
+    const dial = dialsEl.querySelector(`.dial[data-index="${index}"]`);
+    dial.style.setProperty('--deg', `${current[index] * 36}deg`);
+    dial.querySelector('.value').textContent = current[index];
+  }
+
+  // Eventos +/− en cada dial
+  dialsEl.addEventListener('click', (e)=>{
+    const btn = e.target.closest('.btn-mini');
+    if(!btn) return;
+    const dial = e.target.closest('.dial');
+    const idx = Number(dial.dataset.index);
+    updateDial(idx, btn.classList.contains('plus') ? +1 : -1);
+  });
+
+  // Abrir si coincide
+  document.getElementById('openBtn').addEventListener('click', ()=>{
+    const ok = current.every((v,i)=> v === COMBO[i]);
+    if(ok){
+      statusMsg.textContent = "✔ Abierto";
+      door.classList.add('open');
+      photoEl.style.opacity = 1;
+
+      // cambia el fondo a rosa con degradado de a poco
+      document.body.classList.add('safe-open-bg');
+    } else {
+      statusMsg.textContent = "✖ Combinación incorrecta";
+      document.querySelector('.panel').animate(
+        [{transform:'translate(-50%,-50%)'},
+         {transform:'translate(calc(-50% - 6px),-50%)'},
+         {transform:'translate(calc(-50% + 6px),-50%)'},
+         {transform:'translate(-50%,-50%)'}],
+        {duration:300}
+      );
+    }
+  });
+</script>
+</body>
+</html>
