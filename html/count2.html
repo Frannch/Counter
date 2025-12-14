@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contador 2</title>
+  <link rel="stylesheet" href="../estilos/count.css">
+  <link rel="shortcut icon" href="../sprites/favicon.ico">
+  <style>
+    /* Fondo degradado translúcido */
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(5deg,
+        rgba(200,109,0,.35) 0%,
+        rgba(255,143,0,.30) 40%,
+        rgba(255,61,0,.35) 100%);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: #1b1b24;
+    }
+
+    /* Rejilla 3x2 a pantalla completa para tus fotos */
+    .grid-3x2 {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 8px;
+      width: 100vw;
+      height: 100vh;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+
+    .cell {
+      border-radius: 14px;
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.35);
+      backdrop-filter: blur(6px) saturate(1.05);
+      box-shadow: 0 10px 24px rgba(0,0,0,.25);
+      overflow: hidden;
+      background-size: cover;
+      background-position: center;
+    }
+
+    /* Contador al frente, siempre centrado */
+    .counter-overlay {
+      position: fixed; /* por encima de la rejilla */
+      inset: 0;
+      display: grid;
+      place-items: center;
+      z-index: 999; /* frente de todo */
+      pointer-events: none; /* no bloquea clics en la rejilla si los usas */
+    }
+
+    .card {
+      width: min(520px, 92vw);
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px) saturate(1.1);
+      border: 1px solid rgba(255,255,255,.35);
+      border-radius: 18px;
+      box-shadow: 0 18px 50px rgba(0,0,0,.25);
+      padding: 1.2rem 1.4rem;
+      text-align: center;
+      color: #1b1b24;
+      pointer-events: auto; /* permite seleccionar texto dentro si quieres */
+    }
+    .card h1 { margin: 0 0 .1rem; line-height: 1.1; font-size: 1.4rem; font-weight: 700; letter-spacing: .3px }
+    .countdown { margin-top: 0; line-height: 1.2; font-size: 1.8rem; font-weight: 800; letter-spacing: .6px; color: #1b1b24 }
+    .time { margin-top: .3rem; font-size: 1rem; font-weight: 600; color: #33363f }
+    .muted { color: #4a4d59; opacity: .95 }
+
+    /* Móvil: contador ocupa todo el ancho */
+    @media (max-width: 600px){
+      .card{ width: 100vw; border-radius: 0; border-left: none; border-right: none; padding: 1.4rem 1rem }
+      .card h1{ font-weight: 800; font-size: 1.6rem }
+      .countdown{ font-weight: 900; font-size: 2rem }
+      .time{ font-weight: 700; font-size: 1.1rem }
+    }
+  </style>
+</head>
+<body>
+  <!-- Rejilla 3x2 para tu collage (coloca fotos como fondo de cada .cell) -->
+  <main class="grid-3x2">
+    <div class="cell" id="cell-1" style="background-image: url('../sprites/tu1.jpg')"></div>
+    <div class="cell" id="cell-2" style="background-image: url('../sprites/tu2.jpg')"></div>
+    <div class="cell" id="cell-3" style="background-image: url('../sprites/tu3.jpg')"></div>
+    <div class="cell" id="cell-4" style="background-image: url('../sprites/tu4.jpg')"></div>
+    <div class="cell" id="cell-5" style="background-image: url('../sprites/tu5.jpg')"></div>
+    <div class="cell" id="cell-6" style="background-image: url('../sprites/tu6.jpg')"></div>
+  </main>
+
+  <!-- Contador al frente de todo, centrado -->
+  <div class="counter-overlay">
+    <section class="card">
+      <h1>Han Pasado</h1>
+      <div class="countdown" id="countdown">Cargando...</div>
+      <div class="time" id="timeCount"></div>
+      <p class="muted">Desde que somos novios :)</p>
+    </section>
+  </div>
+
+  <!-- Audios (se mantienen) -->
+  <audio id="myAudio" autoplay loop muted>
+    <source src="../audio/song.mp3" type="audio/mpeg">
+    No se pudo reproducir la canción :c
+  </audio>
+  <audio id="max" autoplay loop muted>
+    <source src="../audio/max.mp3" type="audio/mpeg">
+  </audio>
+  <audio id="myedio" autoplay loop muted>
+    <source src="../audio/song2.mp3" type="audio/mpeg">
+  </audio>
+
+  <button id="desgraciado" onclick="toggleAudio()" style="display:none"></button>
+  <button id="botonazo" onclick="toggleAudioo()" style="display:none"></button>
+  <a href="index.html"><button id="cart" style="display:none"></button></a>
+
+  <!-- Lógica (sin cambios de funcionalidad) -->
+  <script>
+    const BACKGROUND_IMAGE = null; // no se usa imagen, se deja el degradado
+    const targetDate = new Date("2025-09-26T22:00:00").getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const timeLeft = targetDate - now;
+      if (timeLeft > 0) {
+        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+        document.getElementById("countdown").textContent =
+          `${days}d ${hours}h ${minutes}m ${seconds}s`;
+      } else {
+        document.getElementById("countdown").textContent = "¡Tiempo terminado!";
+        clearInterval(countdownInterval);
+      }
+    }
+    updateCountdown();
+    const countdownInterval = setInterval(updateCountdown, 1000);
+  </script>
+  <script>
+    let isPlaying = false;
+    function toggleAudio() {
+      const audio = document.getElementById('myAudio');
+      if (isPlaying) { audio.pause(); } else { audio.muted = false; audio.play(); }
+      isPlaying = !isPlaying;
+    }
+    function toggleAudioo() {
+      const audio = document.getElementById('myedio');
+      if (isPlaying) { audio.pause(); } else { audio.muted = false; audio.play(); }
+      isPlaying = !isPlaying;
+    }
+    function handleClickActions() {
+      // sin acción visual, se mantiene la lógica si la necesitas
+    }
+
+    const startDate = new Date("2025-02-04T20:00:00");
+    function updateCounter() {
+      const today = new Date();
+      const diff = today - startDate;
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      document.getElementById("timeCount").textContent =
+        `${days} días, ${hours} horas, ${minutes} minutos, ${seconds} segundos`;
+    }
+    updateCounter();
+    setInterval(updateCounter, 1000);
+
+    function aplicarTema() {
+      const tema = localStorage.getItem('tema');
+      const pagina = window.location.pathname.split("/").pop();
+      document.body.classList.remove('fondo-index-tema1', 'fondo-index-tema2', 'fondo-contador-tema1', 'fondo-contador-tema2');
+      if (tema === 'tema1') { if (pagina === 'count2.html') document.body.classList.add('fondo-contador-tema1'); }
+      else if (tema === 'tema2') { if (pagina === 'count2.html') document.body.classList.add('fondo-contador-tema2'); }
+    }
+    window.addEventListener('DOMContentLoaded', aplicarTema);
+  </script>
+</body>
+</html>
+</body>
+</html>
