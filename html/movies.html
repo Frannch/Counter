@@ -27,7 +27,6 @@
         .poster{ width:96px; height:140px; border-radius:10px; object-fit:cover; box-shadow: 0 6px 16px #0003 }
         .movie-head h2{ margin:0 0 6px; font-size:1.1rem }
 
-        /* Barras de progreso */
         .rating{ display:flex; align-items:center; gap:8px; color:var(--muted); font-size:.85rem; margin-bottom: 5px; }
         .who{ padding:.12rem .4rem; border-radius:8px; border:1px solid var(--ring); background:#fff; font-weight:800; font-size: 0.7rem; }
         .who.ro{ color:#ad1457 } .who.fran{ color:#1565c0 }
@@ -38,6 +37,19 @@
 
         .rev p{ margin:0; line-height:1.4; font-size: 0.9rem; margin-bottom: 8px; }
 
+        /* --- BOTONES DE EDICIÓN (SOLO MODO EDICIÓN) --- */
+        .edit-actions {
+            display: none; position: absolute; top: 10px; right: 10px; gap: 5px; z-index: 10;
+        }
+        body.edit-mode .edit-actions { display: flex; }
+        
+        .action-btn {
+            width: 30px; height: 30px; border-radius: 50%; border: none;
+            cursor: pointer; font-weight: bold; color: white; display: flex; align-items: center; justify-content: center;
+        }
+        .del-btn { background: #d32f2f; }
+        .edit-btn { background: #1976d2; }
+
         /* --- BOTÓN FLOTANTE --- */
         .admin-trigger {
             position: fixed; bottom: 20px; right: 20px;
@@ -47,31 +59,23 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
-        /* --- MODAL DE EDICIÓN --- */
+        /* --- MODAL --- */
         .modal {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center;
         }
         .modal-content {
             background: white; padding: 25px; border-radius: 15px; width: 90%; max-width: 500px;
-            max-height: 80vh; overflow-y: auto;
+            max-height: 85vh; overflow-y: auto;
         }
         .modal-content input, .modal-content textarea {
-            width: 100%; margin-bottom: 12px; padding: 10px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;
+            width: 100%; margin-bottom: 12px; padding: 10px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-family: inherit;
         }
         .btn-save { background: #2e7d32; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; }
         .btn-close { background: #ccc; border: none; padding: 5px 10px; border-radius: 5px; float: right; cursor: pointer; }
-
-        /* Botón eliminar en la card (solo visible si entras a editar) */
-        .delete-btn {
-            display: none; position: absolute; top: -10px; right: -10px;
-            background: #d32f2f; color: white; border: none; border-radius: 50%;
-            width: 25px; height: 25px; cursor: pointer; font-weight: bold;
-        }
-        body.edit-mode .delete-btn { display: block; }
     </style>
 </head>
-<body>
+<body class="">
 
     <h1>🎬 Nuestras Reseñas</h1>
 
@@ -83,89 +87,114 @@
     <div id="adminModal" class="modal">
         <div class="modal-content">
             <button class="btn-close" onclick="toggleModal()">✕</button>
-            <h3>Administrar Catálogo</h3>
+            <h3>Panel de Control</h3>
+            <button onclick="toggleEditMode()" style="width: 100%; margin-bottom: 15px; padding: 8px; cursor:pointer;">
+                Activar/Desactivar Modo Edición (Iconos ✏️ y ✕)
+            </button>
             <hr>
-            <p style="font-size: 0.8rem; color: gray;">Para eliminar: Toca el botón ⚙️ y aparecerá una (X) sobre cada película.</p>
-            <button onclick="toggleEditMode()" style="margin-bottom: 15px;">Activar/Desactivar Borrado</button>
+            <h4 id="form-title">Agregar Nueva Película</h4>
+            <input type="text" id="m-title" placeholder="Título de la película">
+            <input type="text" id="m-poster" placeholder="URL del Póster (../pelis/foto.jpg)">
             
-            <h4>Agregar Nueva</h4>
-            <input type="text" id="m-title" placeholder="Título">
-            <input type="text" id="m-poster" placeholder="URL del Póster">
             <div style="display:flex; gap:10px">
-                <input type="number" id="m-ro-score" placeholder="Puntaje RO" step="0.1" max="10">
-                <input type="number" id="m-fran-score" placeholder="Puntaje Fran" step="0.1" max="10">
+                <div style="flex:1">
+                    <label style="font-size: 0.7rem;">Puntaje RO</label>
+                    <input type="number" id="m-ro-score" placeholder="0-10" step="0.1" max="10">
+                </div>
+                <div style="flex:1">
+                    <label style="font-size: 0.7rem;">Puntaje Fran</label>
+                    <input type="number" id="m-fran-score" placeholder="0-10" step="0.1" max="10">
+                </div>
             </div>
-            <textarea id="m-ro-rev" placeholder="Review de RO"></textarea>
-            <textarea id="m-fran-rev" placeholder="Review de Fran"></textarea>
-            <button class="btn-save" id="saveBtn" onclick="addMovie()">Guardar Película</button>
+
+            <textarea id="m-ro-rev" placeholder="Reseña de RO" rows="3"></textarea>
+            <textarea id="m-fran-rev" placeholder="Reseña de Fran" rows="3"></textarea>
+            
+            <button class="btn-save" id="saveBtn" onclick="saveOrUpdate()">Guardar Película</button>
         </div>
     </div>
 
     <script>
-        // CONFIGURACIÓN JSONBIN
         const BIN_ID = '694602b5ae596e708fa60bcb'; 
         const API_KEY = '$2a$10$UM9MsEz3zJ3qOAvvnpIqdeAMG7wjpYhgAP39TpfixkmYdPy5sQDau';
         const URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
         let moviesData = [];
+        let editingIndex = null;
 
+        // 1. CARGAR DATOS DE JSONBIN
         async function loadMovies() {
             const container = document.getElementById('movies-container');
-            container.innerHTML = "<p>Cargando catálogo...</p>";
+            container.innerHTML = "<p style='text-align:center'>Cargando catálogo...</p>";
             try {
                 const res = await fetch(`${URL}/latest`, { headers: { 'X-Master-Key': API_KEY }});
                 const data = await res.json();
                 moviesData = data.record || [];
                 renderMovies();
-            } catch (err) { container.innerHTML = "Error al conectar con la base de datos."; }
+            } catch (err) { 
+                container.innerHTML = "<p style='text-align:center'>Error al conectar con la base de datos.</p>"; 
+            }
         }
 
+        // 2. DIBUJAR PELÍCULAS
         function renderMovies() {
             const container = document.getElementById('movies-container');
             container.innerHTML = '';
+            
+            if (moviesData.length === 0) {
+                container.innerHTML = "<p style='text-align:center'>No hay películas registradas.</p>";
+                return;
+            }
+
             moviesData.forEach((movie, index) => {
                 container.innerHTML += `
-                <article class="movie-card" data-id="${movie.id}">
-                    <button class="delete-btn" onclick="deleteMovie(${index})">✕</button>
+                <article class="movie-card">
+                    <div class="edit-actions">
+                        <button class="action-btn edit-btn" onclick="openEditForm(${index})">✏️</button>
+                        <button class="action-btn del-btn" onclick="deleteMovie(${index})">✕</button>
+                    </div>
                     <div class="movie-head">
-                        <img class="poster" src="${movie.poster}" alt="Poster">
+                        <img class="poster" src="${movie.poster}" alt="Poster" onerror="this.src='https://placehold.co/96x140?text=Sin+Poster'">
                         <div>
                             <h2>${movie.titulo}</h2>
                             <div class="rating">
                                 <span class="who ro">RO</span>
-                                <div class="rating-bar ro"><span style="width:${movie.ro_score*10}%"></span></div>
+                                <div class="rating-bar ro"><span style="width:${movie.ro_score * 10}%"></span></div>
                                 <span>${movie.ro_score}</span>
                             </div>
-                            <div class="rev ro"><p>${movie.ro_review}</p></div>
+                            <div class="rev ro"><p>${movie.ro_review || ''}</p></div>
                             <div class="rating">
                                 <span class="who fran">FRAN</span>
-                                <div class="rating-bar fran"><span style="width:${movie.fran_score*10}%"></span></div>
+                                <div class="rating-bar fran"><span style="width:${movie.fran_score * 10}%"></span></div>
                                 <span>${movie.fran_score}</span>
                             </div>
-                            <div class="rev fran"><p>${movie.fran_review}</p></div>
+                            <div class="rev fran"><p>${movie.fran_review || ''}</p></div>
                         </div>
                     </div>
                 </article>`;
             });
         }
 
-        async function updateDatabase() {
-            document.getElementById('saveBtn').innerText = "Guardando...";
-            try {
-                await fetch(URL, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
-                    body: JSON.stringify(moviesData)
-                });
-                renderMovies();
-                toggleModal();
-            } catch (e) { alert("Error al sincronizar"); }
-            document.getElementById('saveBtn').innerText = "Guardar Película";
+        // 3. LOGICA DE FORMULARIO (EDITAR O AGREGAR)
+        function openEditForm(index) {
+            editingIndex = index;
+            const movie = moviesData[index];
+
+            document.getElementById('form-title').innerText = "Editando: " + movie.titulo;
+            document.getElementById('m-title').value = movie.titulo;
+            document.getElementById('m-poster').value = movie.poster;
+            document.getElementById('m-ro-score').value = movie.ro_score;
+            document.getElementById('m-fran-score').value = movie.fran_score;
+            document.getElementById('m-ro-rev').value = movie.ro_review;
+            document.getElementById('m-fran-rev').value = movie.fran_review;
+
+            document.getElementById('saveBtn').innerText = "Actualizar Cambios";
+            toggleModal();
         }
 
-        function addMovie() {
+        async function saveOrUpdate() {
             const movie = {
-                id: Date.now(),
+                id: editingIndex !== null ? moviesData[editingIndex].id : Date.now(),
                 titulo: document.getElementById('m-title').value,
                 poster: document.getElementById('m-poster').value,
                 ro_score: parseFloat(document.getElementById('m-ro-score').value || 0),
@@ -173,28 +202,73 @@
                 fran_score: parseFloat(document.getElementById('m-fran-score').value || 0),
                 fran_review: document.getElementById('m-fran-rev').value
             };
-            if(!movie.titulo) return alert("Pon al menos el título");
-            moviesData.unshift(movie); // Agrega al inicio
-            updateDatabase();
+
+            if(!movie.titulo) return alert("El título es obligatorio");
+
+            if(editingIndex !== null) {
+                moviesData[editingIndex] = movie;
+            } else {
+                moviesData.unshift(movie);
+            }
+
+            await updateDatabase();
+            resetForm();
         }
 
-        function deleteMovie(index) {
-            if(confirm("¿Seguro que quieres borrar esta película?")) {
+        async function deleteMovie(index) {
+            if(confirm("¿Eliminar definitivamente esta película?")) {
                 moviesData.splice(index, 1);
-                updateDatabase();
+                await updateDatabase();
             }
         }
 
+        // 4. PERSISTENCIA EN JSONBIN
+        async function updateDatabase() {
+            const btn = document.getElementById('saveBtn');
+            btn.disabled = true;
+            btn.innerText = "Sincronizando...";
+            
+            try {
+                const res = await fetch(URL, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+                    body: JSON.stringify(moviesData)
+                });
+                if(res.ok) {
+                    renderMovies();
+                    if(document.getElementById('adminModal').style.display === 'flex') toggleModal();
+                }
+            } catch (e) { alert("Error al guardar en la nube."); }
+            
+            btn.disabled = false;
+            btn.innerText = "Guardar Película";
+        }
+
+        // 5. UTILIDADES INTERFAZ
         function toggleModal() {
             const m = document.getElementById('adminModal');
-            m.style.display = (m.style.display === 'flex') ? 'none' : 'flex';
+            if (m.style.display === 'flex') {
+                m.style.display = 'none';
+                resetForm();
+            } else {
+                m.style.display = 'flex';
+            }
         }
 
         function toggleEditMode() {
             document.body.classList.toggle('edit-mode');
+            alert(document.body.classList.contains('edit-mode') ? "Modo Edición Activado" : "Modo Edición Desactivado");
             toggleModal();
         }
 
+        function resetForm() {
+            editingIndex = null;
+            document.getElementById('form-title').innerText = "Agregar Nueva Película";
+            document.getElementById('saveBtn').innerText = "Guardar Película";
+            document.querySelectorAll('.modal-content input, .modal-content textarea').forEach(i => i.value = '');
+        }
+
+        // INICIO
         loadMovies();
     </script>
 </body>
