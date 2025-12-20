@@ -1,685 +1,201 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-   <link rel="shortcut icon" href="../sprites/cine.ico">
-  <title>Nuestras Reseñas de Películas</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    :root{
-      --bg:#fff; --text:#1b1b24; --muted:#4a4d59; --ring:#0002; --accent:#c2185b;
-    }
-    body{ margin:0; padding:20px; background:var(--bg); color:var(--text); font-family: Inter, system-ui, Segoe UI, Roboto, Arial }
-    h1{ margin:0 0 12px; font-size:1.6rem }
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="../sprites/cine.ico">
+    <title>Reseñas de Películas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root{
+            --bg:#fff; --text:#1b1b24; --muted:#4a4d59; --ring:#0002; --accent:#c2185b;
+        }
+        body{ margin:0; padding:20px; background:var(--bg); color:var(--text); font-family: Inter, system-ui, sans-serif }
+        h1{ margin:0 0 20px; font-size:1.6rem; text-align: center; }
 
-    /* 2 columnas con flujo vertical (tipo periódico) */
-    .movies-list{
-      column-count: 2;
-      column-gap: 20px;
-    }
-    @media (max-width: 700px){
-      .movies-list{ column-count: 1 }
-    }
+        /* Contenedor de películas */
+        .movies-list{ column-count: 2; column-gap: 20px; }
+        @media (max-width: 700px){ .movies-list{ column-count: 1 } }
 
-    /* Tarjeta de película (evita partirse entre columnas) */
-    .movie-card{
-      display: inline-block;               /* necesario para columns */
-      width: 100%;
-      margin: 0 0 16px;
-      break-inside: avoid;
-      border: 1px solid var(--ring);
-      border-radius: 14px;
-      background: rgba(255,255,255,.9);
-      box-shadow: 0 8px 20px rgba(0,0,0,.08);
-      padding: 12px;
-    }
+        .movie-card{
+            display: inline-block; width: 100%; margin: 0 0 16px; break-inside: avoid;
+            border: 1px solid var(--ring); border-radius: 14px;
+            background: rgba(255,255,255,.9); box-shadow: 0 8px 20px rgba(0,0,0,.08); padding: 12px;
+            position: relative;
+        }
 
-    .movie-head{ display:grid; grid-template-columns: 96px 1fr; gap:12px; align-items:start }
-    .poster{ width:96px; height:140px; border-radius:10px; object-fit:cover; box-shadow: 0 6px 16px #0003 }
-    .movie-head h2{ margin:0 0 6px; font-size:1.1rem }
+        .movie-head{ display:grid; grid-template-columns: 96px 1fr; gap:12px; align-items:start }
+        .poster{ width:96px; height:140px; border-radius:10px; object-fit:cover; box-shadow: 0 6px 16px #0003 }
+        .movie-head h2{ margin:0 0 6px; font-size:1.1rem }
 
-    /* Puntajes RO/Fran */
-    .rating-pair{ display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin:6px 0 8px }
-    .rating{ display:flex; align-items:center; gap:8px; color:var(--muted); font-size:.92rem }
-    .who{ padding:.12rem .4rem; border-radius:8px; border:1px solid var(--ring); background:#fff; font-weight:800 }
-    .who.ro{ color:#ad1457 } .who.fran{ color:#1565c0 }
-    .rating-bar{ width:120px; height:8px; background:#eee; border-radius:999px; overflow:hidden; border:1px solid var(--ring) }
-    .rating-bar span{ display:block; height:100%; width:0% }
-    .rating-bar.ro span{ background: linear-gradient(90deg,#ff8f00,#c2185b) }
-    .rating-bar.fran span{ background: linear-gradient(90deg,#42a5f5,#1565c0) }
+        /* Barras de progreso */
+        .rating{ display:flex; align-items:center; gap:8px; color:var(--muted); font-size:.85rem; margin-bottom: 5px; }
+        .who{ padding:.12rem .4rem; border-radius:8px; border:1px solid var(--ring); background:#fff; font-weight:800; font-size: 0.7rem; }
+        .who.ro{ color:#ad1457 } .who.fran{ color:#1565c0 }
+        .rating-bar{ flex-grow: 1; height:8px; background:#eee; border-radius:999px; overflow:hidden; border:1px solid var(--ring) }
+        .rating-bar span{ display:block; height:100%; transition: width 0.6s ease; }
+        .rating-bar.ro span{ background: linear-gradient(90deg,#ff8f00,#c2185b) }
+        .rating-bar.fran span{ background: linear-gradient(90deg,#42a5f5,#1565c0) }
 
-    /* Reseñas dentro de la tarjeta (RO y Fran lado a lado) */
-    .reviews{ display:grid; grid-template-columns: 1fr 1fr; gap:10px }
-    @media (max-width: 520px){ .reviews{ grid-template-columns: 1fr } }
-    .rev h3{ margin:0 0 4px; font-size:.9rem; color:var(--muted) }
-    .rev.ro h3{ color:#ad1457 } .rev.fran h3{ color:#1565c0 }
-    .rev p{ margin:0; line-height:1.45 }
+        .rev p{ margin:0; line-height:1.4; font-size: 0.9rem; margin-bottom: 8px; }
 
-    /* Barra y review apiladas por persona (RO / Fran) */
-    .ratings-and-reviews{
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px 16px;
-    }
-    .col .rating{ margin-bottom: 6px }
-    @media (max-width: 520px){
-      .ratings-and-reviews{ grid-template-columns: 1fr }
-    }
-  </style>
+        /* --- BOTÓN FLOTANTE --- */
+        .admin-trigger {
+            position: fixed; bottom: 20px; right: 20px;
+            width: 50px; height: 50px; border-radius: 50%;
+            background: var(--text); color: white; border: none;
+            cursor: pointer; font-size: 24px; z-index: 100;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        /* --- MODAL DE EDICIÓN --- */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center;
+        }
+        .modal-content {
+            background: white; padding: 25px; border-radius: 15px; width: 90%; max-width: 500px;
+            max-height: 80vh; overflow-y: auto;
+        }
+        .modal-content input, .modal-content textarea {
+            width: 100%; margin-bottom: 12px; padding: 10px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box;
+        }
+        .btn-save { background: #2e7d32; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .btn-close { background: #ccc; border: none; padding: 5px 10px; border-radius: 5px; float: right; cursor: pointer; }
+
+        /* Botón eliminar en la card (solo visible si entras a editar) */
+        .delete-btn {
+            display: none; position: absolute; top: -10px; right: -10px;
+            background: #d32f2f; color: white; border: none; border-radius: 50%;
+            width: 25px; height: 25px; cursor: pointer; font-weight: bold;
+        }
+        body.edit-mode .delete-btn { display: block; }
+    </style>
 </head>
 <body>
 
+    <h1>🎬 Nuestras Reseñas</h1>
 
-  <section class="movies-list">
-    <!-- Copia este bloque para agregar más películas -->
-    <article class="movie-card">
-      <div class="movie-head">
-        <img class="poster" src="../pelis/venom3.webp" alt="Venom 3">
-        <div>
-          <h2>Venom 3: El Último Baile</h2>
+    <section id="movies-container" class="movies-list">
+        </section>
 
-          <div class="ratings-and-reviews">
-            <div class="col ro">
-              <div class="rating">
-                <span class="who ro">RO</span>
-                <div class="rating-bar ro" data-score="9"><span></span></div>
-                <span>9 / 10</span>
-              </div>
-              <div class="rev ro">
-                <h3>RO</h3>
-                <p>Review de RO.</p>
-              </div>
+    <button class="admin-trigger" onclick="toggleModal()">⚙️</button>
+
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <button class="btn-close" onclick="toggleModal()">✕</button>
+            <h3>Administrar Catálogo</h3>
+            <hr>
+            <p style="font-size: 0.8rem; color: gray;">Para eliminar: Toca el botón ⚙️ y aparecerá una (X) sobre cada película.</p>
+            <button onclick="toggleEditMode()" style="margin-bottom: 15px;">Activar/Desactivar Borrado</button>
+            
+            <h4>Agregar Nueva</h4>
+            <input type="text" id="m-title" placeholder="Título">
+            <input type="text" id="m-poster" placeholder="URL del Póster">
+            <div style="display:flex; gap:10px">
+                <input type="number" id="m-ro-score" placeholder="Puntaje RO" step="0.1" max="10">
+                <input type="number" id="m-fran-score" placeholder="Puntaje Fran" step="0.1" max="10">
             </div>
-
-            <div class="col fran">
-              <div class="rating">
-                <span class="who fran">Fran</span>
-                <div class="rating-bar fran" data-score="8.5"><span></span></div>
-                <span>8.5 / 10</span>
-              </div>
-              <div class="rev fran">
-                <h3>Fran</h3>
-                <p>Review de Fran.</p>
-              </div>
-            </div>
-          </div>
-
+            <textarea id="m-ro-rev" placeholder="Review de RO"></textarea>
+            <textarea id="m-fran-rev" placeholder="Review de Fran"></textarea>
+            <button class="btn-save" id="saveBtn" onclick="addMovie()">Guardar Película</button>
         </div>
-      </div>
-    </article>
-    <!-- Fin bloque -->
-      <!-- Copia este bloque para agregar más películas -->
-    <article class="movie-card">
-      <div class="movie-head">
-        <img class="poster" src="../pelis/kraven.jpg" alt="Kraven">
-        <div>
-          <h2>Kraven: El Cazador</h2>
+    </div>
 
-          <div class="ratings-and-reviews">
-            <div class="col ro">
-              <div class="rating">
-                <span class="who ro">RO</span>
-                <div class="rating-bar ro" data-score="9"><span></span></div>
-                <span>9 / 10</span>
-              </div>
-              <div class="rev ro">
-                <h3>RO</h3>
-                <p>Review de RO.</p>
-              </div>
-            </div>
+    <script>
+        // CONFIGURACIÓN JSONBIN
+        const BIN_ID = '694602b5ae596e708fa60bcb'; 
+        const API_KEY = '$2a$10$UM9MsEz3zJ3qOAvvnpIqdeAMG7wjpYhgAP39TpfixkmYdPy5sQDau';
+        const URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-            <div class="col fran">
-              <div class="rating">
-                <span class="who fran">Fran</span>
-                <div class="rating-bar fran" data-score="8.5"><span></span></div>
-                <span>8.5 / 10</span>
-              </div>
-              <div class="rev fran">
-                <h3>Fran</h3>
-                <p>Review de Fran.</p>
-              </div>
-            </div>
-          </div>
+        let moviesData = [];
 
-        </div>
-      </div>
-    </article>
-    <!-- Fin bloque -->
-     <!-- Copia este bloque para agregar más películas -->
-    <article class="movie-card">
-      <div class="movie-head">
-        <img class="poster" src="../pelis/Dragon.jpg" alt="Cómo Entrenar a tu Dragón Live Action">
-        <div>
-          <h2>Cómo Entrenar A Tu Dragón Live Action</h2>
+        async function loadMovies() {
+            const container = document.getElementById('movies-container');
+            container.innerHTML = "<p>Cargando catálogo...</p>";
+            try {
+                const res = await fetch(`${URL}/latest`, { headers: { 'X-Master-Key': API_KEY }});
+                const data = await res.json();
+                moviesData = data.record || [];
+                renderMovies();
+            } catch (err) { container.innerHTML = "Error al conectar con la base de datos."; }
+        }
 
-          <div class="ratings-and-reviews">
-            <div class="col ro">
-              <div class="rating">
-                <span class="who ro">RO</span>
-                <div class="rating-bar ro" data-score="9"><span></span></div>
-                <span>9 / 10</span>
-              </div>
-              <div class="rev ro">
-                <h3>RO</h3>
-                <p>Review de RO.</p>
-              </div>
-            </div>
+        function renderMovies() {
+            const container = document.getElementById('movies-container');
+            container.innerHTML = '';
+            moviesData.forEach((movie, index) => {
+                container.innerHTML += `
+                <article class="movie-card" data-id="${movie.id}">
+                    <button class="delete-btn" onclick="deleteMovie(${index})">✕</button>
+                    <div class="movie-head">
+                        <img class="poster" src="${movie.poster}" alt="Poster">
+                        <div>
+                            <h2>${movie.titulo}</h2>
+                            <div class="rating">
+                                <span class="who ro">RO</span>
+                                <div class="rating-bar ro"><span style="width:${movie.ro_score*10}%"></span></div>
+                                <span>${movie.ro_score}</span>
+                            </div>
+                            <div class="rev ro"><p>${movie.ro_review}</p></div>
+                            <div class="rating">
+                                <span class="who fran">FRAN</span>
+                                <div class="rating-bar fran"><span style="width:${movie.fran_score*10}%"></span></div>
+                                <span>${movie.fran_score}</span>
+                            </div>
+                            <div class="rev fran"><p>${movie.fran_review}</p></div>
+                        </div>
+                    </div>
+                </article>`;
+            });
+        }
 
-            <div class="col fran">
-              <div class="rating">
-                <span class="who fran">Fran</span>
-                <div class="rating-bar fran" data-score="8.5"><span></span></div>
-                <span>8.5 / 10</span>
-              </div>
-              <div class="rev fran">
-                <h3>Fran</h3>
-                <p>Review de Fran.</p>
-              </div>
-            </div>
-          </div>
+        async function updateDatabase() {
+            document.getElementById('saveBtn').innerText = "Guardando...";
+            try {
+                await fetch(URL, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'X-Master-Key': API_KEY },
+                    body: JSON.stringify(moviesData)
+                });
+                renderMovies();
+                toggleModal();
+            } catch (e) { alert("Error al sincronizar"); }
+            document.getElementById('saveBtn').innerText = "Guardar Película";
+        }
 
-        </div>
-      </div>
-    </article>
-    <!-- Fin bloque -->
-     <!-- Copia este bloque para agregar más películas -->
-    <article class="movie-card">
-      <div class="movie-head">
-        <img class="poster" src="../pelis/angus.jpg" alt="Mi Gato Angus">
-        <div>
-          <h2>Mi Gato Angus</h2>
+        function addMovie() {
+            const movie = {
+                id: Date.now(),
+                titulo: document.getElementById('m-title').value,
+                poster: document.getElementById('m-poster').value,
+                ro_score: parseFloat(document.getElementById('m-ro-score').value || 0),
+                ro_review: document.getElementById('m-ro-rev').value,
+                fran_score: parseFloat(document.getElementById('m-fran-score').value || 0),
+                fran_review: document.getElementById('m-fran-rev').value
+            };
+            if(!movie.titulo) return alert("Pon al menos el título");
+            moviesData.unshift(movie); // Agrega al inicio
+            updateDatabase();
+        }
 
-          <div class="ratings-and-reviews">
-            <div class="col ro">
-              <div class="rating">
-                <span class="who ro">RO</span>
-                <div class="rating-bar ro" data-score="9"><span></span></div>
-                <span>9 / 10</span>
-              </div>
-              <div class="rev ro">
-                <h3>RO</h3>
-                <p>Review de RO.</p>
-              </div>
-            </div>
+        function deleteMovie(index) {
+            if(confirm("¿Seguro que quieres borrar esta película?")) {
+                moviesData.splice(index, 1);
+                updateDatabase();
+            }
+        }
 
-            <div class="col fran">
-              <div class="rating">
-                <span class="who fran">Fran</span>
-                <div class="rating-bar fran" data-score="8.5"><span></span></div>
-                <span>8.5 / 10</span>
-              </div>
-              <div class="rev fran">
-                <h3>Fran</h3>
-                <p>Review de Fran.</p>
-              </div>
-            </div>
-          </div>
+        function toggleModal() {
+            const m = document.getElementById('adminModal');
+            m.style.display = (m.style.display === 'flex') ? 'none' : 'flex';
+        }
 
-        </div>
-      </div>
-    </article>
-    <!-- Fin bloque -->
-     <!-- Copia este bloque para agregar más películas -->
-    <article class="movie-card">
-      <div class="movie-head">
-        <img class="poster" src="../pelis/paris.jpg" alt="The Wrong Paris">
-        <div>
-          <h2>The Wrong Paris</h2>
+        function toggleEditMode() {
+            document.body.classList.toggle('edit-mode');
+            toggleModal();
+        }
 
-          <div class="ratings-and-reviews">
-            <div class="col ro">
-              <div class="rating">
-                <span class="who ro">RO</span>
-                <div class="rating-bar ro" data-score="9"><span></span></div>
-                <span>9 / 10</span>
-              </div>
-              <div class="rev ro">
-                <h3>RO</h3>
-                <p>Review de RO.</p>
-              </div>
-            </div>
-
-            <div class="col fran">
-              <div class="rating">
-                <span class="who fran">Fran</span>
-                <div class="rating-bar fran" data-score="8.5"><span></span></div>
-                <span>8.5 / 10</span>
-              </div>
-              <div class="rev fran">
-                <h3>Fran</h3>
-                <p>Review de Fran.</p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </article>
-    <!-- Fin bloque -->
-     <!-- Copia este bloque para agregar más películas -->
-    <article class="movie-card">
-      <div class="movie-head">
-        <img class="poster" src="../pelis/moana2.webp" alt="Moana 2">
-        <div>
-          <h2>Moana 2</h2>
-
-          <div class="ratings-and-reviews">
-            <div class="col ro">
-              <div class="rating">
-                <span class="who ro">RO</span>
-                <div class="rating-bar ro" data-score="9"><span></span></div>
-                <span>9 / 10</span>
-              </div>
-              <div class="rev ro">
-                <h3>RO</h3>
-                <p>Review de RO.</p>
-              </div>
-            </div>
-
-            <div class="col fran">
-              <div class="rating">
-                <span class="who fran">Fran</span>
-                <div class="rating-bar fran" data-score="8.5"><span></span></div>
-                <span>8.5 / 10</span>
-              </div>
-              <div class="rev fran">
-                <h3>Fran</h3>
-                <p>Review de Fran.</p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </article>
-    <!-- Fin bloque -->
-
-     <!-- Copia este bloque para agregar más películas -->
-    <article class="movie-card">
-      <div class="movie-head">
-        <img class="poster" src="../pelis/blancanieves.jpg" alt="Blancanieves Live Action">
-        <div>
-          <h2>Blancanieves Live Action</h2>
-
-          <div class="ratings-and-reviews">
-            <div class="col ro">
-              <div class="rating">
-                <span class="who ro">RO</span>
-                <div class="rating-bar ro" data-score="9"><span></span></div>
-                <span>9 / 10</span>
-              </div>
-              <div class="rev ro">
-                <h3>RO</h3>
-                <p>Review de RO.</p>
-              </div>
-            </div>
-
-            <div class="col fran">
-              <div class="rating">
-                <span class="who fran">Fran</span>
-                <div class="rating-bar fran" data-score="8.5"><span></span></div>
-                <span>8.5 / 10</span>
-              </div>
-              <div class="rev fran">
-                <h3>Fran</h3>
-                <p>Review de Fran.</p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </article>
-    <!-- Fin bloque -->
-
-         <!-- Copia este bloque para agregar más películas -->
-    <article class="movie-card">
-      <div class="movie-head">
-        <img class="poster" src="../pelis/wicked2.jpg" alt="Wicked 2">
-        <div>
-          <h2>Wicked For Good</h2>
-
-          <div class="ratings-and-reviews">
-            <div class="col ro">
-              <div class="rating">
-                <span class="who ro">RO</span>
-                <div class="rating-bar ro" data-score="9"><span></span></div>
-                <span>9 / 10</span>
-              </div>
-              <div class="rev ro">
-                <h3>RO</h3>
-                <p>Review de RO.</p>
-              </div>
-            </div>
-
-            <div class="col fran">
-              <div class="rating">
-                <span class="who fran">Fran</span>
-                <div class="rating-bar fran" data-score="8.5"><span></span></div>
-                <span>8.5 / 10</span>
-              </div>
-              <div class="rev fran">
-                <h3>Fran</h3>
-                <p>Review de Fran.</p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </article>
-    <!-- Fin bloque -->
-
-         <!-- Copia este bloque para agregar más películas -->
-    <article class="movie-card">
-      <div class="movie-head">
-        <img class="poster" src="../pelis/pitch1.jpg" alt="Pitch Perfect 1">
-        <div>
-          <h2>Pitch Perfect</h2>
-
-          <div class="ratings-and-reviews">
-            <div class="col ro">
-              <div class="rating">
-                <span class="who ro">RO</span>
-                <div class="rating-bar ro" data-score="9"><span></span></div>
-                <span>9 / 10</span>
-              </div>
-              <div class="rev ro">
-                <h3>RO</h3>
-                <p>Review de RO.</p>
-              </div>
-            </div>
-
-            <div class="col fran">
-              <div class="rating">
-                <span class="who fran">Fran</span>
-                <div class="rating-bar fran" data-score="8.5"><span></span></div>
-                <span>8.5 / 10</span>
-              </div>
-              <div class="rev fran">
-                <h3>Fran</h3>
-                <p>Review de Fran.</p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </article>
-    <!-- Fin bloque -->
-
-         <!-- Copia este bloque para agregar más películas -->
-    <article class="movie-card">
-      <div class="movie-head">
-        <img class="poster" src="../pelis/freaky2.png" alt="Freakier Friday">
-        <div>
-          <h2>Frakier Friday</h2>
-
-          <div class="ratings-and-reviews">
-            <div class="col ro">
-              <div class="rating">
-                <span class="who ro">RO</span>
-                <div class="rating-bar ro" data-score="9"><span></span></div>
-                <span>9 / 10</span>
-              </div>
-              <div class="rev ro">
-                <h3>RO</h3>
-                <p>Review de RO.</p>
-              </div>
-            </div>
-
-            <div class="col fran">
-              <div class="rating">
-                <span class="who fran">Fran</span>
-                <div class="rating-bar fran" data-score="8.5"><span></span></div>
-                <span>8.5 / 10</span>
-              </div>
-              <div class="rev fran">
-                <h3>Fran</h3>
-                <p>Review de Fran.</p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </article>
-    <!-- Fin bloque -->
-
-         <!-- Copia este bloque para agregar más películas -->
-    <article class="movie-card">
-      <div class="movie-head">
-        <img class="poster" src="../pelis/sirenas.jpg" alt="Sirenas">
-        <div>
-          <h2>Barbie: Una Aventura De Sirenas</h2>
-
-          <div class="ratings-and-reviews">
-            <div class="col ro">
-              <div class="rating">
-                <span class="who ro">RO</span>
-                <div class="rating-bar ro" data-score="9"><span></span></div>
-                <span>9 / 10</span>
-              </div>
-              <div class="rev ro">
-                <h3>RO</h3>
-                <p>Review de RO.</p>
-              </div>
-            </div>
-
-            <div class="col fran">
-              <div class="rating">
-                <span class="who fran">Fran</span>
-                <div class="rating-bar fran" data-score="8.5"><span></span></div>
-                <span>8.5 / 10</span>
-              </div>
-              <div class="rev fran">
-                <h3>Fran</h3>
-                <p>Review de Fran.</p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </article>
-    <!-- Fin bloque -->
-
-         <!-- Copia este bloque para agregar más películas -->
-    <article class="movie-card">
-      <div class="movie-head">
-        <img class="poster" src="../pelis/moana2.webp" alt="Moana 2">
-        <div>
-          <h2>Moana 2</h2>
-
-          <div class="ratings-and-reviews">
-            <div class="col ro">
-              <div class="rating">
-                <span class="who ro">RO</span>
-                <div class="rating-bar ro" data-score="9"><span></span></div>
-                <span>9 / 10</span>
-              </div>
-              <div class="rev ro">
-                <h3>RO</h3>
-                <p>Review de RO.</p>
-              </div>
-            </div>
-
-            <div class="col fran">
-              <div class="rating">
-                <span class="who fran">Fran</span>
-                <div class="rating-bar fran" data-score="8.5"><span></span></div>
-                <span>8.5 / 10</span>
-              </div>
-              <div class="rev fran">
-                <h3>Fran</h3>
-                <p>Review de Fran.</p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </article>
-    <!-- Fin bloque -->
-
-         <!-- Copia este bloque para agregar más películas -->
-    <article class="movie-card">
-      <div class="movie-head">
-        <img class="poster" src="../pelis/tron.jpeg" alt="Tron: El Legado">
-        <div>
-          <h2>Tron: El Legado</h2>
-
-          <div class="ratings-and-reviews">
-            <div class="col ro">
-              <div class="rating">
-                <span class="who ro">RO</span>
-                <div class="rating-bar ro" data-score="9"><span></span></div>
-                <span>9 / 10</span>
-              </div>
-              <div class="rev ro">
-                <h3>RO</h3>
-                <p>Review de RO.</p>
-              </div>
-            </div>
-
-            <div class="col fran">
-              <div class="rating">
-                <span class="who fran">Fran</span>
-                <div class="rating-bar fran" data-score="8.5"><span></span></div>
-                <span>8.5 / 10</span>
-              </div>
-              <div class="rev fran">
-                <h3>Fran</h3>
-                <p>Review de Fran.</p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </article>
-    <!-- Fin bloque -->
-    <!-- Copia este bloque para agregar más películas -->
-    <article class="movie-card">
-      <div class="movie-head">
-        <img class="poster" src="../pelis/steel.webp" alt="Max Steel: Cuenta Regresiva">
-        <div>
-          <h2>Max Steel: Cuenta Regresiva</h2>
-
-          <div class="ratings-and-reviews">
-            <div class="col ro">
-              <div class="rating">
-                <span class="who ro">RO</span>
-                <div class="rating-bar ro" data-score="9"><span></span></div>
-                <span>9 / 10</span>
-              </div>
-              <div class="rev ro">
-                <h3>RO</h3>
-                <p>Review de RO.</p>
-              </div>
-            </div>
-
-            <div class="col fran">
-              <div class="rating">
-                <span class="who fran">Fran</span>
-                <div class="rating-bar fran" data-score="8.5"><span></span></div>
-                <span>8.5 / 10</span>
-              </div>
-              <div class="rev fran">
-                <h3>Fran</h3>
-                <p>Review de Fran.</p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </article>
-    <!-- Fin bloque -->
-     <!-- Copia este bloque para agregar más películas -->
-    <article class="movie-card">
-      <div class="movie-head">
-        <img class="poster" src="../pelis/tron.jpeg" alt="Tron: El Legado">
-        <div>
-          <h2></h2>
-
-          <div class="ratings-and-reviews">
-            <div class="col ro">
-              <div class="rating">
-                <span class="who ro">RO</span>
-                <div class="rating-bar ro" data-score="9"><span></span></div>
-                <span>9 / 10</span>
-              </div>
-              <div class="rev ro">
-                <h3>RO</h3>
-                <p>Review de RO.</p>
-              </div>
-            </div>
-
-            <div class="col fran">
-              <div class="rating">
-                <span class="who fran">Fran</span>
-                <div class="rating-bar fran" data-score="8.5"><span></span></div>
-                <span>8.5 / 10</span>
-              </div>
-              <div class="rev fran">
-                <h3>Fran</h3>
-                <p>Review de Fran.</p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </article>
-    <!-- Fin bloque -->
-     <!-- Copia este bloque para agregar más películas -->
-    <article class="movie-card">
-      <div class="movie-head">
-        <img class="poster" src="../pelis/tron.jpeg" alt="Tron: El Legado">
-        <div>
-          <h2></h2>
-
-          <div class="ratings-and-reviews">
-            <div class="col ro">
-              <div class="rating">
-                <span class="who ro">RO</span>
-                <div class="rating-bar ro" data-score="9"><span></span></div>
-                <span>9 / 10</span>
-              </div>
-              <div class="rev ro">
-                <h3>RO</h3>
-                <p>Review de RO.</p>
-              </div>
-            </div>
-
-            <div class="col fran">
-              <div class="rating">
-                <span class="who fran">Fran</span>
-                <div class="rating-bar fran" data-score="8.5"><span></span></div>
-                <span>8.5 / 10</span>
-              </div>
-              <div class="rev fran">
-                <h3>Fran</h3>
-                <p>Review de Fran.</p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </article>
-    <!-- Fin bloque -->
-
-  </section>
-
-  <script>
-    // Rellena las barras según data-score (0–10)
-    document.querySelectorAll('.rating-bar').forEach(bar=>{
-      const score = parseFloat(bar.getAttribute('data-score') || '0');
-      const pct = Math.max(0, Math.min(10, score)) * 10;
-      bar.querySelector('span').style.width = pct + '%';
-    });
-  </script>
+        loadMovies();
+    </script>
 </body>
 </html>
