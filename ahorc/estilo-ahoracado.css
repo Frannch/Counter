@@ -1,0 +1,174 @@
+* {
+  box-sizing: border-box;
+}
+html {
+  height: 100%;
+  background-image: url(./7481714.jpg);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed; /* opcional */
+}
+body {
+  min-height: 100%;
+  background: none; /* usa el fondo del html */
+}
+.main-container {
+  max-width: 800px;
+  margin: auto;
+}
+h1.titulo {
+  margin: 50px auto 80px auto;
+  text-align: center;
+  font-family: Cambria, Cochin, Georgia, Times, Times New Roman, serif;
+}
+h1#msg-final {
+  text-align: center;
+  color: crimson;
+  transition: all .5s ease;
+  transform: scale(0);
+  min-height: 50px;
+  margin-bottom: 0;
+}
+.zoom-in {
+  transform: scale(1) !important;
+}
+#acierto {
+  text-align: center;
+  min-height: 24px;
+  transform: scale(0);
+}
+.acierto {
+  animation: zoomInOut 1s ease;
+}
+.rojo {
+  color: red;
+}
+.verde {
+  color: green;
+}
+@keyframes zoomInOut {
+  0% { transform: scale(0); }
+  50% { transform: scale(1); }
+  70% { transform: scale(1); }
+  100% { transform: scale(0); }
+}
+h2.palabra {
+  margin: 0 auto 25px auto;
+  text-align: center;
+  color: royalblue;
+  text-transform: uppercase;
+  letter-spacing: 6px;
+}
+.flex-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 10px auto; 
+}
+.no-wrap {
+  flex-wrap: nowrap !important;
+}
+.col {
+  width: 50%;
+  text-align: center;
+}
+.col span {
+  
+}
+#turnos h3 {
+  margin: auto;
+}
+h3 span {
+   color: orangered;
+}
+.letra:disabled {
+  color:rgba(255, 0, 0, 0.5);
+}
+picture {
+  position: relative;
+}
+picture img {
+  position: absolute;
+  top: -203px;
+  left: -205px;
+  height: 225px;
+}
+#image5, #image4, #image3,
+#image2, #image1, #image0 {
+  opacity: 0;
+  transition: opacity .3s ease;
+}
+.fade-in {
+  opacity: 1 !important;
+}
+.encuadre {
+  border: 2px dashed crimson;
+  padding: 3px 2px 2px 6px;
+}
+
+/* Desactivar y ocultar la barra de desplazamiento */
+html, body {
+  overflow: hidden;
+  scrollbar-width: none; /* Firefox */
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Edge, Safari */
+}
+
+/* Botones modernos */
+#turnos .col button {
+  appearance: none;
+  border: none;
+  cursor: pointer;
+  padding: 12px 18px;
+  margin: 4px 8px;
+  border-radius: 12px;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .3px;
+  color: #fff;
+  background: linear-gradient(135deg, #4f46e5, #06b6d4);
+  box-shadow: 0 8px 16px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.08);
+  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+}
+
+#turnos .col button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.12);
+  filter: brightness(1.06);
+}
+
+#turnos .col button:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 12px rgba(0,0,0,.3), inset 0 2px 6px rgba(0,0,0,.3);
+  filter: brightness(0.98);
+}
+
+#turnos .col button:focus-visible {
+  outline: 2px solid #22d3ee;
+  outline-offset: 2px;
+}
+
+/* Zona de pista */
+#hueco-pista {
+  display: inline-block;
+  min-width: 220px;
+  margin-left: 10px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(4px);
+  color: #111;
+  box-shadow: 0 6px 18px rgba(0,0,0,.25);
+  font: 14px system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+}
+
+#hueco-pista::before {
+  content: "Pista:";
+  font-weight: 700;
+  margin-right: 8px;
+  color: #0ea5b7;
+}
