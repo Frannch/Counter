@@ -1,0 +1,108 @@
+html {
+  height: 100%;
+  background-image: url(../images/selva.png);
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed; /* opcional */
+}
+
+body {
+  font-family: Arial, sans-serif;
+  width: 940px;
+  margin: 5% auto;
+  min-height: 100%;
+  background: none; /* usa el fondo del html */
+}
+
+ul {
+  padding-left: 0;
+  list-style: none;
+  color: #ad81ef;
+  font-style:oblique;
+}
+
+li {
+  padding: 5px 0;
+  animation: fadein 5s;
+}
+
+li::before {
+  content: "• ";
+  color: #ad81ef;
+}
+
+.col-40 h1 {
+  font-size: 20px;
+  color: #be1ff6;
+}
+
+.col-40, .col-60 {
+  display: table-cell;
+  margin: 0;
+  vertical-align: top;
+}
+
+.col-40 {
+  background: #9be2e8;
+  padding: 30px;
+}
+
+.col-60 {
+  background:	#be1ff6;
+}
+
+#flecha{
+  font-size: 60px;
+}
+
+.texto-centrado {
+  text-align: center;
+}
+
+#juego div {
+  text-align: center;
+  animation: fadein 2s;
+}
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/*Lo nuevo*/
+
+.col-40{
+  width:40%;
+}
+
+.col-60{
+  width:60%;
+}
+
+#juego {
+  height:600px;
+  width:600px;
+}
+
+.partes{
+  border: 1px solid #ad81ef;
+  float: left;
+  width: 33%;
+  height: 33%;
+}
+
+.partes img{
+  width:100%;
+}
+
+#titulo {
+  text-align: center;
+  background-color: #a4b1eb;
+}
+
+#footer {
+  font-family: 'Kavivanar', cursive;
+  font-size: 10px;
+  color: #be1ff6;
+}
