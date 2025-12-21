@@ -1,6 +1,6 @@
 const colors = ['blue', 'green', 'white', 'yellow', 'orange', 'red'];
 const pieces = document.getElementsByClassName('piece');
-const SOLVED_LETTER = 'F'; // cambia aquí la letra que quieres mostrar
+const SOLVED_LETTER = 'Felicidades :), la primer letra es: M'; // cambia aquí la letra que quieres mostrar
 
 /**
  * Returns j-th adjacent face of i-th face  
@@ -142,7 +142,7 @@ function mouseDown(md_e) {
     document.addEventListener('mouseup', mouseUp);
     scene.removeEventListener('mousedown', mouseDown);
 }
-/* 
+
 function scramble(count = 25, animate = true) {
     let lastFace = -1;
     let i = 0;
@@ -169,7 +169,7 @@ function scramble(count = 25, animate = true) {
 
     step();
 }
-*/
+
 function isSolved() {
     for (const piece of pieces) {
         for (let face = 0; face < 6; face++) {
