@@ -131,7 +131,7 @@
     class="card"
     id="card-release"
     href="html/lobby.html"
-    data-release="2026-12-22T15:16:00-03:00"              
+    data-release="2026-01-03T10:00:00-03:00"              
     data-unlocked-title="Summer Games"
     data-unlocked-desc="Round 2"
     aria-disabled="true"
@@ -176,6 +176,13 @@
       }
     }
   }
+
+  // Detectar dispositivo móvil
+  function esMovil() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+           || window.matchMedia('(pointer:coarse)').matches;
+  }
+
   window.addEventListener('DOMContentLoaded', () => {
     aplicarTema();
     const tema = localStorage.getItem('tema');
@@ -188,6 +195,15 @@
     // Countdown de desbloqueo
     const card = document.getElementById('card-release');
     if (card) {
+      // Bloqueo en móviles
+      card.addEventListener('click', (e) => {
+        if (esMovil()) {
+          e.preventDefault();
+          e.stopPropagation();
+          alert('Solo disponible en PC');
+        }
+      }, true);
+
       const targetStr = card.getAttribute('data-release');
       const unlockedTitle = card.getAttribute('data-unlocked-title') || 'Disponible';
       const unlockedDesc = card.getAttribute('data-unlocked-desc') || '';
