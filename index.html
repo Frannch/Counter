@@ -195,15 +195,6 @@
     // Countdown de desbloqueo
     const card = document.getElementById('card-release');
     if (card) {
-      // Bloqueo en móviles
-      card.addEventListener('click', (e) => {
-        if (esMovil()) {
-          e.preventDefault();
-          e.stopPropagation();
-          alert('Solo disponible en PC');
-        }
-      }, true);
-
       const targetStr = card.getAttribute('data-release');
       const unlockedTitle = card.getAttribute('data-unlocked-title') || 'Disponible';
       const unlockedDesc = card.getAttribute('data-unlocked-desc') || '';
