@@ -35,12 +35,6 @@ Race.prototype = {
   },
 
   start: function(trackNumber) {
-    raceAudioEngineSpeed(0);
-
-    if(trackNumber >= 4) {
-      trackNumber = 0;
-    }
-    trackNumber = 0;
     this.raceNumber = trackNumber;
     track = new Track();
 
@@ -67,8 +61,19 @@ Race.prototype = {
     this.state = STATE_PRERACE;
     this.countdownNumber = 4;
     this.lastTime = getTimestamp();
+    this.winShown = false;
+    this.musicStarted = false;    // flag para disparar música una sola vez
 
-    this.winShown = false; // reset del flag en cada carrera
+    // Inicializar audio del motor/SFX
+    raceAudioInit();
+
+    // Configurar música de fondo desde archivo (una vez)
+    if (!window.__bgmSetup) {
+      raceMusicSetSource(window.BGM_URL || 'getaway.mp3');
+      window.__bgmSetup = true;
+    }
+    // Reproducir música (tras click de inicio)
+    // raceMusicPlay();
   },
 
   raceOver: function() {
@@ -256,6 +261,12 @@ Race.prototype = {
       }
     }
     camera.update(dt);
+
+    if (this.state === STATE_RACE && !this.musicStarted) {
+      this.musicStarted = true;
+      // Dispara la música en el mismo tick que aparece “Race One”
+      raceMusicPlay();
+    }
   },
 
   updateRace: function(dt) {

@@ -24,6 +24,18 @@
       <canvas id="gameCanvas" width="1024" height="768"></canvas>
 
       <script src="main.min.js"></script>
+      <script>
+        // Ruta de tu música personalizada
+        window.BGM_URL = 'getaway.mp3';
+        // Opcional: volumen
+        // window.raceMusicSetVolume(0.5);
+
+        // Garantizar que tras el primer clic se pueda reproducir
+        window.addEventListener('click', function once() {
+          try { if (window.raceMusicSetSource) window.raceMusicSetSource(window.BGM_URL); } catch(e){}
+          window.removeEventListener('click', once);
+        });
+      </script>
 
       <script>
       (function () {

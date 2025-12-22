@@ -209,3 +209,38 @@ function drawBuffer(buffer) {
   context.stroke();
 
 }
+
+// Música de fondo (HTMLAudioElement)
+var bgmEl = null;
+function raceMusicInit(url) {
+  if (!bgmEl) {
+    bgmEl = new Audio(url || '');
+    bgmEl.loop = true;
+    bgmEl.volume = 0.6; // ajusta volumen de música
+  } else if (url) {
+    bgmEl.src = url;
+  }
+}
+function raceMusicSetSource(url) {
+  raceMusicInit(url);
+}
+function raceMusicPlay() {
+  if (!bgmEl) return;
+  // reanudar WebAudio en interacción
+  if (audioCtx && audioCtx.state === 'suspended') {
+    audioCtx.resume().catch(()=>{});
+  }
+  bgmEl.play().catch(()=>{ /* requiere interacción del usuario */ });
+}
+function raceMusicStop() {
+  if (bgmEl) bgmEl.pause();
+}
+function raceMusicSetVolume(v) {
+  if (bgmEl) bgmEl.volume = Math.max(0, Math.min(1, v));
+}
+
+// Exponer helpers globales
+window.raceMusicSetSource = raceMusicSetSource;
+window.raceMusicPlay = raceMusicPlay;
+window.raceMusicStop = raceMusicStop;
+window.raceMusicSetVolume = raceMusicSetVolume
