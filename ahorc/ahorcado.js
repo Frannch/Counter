@@ -101,8 +101,10 @@ function compruebaFin() {
 
     if (victorias >= VICTORIAS_OBJETIVO) {
       alert(MENSAJE_TRES_VICTORIAS);
+
       victorias = 0;
       localStorage.setItem('victorias', 0);
+      marcarVictoriaYVolver('ahorcado', 'lobby.html');
     }
 
     document.getElementById("msg-final").innerHTML = "¡Bien! Siguiente palabra…";
@@ -149,3 +151,18 @@ function inicio() {
 
 // Iniciar
 window.onload = inicio();
+
+//Funcion actualizar lobby
+// Llamar cuando el jugador gane
+function marcarVictoriaYVolver(gameId, lobbyPath) {
+  try {
+    // Marca la victoria para persistencia inmediata
+    localStorage.setItem(`win_${gameId}`, '1');
+  } catch (_) {}
+  // Notifica al lobby y regresa
+  window.location.href = `${lobbyPath}?win=${encodeURIComponent(gameId)}`;
+}
+
+/* Ejemplo de uso (dentro del evento/función de victoria):
+marcarVictoriaYVolver('dice', 'lobby.html');
+*/

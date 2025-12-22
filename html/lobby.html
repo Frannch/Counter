@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Lobby de Desafíos</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="../estilos/lobby.css" />
+</head>
+<body>
+	<header class="topbar">
+		<div class="brand">
+			<span class="logo">★</span>
+			<h1>Lobby de Desafíos</h1>
+		</div>
+		<div class="secret">
+			<div class="secret-label">Código Secreto</div>
+			<div id="secret-code" class="secret-code" aria-live="polite" title="Completa los desafíos para revelar las letras"></div>
+			<div id="progress" class="progress"></div>
+			<button id="reset-progress" type="button" class="btn reset" title="Borrar avance">Reiniciar progreso</button>
+		</div>
+	</header>
+
+	<main class="container">
+		<section class="intro">
+			<p>Supera los minijuegos para revelar el código secreto. Algunos desafíos se desbloquean con el tiempo. ¡Prepárate!</p>
+		</section>
+
+		<section>
+			<div id="games-grid" class="grid"></div>
+		</section>
+
+	</main>
+
+	<footer class="footer">Hecho con ❤️ para jugar y pensar.</footer>
+
+	<script src="../js/lobby.js"></script>
+</body>
+</html>
