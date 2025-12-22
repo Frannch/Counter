@@ -26,7 +26,7 @@
       id: 'rompe', 
       name: 'Rompecabezas', 
       url: '../puzzle/Rompecabezas-master/index.html', 
-      unlockAt: '2026-01-04T10:00:00', 
+      unlockAt: '2022-01-04T10:00:00', 
       letter: 'M', 
       hint: 'Fácil' 
     },
@@ -34,15 +34,15 @@
       id: 'ahorcado',
       name: 'Ahorcado', 
       url: '../ahorc/Ahorcado.html', 
-      unlockAt: '2026-01-05T10:00:00', 
+      unlockAt: '2022-01-05T10:00:00', 
       letter: 'L', 
       hint: 'Adivina la palabra.' 
     },
     { 
-      id: 'lizard', 
+      id: 'laberinto', 
       name: 'Laberinto', 
       url: '../Laberinto/lab.html', 
-      unlockAt: '2026-01-07T10:00:00', 
+      unlockAt: '2022-01-07T10:00:00', 
       letter: '6', 
       hint: 'Encuentra la salida.' 
     },
@@ -50,23 +50,23 @@
       id: 'rubik', 
       name: 'Rubik', 
       url: '../Rubik/src/Index.html', 
-      unlockAt: '2026-01-03T10:00:00', 
+      unlockAt: '2022-01-03T10:00:00', 
       letter: 'V', 
       hint: 'Ármalo, si podés.' 
     },
     { 
       id: 'dice', 
       name: 'Space Invaders', 
-      url: 'Dice.html', 
-      unlockAt: '2026-01-03T10:00:00', // EJEMPLO: Cambia esto a tu fecha real
+      url: '../invaders/index.html', 
+      unlockAt: '2022-01-03T10:00:00', // EJEMPLO: Cambia esto a tu fecha real
       letter: 'C', 
       hint: 'Aura' 
     },
     { 
       id: 'racer', 
       name: 'Carreras', 
-      url: 'cartas.html', 
-      unlockAt: '2026-01-05T10:00:00', 
+      url: '../racer/index.html', 
+      unlockAt: '2022-01-05T10:00:00', 
       letter: '1', 
       hint: 'Memoria y suerte.' 
     },

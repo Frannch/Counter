@@ -35,30 +35,80 @@ function UltimoMovimiento(direccion) {
   actualizarUltimoMovimiento(UltimoMovimiento);
 }
 
+// === Config victoria → lobby ===
+const GAME_ID = 'rompe';                 // Debe existir en js/lobby.js
+const LOBBY_PATH = '../../html/lobby.html';
+const REDIRECT_DELAY = 10;               // segundos
+
+function notifyWinAndRedirect(gameId, lobbyPath, seconds = 10) {
+  try { localStorage.setItem(`win_${gameId}`, '1'); } catch (_) {}
+  const target = `${lobbyPath}?win=${encodeURIComponent(gameId)}`;
+
+  if (!document.getElementById('win-overlay-style')) {
+    const style = document.createElement('style');
+    style.id = 'win-overlay-style';
+    style.textContent = `
+      .win-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;z-index:99999}
+      .win-box{background:#111;color:#fff;max-width:560px;width:90%;padding:24px;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.4);text-align:center;font-family:system-ui,Segoe UI,Roboto,Arial}
+      .win-box h2{margin:0 0 8px;font-size:1.8rem}
+      .win-box p{margin:6px 0}
+      .win-actions{margin-top:14px;display:flex;gap:8px;justify-content:center}
+      .win-btn{padding:.6rem 1rem;border-radius:8px;border:0;cursor:pointer;font-weight:700}
+      .win-btn.primary{background:#22c55e;color:#111}
+      .win-count{font-weight:800}
+    `;
+    document.head.appendChild(style);
+  }
+
+  const overlay = document.createElement('div');
+  overlay.className = 'win-overlay';
+  overlay.innerHTML = `
+    <div class="win-box" role="dialog" aria-modal="true" aria-label="Has ganado">
+      <h2>¡Felicitaciones!</h2>
+      <p>Has completado el rompecabezas.</p>
+      <p>Volviendo al lobby en <span class="win-count" id="win-count">${seconds}</span> segundos…</p>
+      <div class="win-actions">
+        <button class="win-btn primary" id="win-go-now">Ir ahora</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  function stopKeys(e){ e.stopImmediatePropagation(); }
+  window.addEventListener('keydown', stopKeys, true);
+  window.addEventListener('keyup', stopKeys, true);
+
+  const countEl = overlay.querySelector('#win-count');
+  const goNow = overlay.querySelector('#win-go-now');
+  function go(){ window.location.href = target; }
+  let left = seconds;
+  const t = setInterval(() => {
+    left -= 1;
+    if (left <= 0) { clearInterval(t); go(); }
+    else { countEl.textContent = String(left); }
+  }, 1000);
+  goNow.addEventListener('click', () => { clearInterval(t); go(); });
+}
+// === fin config victoria → lobby ===
+
 /* Si el Rompecabezas está en la posición ganadora. */
 function chequearSiGano() {
-    var grillaWin = [
-        [1, 2, 3],
-        [4, 5, 6],
-        [7, 8, 9]
-    ];
-    if (grilla.length === grillaWin.length) {
-    for (var i = 0; i < grilla.length; i++) {
-      for (var j = 0; j < grilla.length; j++) {
-    if(grilla[i][j] == grillaWin[i][j]){
-      }else{
-       return false;
-     }
-   }
- }
-true;
-mostrarCartelGanador();
-}
+  var grillaWin = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+  ];
+  for (var i = 0; i < grilla.length; i++) {
+    for (var j = 0; j < grilla[i].length; j++) {
+      if (grilla[i][j] !== grillaWin[i][j]) return false;
+    }
+  }
+  return true;
 }
 
-// Implementar alguna forma de mostrar un cartel que avise que ganaste el juego
+// Implementar cartel de victoria + redirección al lobby
 function mostrarCartelGanador() {
-  alert("¡Lo lograste!, la segunda letra es L");
+  notifyWinAndRedirect(GAME_ID, LOBBY_PATH, REDIRECT_DELAY);
 }
 
 /* Función que intercambia dos posiciones en la grilla.
@@ -243,21 +293,19 @@ se toca una tecla se hace algo en respuesta, en este caso, un movimiento */
 function capturarTeclas() {
   document.body.onkeydown = (function(evento) {
     if (evento.which === codigosDireccion.ABAJO ||
-      evento.which === codigosDireccion.ARRIBA ||
-      evento.which === codigosDireccion.DERECHA ||
-      evento.which === codigosDireccion.IZQUIERDA) {
+        evento.which === codigosDireccion.ARRIBA ||
+        evento.which === codigosDireccion.DERECHA ||
+        evento.which === codigosDireccion.IZQUIERDA) {
 
       moverEnDireccion(evento.which);
 
-        var gano = chequearSiGano();
-        if (gano) {
-          setTimeout(function() {
-              mostrarCartelGanador();
-              }, 500);
-            }
-            evento.preventDefault();
-        }
-    })
+      var gano = chequearSiGano();
+      if (gano) {
+        setTimeout(function() { mostrarCartelGanador(); }, 300);
+      }
+      evento.preventDefault();
+    }
+  })
 }
 
 /* Se inicia el rompecabezas mezclando las piezas 60 veces

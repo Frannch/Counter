@@ -2,6 +2,65 @@ const colors = ['blue', 'green', 'white', 'yellow', 'orange', 'red'];
 const pieces = document.getElementsByClassName('piece');
 const SOLVED_LETTER = 'Felicidades :), la primer letra es: M'; // cambia aquí la letra que quieres mostrar
 
+// === Victoria → lobby ===
+const GAME_ID = 'rubik';
+const LOBBY_PATH = '../../html/lobby.html';
+const REDIRECT_DELAY = 10;
+
+// Desactivar/activar mezcla inicial del cubo
+const ENABLE_SCRAMBLE = false;
+
+function notifyWinAndRedirect(gameId, lobbyPath, seconds = 10) {
+    try { localStorage.setItem(`win_${gameId}`, '1'); } catch (_) {}
+    const target = `${lobbyPath}?win=${encodeURIComponent(gameId)}`;
+
+    if (!document.getElementById('win-overlay-style')) {
+        const style = document.createElement('style');
+        style.id = 'win-overlay-style';
+        style.textContent = `
+          .win-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;z-index:99999}
+          .win-box{background:#111;color:#fff;max-width:560px;width:90%;padding:24px;border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.4);text-align:center;font-family:system-ui,Segoe UI,Roboto,Arial}
+          .win-box h2{margin:0 0 8px;font-size:1.8rem}
+          .win-box p{margin:6px 0}
+          .win-actions{margin-top:14px;display:flex;gap:8px;justify-content:center}
+          .win-btn{padding:.6rem 1rem;border-radius:8px;border:0;cursor:pointer;font-weight:700}
+          .win-btn.primary{background:#22c55e;color:#111}
+          .win-count{font-weight:800}
+        `;
+        document.head.appendChild(style);
+    }
+
+    const overlay = document.createElement('div');
+    overlay.className = 'win-overlay';
+    overlay.innerHTML = `
+      <div class="win-box" role="dialog" aria-modal="true" aria-label="Has ganado">
+        <h2>¡Felicitaciones!</h2>
+        <p>Has resuelto el cubo.</p>
+        <p>Volviendo al lobby en <span class="win-count" id="win-count">${seconds}</span> segundos…</p>
+        <div class="win-actions">
+          <button class="win-btn primary" id="win-go-now">Ir ahora</button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(overlay);
+
+    function stopKeys(e){ e.stopImmediatePropagation(); }
+    window.addEventListener('keydown', stopKeys, true);
+    window.addEventListener('keyup', stopKeys, true);
+
+    const countEl = overlay.querySelector('#win-count');
+    const goNow = overlay.querySelector('#win-go-now');
+    function go(){ window.location.href = target; }
+    let left = seconds;
+    const t = setInterval(() => {
+        left -= 1;
+        if (left <= 0) { clearInterval(t); go(); }
+        else { countEl.textContent = String(left); }
+    }, 1000);
+    goNow.addEventListener('click', () => { clearInterval(t); go(); });
+}
+// === fin victoria → lobby ===
+
 /**
  * Returns j-th adjacent face of i-th face  
  * @param {*} i 
@@ -186,12 +245,14 @@ document.ondragstart = () => false
 // window.addEventListener('load', assembleCube);
 window.addEventListener('load', () => {
     assembleCube();
-    requestAnimationFrame(() => scramble(25, true));
+    // Mezcla inicial (desactivada si ENABLE_SCRAMBLE = false)
+    if (ENABLE_SCRAMBLE) requestAnimationFrame(() => scramble(25, true));
 
     const btn = document.getElementById('checkBtn');
     btn?.addEventListener('click', () => {
         if (isSolved()) {
-            alert(SOLVED_LETTER);
+            // alert(SOLVED_LETTER);
+            notifyWinAndRedirect(GAME_ID, LOBBY_PATH, REDIRECT_DELAY);
         }
     });
 });
