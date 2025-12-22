@@ -18,15 +18,49 @@
         height: 768px;   /* antes 384px */
         display: block;
       }
+      /* Overlay de inicio */
+      .start-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;z-index:9999}
+      .start-btn{
+        font-family:system-ui,Segoe UI,Roboto,Arial;
+        font-size:clamp(24px,6vw,56px);
+        padding:.9em 1.6em;border:0;border-radius:16px;font-weight:800;cursor:pointer;
+        background:linear-gradient(135deg,#22c55e,#16a34a);color:#111;box-shadow:0 14px 34px rgba(0,0,0,.45)
+      }
     </style>
   </head>
   <body>
+     <!-- Botón de Play -->
+     <div id="overlay" class="start-overlay">
+       <button id="play-btn" type="button" class="start-btn">▶ Play</button>
+     </div>
       <canvas id="gameCanvas" width="1024" height="768"></canvas>
 
       <script src="main.min.js"></script>
       <script>
-        window.BGM_URL = '../racer/js/getaway.mp3'; // pon tu archivo aquí
+        window.BGM_URL = './js/getaway.mp3'; // MP3 en la carpeta js
       </script>
+     <script>
+       // Lógica del botón: ocultar y arrancar música a los 10s
+       (function(){
+         const overlay = document.getElementById('overlay');
+         const btn = document.getElementById('play-btn');
+         let bgm = null;
+         function fadeTo(el, target = 0.6, ms = 800){
+           const steps = 20, inc = (target - el.volume) / steps; let i = 0;
+           const t = setInterval(()=>{ i++; el.volume = Math.max(0, Math.min(1, el.volume + inc)); if(i>=steps) clearInterval(t); }, ms/steps);
+         }
+         btn.addEventListener('click', async () => {
+           overlay.style.display = 'none'; // desaparecer botón
+           try {
+             bgm = new Audio(window.BGM_URL);
+             bgm.loop = true;
+             bgm.volume = 0.001; // arranca en silencio para cumplir políticas
+             await bgm.play();
+             setTimeout(()=>fadeTo(bgm, 0.6, 800), 10000); // suena a los 10s
+           } catch(e) { console.warn('No se pudo iniciar la música:', e); }
+         });
+       })();
+     </script>
 
       <script>
       (function () {
