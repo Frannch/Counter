@@ -74,13 +74,13 @@ Race.prototype = {
   raceOver: function() {
     this.state = STATE_RACEOVER;
 
-    // Detectar TOP-8 y mostrar overlay + redirigir
+    // Detectar TOP-3 y mostrar overlay + redirigir
     var posStr = (cars && cars[0] && cars[0].finishPosition) || '';
     var m = String(posStr).match(/^\d+/);
     var rank = m ? parseInt(m[0], 10) : NaN;
-    var isTop8 = Number.isFinite(rank) && rank >= 1 && rank <= 8;
+    var isTop3 = Number.isFinite(rank) && rank >= 1 && rank <= 3;
 
-    if (isTop8 && !this.winShown) {
+    if (isTop3 && !this.winShown) {
       this.winShown = true;
       notifyWinAndRedirect(GAME_ID, LOBBY_PATH, REDIRECT_DELAY);
     }
@@ -420,7 +420,7 @@ function notifyWinAndRedirect(gameId, lobbyPath, seconds = 10) {
   overlay.innerHTML = `
     <div class="win-box" role="dialog" aria-modal="true" aria-label="Has ganado">
       <h2>¡Felicitaciones!</h2>
-      <p>Has quedado entre los 8 primeros.</p>
+      <p>Has quedado entre los 3 primeros.</p>
       <p>Volviendo al lobby en <span class="win-count" id="win-count">${seconds}</span> segundos…</p>
       <div class="win-actions">
         <button class="win-btn primary" id="win-go-now">Ir ahora</button>

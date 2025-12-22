@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Racer</title>
+    <title>Fran's Race</title>
     <style>
       html, body { height: 100%; }
       body {
@@ -57,7 +57,7 @@
           overlay.innerHTML = `
             <div class="win-box" role="dialog" aria-modal="true" aria-label="Has ganado">
               <h2>¡Felicitaciones!</h2>
-              <p>Has quedado entre los 8 primeros.</p>
+              <p>Has quedado entre los 3 primeros.</p>
               <p>Volviendo al lobby en <span class="win-count" id="win-count">${seconds}</span> segundos…</p>
               <div class="win-actions">
                 <button class="win-btn primary" id="win-go-now">Ir ahora</button>
@@ -98,7 +98,7 @@
           if (!r || shown) return;
           if (r.state === 5) { // STATE_RACEOVER
             const rank = getFinalRank();
-            if (Number.isFinite(rank) && rank >= 1 && rank <= 8) {
+            if (Number.isFinite(rank) && rank >= 1 && rank <= 3) {
               shown = true;
               notifyWinAndRedirect(GAME_ID, LOBBY_PATH, REDIRECT_DELAY);
             }

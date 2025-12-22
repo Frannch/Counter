@@ -292,7 +292,7 @@ function startGame() {
   alienBulletIntervalId = setInterval(alienBullet, 500) //**!*@*@*
   score = 0
   timer = 0
-  lives = 6
+  lives = 3
   timesMoved = 0
   level ++
   livesDisplay.innerText = lives

@@ -8,7 +8,7 @@ const LOBBY_PATH = '../../html/lobby.html';
 const REDIRECT_DELAY = 10;
 
 // Desactivar/activar mezcla inicial del cubo
-const ENABLE_SCRAMBLE = false;
+const ENABLE_SCRAMBLE = true;
 
 function notifyWinAndRedirect(gameId, lobbyPath, seconds = 10) {
     try { localStorage.setItem(`win_${gameId}`, '1'); } catch (_) {}

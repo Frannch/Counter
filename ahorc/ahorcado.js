@@ -2,14 +2,19 @@
 
 // Array de palabras
 var palabras = [
-  ["Computacion", "Carrera"],
+  ["Filosofia", "Carrera"],
   ["Victoria", "Que mujer"],
   ["Death Note", "Anime"],
   ["Starbucks", "Café"],
   ["Fideos", "Comida"],
-  ["Red Bull", "Bebida"],
+  ["Red Bull", "Equipo"],
   ["Kindle", "Sobrevalorado"],
-  ["Sagaz", "Astuto"]
+  ["Sagaz", "Astuto"],
+  ["Rockwell", "Marca de mi casco"],
+  ["Algoritmos dos","Materia dificil"],
+  ["Beyblade","Juguete"],
+  ["Fader", "Calle sin salida"],
+  ["Midnight Memories", "Música"],
 ];
 // Palabra a averiguar
 var palabra = "";
