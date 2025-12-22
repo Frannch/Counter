@@ -11,7 +11,7 @@
 
   // Configuración de redirección al completar todas las letras
   const COMPLETE_REDIRECT = {
-    url: 'final.html', // Cambia esto al destino deseado (relativo a html/lobby.html)
+    url: '../html/final.html', // Cambia esto al destino deseado (relativo a html/lobby.html)
     delay: 10          // Segundos de cuenta regresiva
   };
   const ALL_COMPLETE_FLAG = 'lobbyAllCompleteShown';
