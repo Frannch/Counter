@@ -63,8 +63,8 @@
       hint: 'Aura' 
     },
     { 
-      id: 'cartas', 
-      name: 'Cartas', 
+      id: 'racer', 
+      name: 'Carreras', 
       url: 'cartas.html', 
       unlockAt: '2026-01-05T10:00:00', 
       letter: '1', 
