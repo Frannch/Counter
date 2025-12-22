@@ -22,7 +22,7 @@
       id: 'rompe', 
       name: 'Rompecabezas', 
       url: '../puzzle/Rompecabezas-master/index.html', 
-      unlockAt: '2022-12-22T15:40:00', 
+      unlockAt: '2025-12-22T15:40:00', 
       letter: 'M', 
       hint: 'Ayuda a Sally' 
     },
@@ -30,7 +30,7 @@
       id: 'ahorcado',
       name: 'Ahorcado', 
       url: '../ahorc/Ahorcado.html', 
-      unlockAt: '2022-12-22T15:40:10', 
+      unlockAt: '2025-12-22T15:40:10', 
       letter: 'L', 
       hint: 'Adivina 5 palabras.' 
     },
@@ -38,7 +38,7 @@
       id: 'laberinto', 
       name: 'Laberinto', 
       url: '../Laberinto/lab.html', 
-      unlockAt: '2022-12-22T15:40:20', 
+      unlockAt: '2025-12-22T15:40:20', 
       letter: '6', 
       hint: 'Encuentra la salida.' 
     },
@@ -47,7 +47,7 @@
       id: 'dice', 
       name: 'Space Invaders', 
       url: '../invaders/index.html', 
-      unlockAt: '2022-12-22T15:40:30', 
+      unlockAt: '2025-12-22T15:40:30', 
       letter: 'C', 
       hint: 'Eliminálos a todos' 
     },
@@ -55,7 +55,7 @@
       id: 'racer', 
       name: 'Carreras', 
       url: '../racer/index.html', 
-      unlockAt: '2022-12-22T15:40:40', 
+      unlockAt: '2025-12-22T15:40:40', 
       letter: '1', 
       hint: 'Termina entre los 3 primeros. Sé que podés ganar' 
     },
@@ -63,7 +63,7 @@
       id: 'rubik', 
       name: 'Rubik', 
       url: '../Rubik/src/Index.html', 
-      unlockAt: '2022-12-22T15:40:50', 
+      unlockAt: '2025-12-22T15:40:50', 
       letter: 'V', 
       hint: 'Suerte' 
     },
