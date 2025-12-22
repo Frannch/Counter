@@ -126,6 +126,22 @@
     </section>
   </main>-->
 
+  <!-- Card con desbloqueo por fecha -->
+  <a
+    class="card"
+    id="card-release"
+    href="html/lobby.html"
+    data-release="2025-12-22T15:16:00-03:00"              
+    data-unlocked-title="Summer Games"
+    data-unlocked-desc="Round 2"
+    aria-disabled="true"
+  >
+    <div class="card-body">
+      <h3 id="release-title">Se desbloquea en…</h3>
+      <p id="release-count">--d --h --m --s</p>
+    </div>
+  </a>
+
   <script>
   function seleccionarTema(tema) {
     localStorage.setItem('tema', tema);
@@ -168,6 +184,50 @@
     document.getElementById('cambiar-tema').addEventListener('click', () => {
       modal.style.display = 'flex';
     });
+
+    // Countdown de desbloqueo
+    const card = document.getElementById('card-release');
+    if (card) {
+      const targetStr = card.getAttribute('data-release');
+      const unlockedTitle = card.getAttribute('data-unlocked-title') || 'Disponible';
+      const unlockedDesc = card.getAttribute('data-unlocked-desc') || '';
+      const titleEl = document.getElementById('release-title');
+      const countEl = document.getElementById('release-count');
+      const target = Date.parse(targetStr);
+
+      function fmt(ms){
+        const d = Math.floor(ms / 86400000);
+        const h = Math.floor((ms % 86400000) / 3600000);
+        const m = Math.floor((ms % 3600000) / 60000);
+        const s = Math.floor((ms % 60000) / 1000);
+        return `${d}d ${h}h ${m}m ${s}s`;
+      }
+
+      function tick(){
+        const diff = target - Date.now();
+        if (isNaN(target)) {
+          titleEl.textContent = 'Fecha inválida';
+          countEl.textContent = '';
+          return;
+        }
+        if (diff <= 0) {
+          titleEl.textContent = unlockedTitle;
+          countEl.textContent = unlockedDesc;
+          card.removeAttribute('aria-disabled');
+          card.style.pointerEvents = 'auto';
+          card.style.opacity = '';
+          clearInterval(int);
+        } else {
+          titleEl.textContent = 'Se desbloquea en…';
+          countEl.textContent = fmt(diff);
+          card.setAttribute('aria-disabled','true');
+          card.style.pointerEvents = 'none';
+          card.style.opacity = '.75';
+        }
+      }
+      const int = setInterval(tick, 1000);
+      tick();
+    }
   });
   </script>
 </body>

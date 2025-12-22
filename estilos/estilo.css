@@ -162,6 +162,13 @@ body{
   border-color: #ffffff22;
 }
 
+/* Card deshabilitada mientras cuenta regresiva */
+.card[aria-disabled="true"] {
+  pointer-events: none;
+  opacity: .75;
+  filter: grayscale(.06) brightness(.96);
+}
+
 /* Tema RO: texto principal negro */
 body.tema-ro {
   --text: #000000;   /* texto base en negro */

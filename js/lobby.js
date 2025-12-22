@@ -17,16 +17,12 @@
   const ALL_COMPLETE_FLAG = 'lobbyAllCompleteShown';
 
   // CONFIGURACIÓN DE JUEGOS
-  // IMPORTANTE: Usa el formato ISO 'YYYY-MM-DDTHH:mm:ss' para evitar errores entre navegadores.
-  // Ejemplo: '2025-12-24T20:00:00' (Año-Mes-Dia T Hora:Minutos:Segundos)
   const games = [
-    
-    
     { 
       id: 'rompe', 
       name: 'Rompecabezas', 
       url: '../puzzle/Rompecabezas-master/index.html', 
-      unlockAt: '2022-01-04T10:00:00', 
+      unlockAt: '2026-01-04T10:00:00', 
       letter: 'M', 
       hint: 'Fácil' 
     },
@@ -34,15 +30,15 @@
       id: 'ahorcado',
       name: 'Ahorcado', 
       url: '../ahorc/Ahorcado.html', 
-      unlockAt: '2022-01-05T10:00:00', 
+      unlockAt: '2026-01-05T10:00:00', 
       letter: 'L', 
-      hint: 'Adivina la palabra.' 
+      hint: 'Adivina 5 palabras.' 
     },
     { 
       id: 'laberinto', 
       name: 'Laberinto', 
       url: '../Laberinto/lab.html', 
-      unlockAt: '2022-01-07T10:00:00', 
+      unlockAt: '2026-01-06T10:00:00', 
       letter: '6', 
       hint: 'Encuentra la salida.' 
     },
@@ -50,25 +46,25 @@
       id: 'rubik', 
       name: 'Rubik', 
       url: '../Rubik/src/Index.html', 
-      unlockAt: '2022-01-03T10:00:00', 
+      unlockAt: '2026-01-07T10:00:00', 
       letter: 'V', 
-      hint: 'Ármalo, si podés.' 
+      hint: 'Suerte' 
     },
     { 
       id: 'dice', 
       name: 'Space Invaders', 
       url: '../invaders/index.html', 
-      unlockAt: '2022-01-03T10:00:00', // EJEMPLO: Cambia esto a tu fecha real
+      unlockAt: '2026-01-08T10:00:00', 
       letter: 'C', 
-      hint: 'Aura' 
+      hint: 'Eliminálos a todos' 
     },
     { 
       id: 'racer', 
       name: 'Carreras', 
       url: '../racer/index.html', 
-      unlockAt: '2022-01-05T10:00:00', 
+      unlockAt: '2026-01-09T10:00:00', 
       letter: '1', 
-      hint: 'Memoria y suerte.' 
+      hint: 'Termina entre los 3 primeros. Sé que podés ganar' 
     },
   ];
 
@@ -85,24 +81,19 @@
   // Parser robusto de fechas
   function parseDateTime(input) {
     if (!input && input !== 0) return NaN;
-    if (typeof input === 'number') return input; // Si ya es timestamp
+    if (typeof input === 'number') return input; 
     if (input instanceof Date) return input.getTime();
-    
-    // Intenta parsear string ISO o local
     const ts = Date.parse(input);
     if (!Number.isNaN(ts)) return ts;
-    
     return NaN;
   }
 
-  // Obtiene el momento de desbloqueo en ms
   function getUnlockAtMs(game) {
     if (game.unlockAt) {
       const ts = parseDateTime(game.unlockAt);
       if (!Number.isNaN(ts)) return ts;
       console.warn(`Fecha inválida para ${game.id}:`, game.unlockAt);
     }
-    // Fallback por si no pones fecha: se desbloquea al instante
     return 0; 
   }
 
@@ -112,15 +103,13 @@
 
   function timeLeft(game, now) {
     const unlockAt = getUnlockAtMs(game);
-    // Si la fecha es 0 o inválida, asumimos desbloqueado, tiempo restante 0
     if (unlockAt === 0) return 0;
     return Math.max(0, unlockAt - now);
   }
 
-  // Formatea DD:HH:MM:SS o HH:MM:SS
   function formatDuration(ms) {
     const total = Math.ceil(ms / 1000);
-    const d = Math.floor(total / 86400); // Días
+    const d = Math.floor(total / 86400); 
     const h = Math.floor((total % 86400) / 3600);
     const m = Math.floor((total % 3600) / 60);
     const s = total % 60;
@@ -146,7 +135,7 @@
   function clearProgress() {
     localStorage.removeItem(stateKey);
     games.forEach((g) => localStorage.removeItem(winKey(g.id)));
-    localStorage.removeItem(ALL_COMPLETE_FLAG); // limpiar la marca de “ya mostrado”
+    localStorage.removeItem(ALL_COMPLETE_FLAG); 
   }
 
   function renderGrid() {
@@ -164,14 +153,19 @@
       const unlocked = isUnlocked(g, now);
       const won = wins.has(g.id);
 
+      // --- CAMBIO AQUÍ: Determinar si mostramos el nombre o signos de interrogación ---
+      // Si está desbloqueado O ganado, mostramos el nombre. Si no, mostramos secreto.
+      const displayName = (unlocked || won) ? g.name : '-';
+      const displayHint = (unlocked || won) ? g.hint : ':)';
+
       card.innerHTML = `
         <div class="card-top">
-          <h3 class="title">${g.name}</h3>
+          <h3 class="title">${displayName}</h3>
           <span class="badge ${won ? 'won' : unlocked ? 'unlocked' : 'locked'}">
             ${won ? 'Completado' : unlocked ? 'Desbloqueado' : 'Bloqueado'}
           </span>
         </div>
-        <p class="hint">${g.hint}</p>
+        <p class="hint">${displayHint}</p>
         
         <div class="timer ${unlocked ? 'hide' : ''}">
           <span>Disponible en:</span>
@@ -203,7 +197,7 @@
     progressEl().textContent = `Progreso: ${revealed}/${codeOrder.length}`;
   }
 
-// --- NUEVO: detección y overlay de finalización ---
+  // --- detección y overlay de finalización ---
   function hasAllCompleted() {
     return codeOrder.every((c) => localStorage.getItem(winKey(c.id)) === '1');
   }
@@ -269,19 +263,17 @@
     localStorage.setItem(ALL_COMPLETE_FLAG, '1');
     showCompletionOverlay(COMPLETE_REDIRECT.delay, COMPLETE_REDIRECT.url);
   }
-// --- FIN NUEVO ---
 
   // Oculta el botón de reinicio cuando no es modo test
   function setupResetVisibility() {
     const reset = document.getElementById('reset-progress');
     if (!reset) return;
     if (!SHOW_TEST_BUTTON) {
-      reset.remove(); // lo quita del DOM si no está en modo test
+      reset.remove(); 
     }
   }
 
   function attachHandlers() {
-    // Listener del botón de testing (solo si ?test=1)
     if (SHOW_TEST_BUTTON) {
       grid().addEventListener('click', (ev) => {
         const btn = ev.target.closest('[data-test-win]');
@@ -290,7 +282,7 @@
         setWin(id);
         renderGrid();
         updateSecret();
-        checkAllCompleted(); // <- verificar si se completó todo en modo test
+        checkAllCompleted(); 
       });
     }
 
@@ -306,7 +298,7 @@
 
   function tick() {
     const now = Date.now();
-    // Actualizamos contadores
+    
     document.querySelectorAll('[data-countdown-for]').forEach((el) => {
       const id = el.getAttribute('data-countdown-for');
       const g = games.find((x) => x.id === id);
@@ -314,9 +306,7 @@
       
       const left = timeLeft(g, now);
       
-      // Si el tiempo llega a 0 y la carta sigue bloqueada visualmente, forzamos re-render
       if (left <= 0 && el.closest('.timer') && !el.closest('.timer').classList.contains('hide')) {
-         // Pequeño hack para forzar el desbloqueo visual exacto al llegar a 0
          renderGrid();
          updateSecret();
          return;
@@ -325,7 +315,6 @@
       el.textContent = formatDuration(left);
     });
 
-    // Verificación de desbloqueo general
     let needsRender = false;
     games.forEach((g) => {
       const card = document.querySelector(`.card[data-game-id="${g.id}"]`);
@@ -348,23 +337,19 @@
     const g = games.find((x) => x.id === win);
     if (!g) return;
     setWin(g.id);
-    // Limpiar parámetro de la URL sin recargar
     params.delete('win');
     const newUrl = `${location.pathname}${params.toString() ? '?' + params.toString() : ''}${location.hash}`;
     history.replaceState({}, '', newUrl);
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    // Inicializar
     getStartTime();
     handleWinFromURL();
     renderGrid();
     updateSecret();
     setupResetVisibility();
     attachHandlers();
-    // Mostrar overlay si ya quedó todo completo en esta carga (ej. último win vino por URL)
     checkAllCompleted();
-    // Ticker cada segundo
     setInterval(tick, 1000);
   });
 })();

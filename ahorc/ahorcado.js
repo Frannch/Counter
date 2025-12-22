@@ -32,9 +32,15 @@ var buttons = document.getElementsByClassName('letra');
 var btnInicio = document.getElementById("reset");
 
 // Nuevo: configuración y contador de victorias
-const VICTORIAS_OBJETIVO = 3;
+const VICTORIAS_OBJETIVO = 5;
 const MENSAJE_TRES_VICTORIAS = "¡Felicidades! Adivinaste 3 palabras. La letra es: M";
 let victorias = Number(localStorage.getItem('victorias') || 0);
+// UI de progreso
+const progresoEl = document.getElementById('progreso');
+function updateProgreso() {
+  if (progresoEl) progresoEl.textContent = `${victorias}/${VICTORIAS_OBJETIVO}`;
+}
+updateProgreso();
 
 // Nuevo: configuración y cartel de victoria + redirección al lobby
 const GAME_ID = 'ahorcado';
@@ -151,17 +157,17 @@ function pista() {
   document.getElementById("hueco-pista").innerHTML = palabras[rand][1];
 }
 
-// Compruba si ha finalizado
+// Comprueba si ha finalizado (ganó/perdió la palabra)
 function compruebaFin() {
   if (oculta.indexOf("_") == -1) {
-    // palabra acertada
     victorias++;
     localStorage.setItem('victorias', victorias);
+    updateProgreso();
 
     if (victorias >= VICTORIAS_OBJETIVO) {
-      // Reset y cartel + redirección al lobby con ?win=ahorcado
       victorias = 0;
       localStorage.setItem('victorias', 0);
+      updateProgreso();
       notifyWinAndRedirect(GAME_ID, LOBBY_PATH, REDIRECT_DELAY);
       return;
     }
@@ -183,6 +189,11 @@ function compruebaFin() {
     }, 800);
 
   } else if (cont == 0) {
+    // Derrota: reiniciar progreso
+    victorias = 0;
+    localStorage.setItem('victorias', 0);
+    updateProgreso();
+
     document.getElementById("msg-final").innerHTML = "Game Over";
     document.getElementById("msg-final").className += "zoom-in";
     for (var i = 0; i < buttons.length; i++) { buttons[i].disabled = true; }
