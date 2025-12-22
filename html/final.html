@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cupones</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&family=Sacramento&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#fff7fb;
+      --card:#ffffff;
+      --ink:#3b2c35;
+      --accent:#ff4d88;
+      --accent-2:#ff9fc0;
+      --accent-3:#ffd0df;
+      --ok:#2e7d32;
+      --warn:#b00020;
+      --grey-1:#f3f3f5;
+      --grey-2:#e1e1e6;
+      --grey-3:#b7b7c2;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:linear-gradient(135deg,var(--bg),#fff);
+      font-family:Quicksand, system-ui, sans-serif; color:var(--ink);
+    }
+
+    /* Ocultar desplazamiento horizontal */
+    html, body { overflow-x: hidden; }
+
+    header{
+      padding:28px 20px 10px; text-align:center; position:relative;
+    }
+    .title{
+      font-family:Sacramento, cursive; font-size:52px; color:var(--accent);
+      margin:0 0 6px;
+    }
+    .subtitle{margin:0; color:#7a5a68}
+    .heart-bg::before,.heart-bg::after{
+      content:"❤"; position:absolute; opacity:.12; font-size:80px; color:var(--accent);
+    }
+    .heart-bg::before{left:10px; top:-6px; transform:rotate(-20deg)}
+    .heart-bg::after{right:12px; top:-10px; transform:rotate(18deg)}
+    main{max-width:980px; margin:18px auto; padding:0 16px 40px}
+    .panel{
+      background:var(--card); border:1px solid var(--accent-3); border-radius:16px;
+      box-shadow:0 6px 20px rgba(255,77,136,.12); padding:18px;
+    }
+    .coupon-list{
+      margin-top:4px; display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px;
+    }
+    .coupon{
+      background:#fff; border:2px dashed var(--accent-2); border-radius:16px;
+      padding:14px; position:relative; overflow:hidden;
+      transition:opacity .2s ease;
+    }
+    .coupon::after{
+      content:""; position:absolute; inset:0; pointer-events:none;
+      background-image:radial-gradient(circle at 10% 10%, rgba(255,77,136,.12), transparent 40%),
+                       radial-gradient(circle at 90% 80%, rgba(255,159,192,.14), transparent 40%);
+      opacity:.8;
+    }
+    .chip{
+      display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border-radius:999px;
+      background:var(--accent-3); color:var(--ink); font-weight:600; position:relative; z-index:1;
+      border:1px solid transparent;
+    }
+    .coupon h3{margin:10px 0 6px; font-size:18px; position:relative; z-index:1}
+    .coupon p{margin:0 0 8px; color:#6b5562; position:relative; z-index:1}
+    .meta{font-size:12px; color:#8a6f7c}
+    .empty{
+      text-align:center; color:#8a6f7c; padding:24px; border:2px dashed #f1dbe4; border-radius:12px;
+    }
+    footer{text-align:center; padding:12px; color:#8a6f7c}
+
+    /* Estado usado */
+    .coupon.used{
+      background:var(--grey-1);
+      border-color:var(--grey-2);
+      opacity:.85;
+    }
+    .coupon.used::after{ opacity:.25 }
+    .coupon.used h3,
+    .coupon.used p,
+    .coupon.used .meta{ color:var(--grey-3) }
+    .coupon.used .chip{
+      background:var(--grey-2);
+      border-color:var(--grey-2);
+      color:#555a66;
+    }
+    .estado{
+      font-size:12px; font-weight:700; margin-left:8px; padding:2px 8px; border-radius:999px;
+      background:#fff3f6; border:1px solid #ffd6e3; color:#b0476a;
+    }
+    .coupon.used .estado{
+      background:#efeff2; border-color:#dedee3; color:#6e7480;
+    }
+
+    /* Print */
+    @media print{
+      header, footer{display:none !important}
+      body{background:#fff}
+      .coupon-list{grid-template-columns:repeat(3,1fr); gap:12px}
+      .coupon{page-break-inside:avoid}
+    }
+  </style>
+</head>
+<body>
+  <header class="heart-bg">
+    <h1 class="title">Cupones para Ro</h1>
+    <p class="subtitle">Lista de cupones vigentes</p>
+  </header>
+
+  <main>
+    <section class="panel">
+      <div id="lista" class="coupon-list"></div>
+      <div id="vacio" class="empty" hidden>
+        Aún no hay cupones para mostrar.
+      </div>
+    </section>
+  </main>
+
+  <footer>Hecho con amor 💖</footer>
+
+  <script>
+    // Cupones definidos en código sin campo 'vence'
+    const cupones = [
+      { titulo:"Película", descripcion:"Saltea turno y elije película", icono:"🍿", color:"#ffd0df", usos:"1", usado:false },
+      { titulo:"Skincare", descripcion:"Rutina de cuidado de la piel y/o pelo", icono:"🧴", color:"#ffd0df", usos:"1", usado:false },
+      { titulo:"Merienda con elección de lugar", descripcion:"Salida juntos. No válido para güemes", icono:"🧁", color:"#ffd0df", usos:"1", usado:false },
+      { titulo:"Almorzar milanesas", descripcion:"Cocino milanesas napolitanas. Con fideos probablemente", icono:"🍝", color:"#ffd0df", usos:"1", usado:false },
+      { titulo:"Maratón de Serie", descripcion:"Sesión de maratón de tu serie favorita. 5 capitulos máximo", icono:"📺", color:"#ffd0df", usos:"1", usado:false },
+      { titulo:"Escuchar un álbum completo", descripcion:"Reproducir un álbum completo de tu elección.", icono:"🎧", color:"#ffd0df", usos:"1", usado:false },
+      { titulo:"Carta para ti", descripcion:"Una carta escrita a mano", icono:"💌", color:"#ffd0df", usos:"1", usado:false },
+      { titulo:"Modelo 3D", descripcion:"Imprimir modelo de hasta 50g de filamento.", icono:"🖨️", color:"#ffd0df", usos:"1", usado:false },
+      { titulo:"Video tocando canción en guitarra", descripcion:"Grabo un video tocando tu canción elegida en la guitarra.", icono:"🎸", color:"#ffd0df", usos:"1", usado:false },
+       
+      { titulo:"Comprar remeras/ropa igual", descripcion:"Comprar remeras o ropa igual para ambos.", icono:"👕", color:"#ffd0df", usos:"1", usado:false },
+      
+      { titulo:"Video tocando canción en piano", descripcion:"Grabo un video tocando tu canción elegida en el piano.", icono:"🎹", color:"#ffd0df", usos:"1", usado:false },
+      
+      { titulo:"Chocolate o Helado", descripcion:"Comprar chocolate o helado", icono:"🍫", color:"#ffd0df", usos:"1", usado:false },
+      
+      { titulo:"Salir a un Restaurante", descripcion:"Salir a un restaurante juntos.", icono:"🍽️", color:"#ffd0df", usos:"1", usado:false },
+      
+      { titulo:"Jugar en dispositivo o juego de mesa", descripcion:"Viciar", icono:"🎮", color:"#ffd0df", usos:"1", usado:false },
+      
+      { titulo:"Pasapalabra", descripcion:"Saltea todo", icono:"-_-", color:"#ffd0df", usos:"1", usado:false },
+      ];
+
+    const el = {
+      lista: document.getElementById("lista"),
+      vacio: document.getElementById("vacio"),
+    };
+
+    function escapeHtml(s){
+      return String(s).replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[m]));
+    }
+
+    function lighten(hex, amt=0.3){
+      const c = (hex||"").replace("#","");
+      if(c.length!==6) return hex || "#ccc";
+      const r=parseInt(c.slice(0,2),16), g=parseInt(c.slice(2,4),16), b=parseInt(c.slice(4,6),16);
+      const mix = x=>Math.round(x + (255 - x)*amt);
+      return `rgb(${mix(r)}, ${mix(g)}, ${mix(b)})`;
+    }
+
+    function render(){
+      el.lista.innerHTML = "";
+      if (!cupones.length){
+        el.vacio.hidden = false;
+        return;
+      }
+      el.vacio.hidden = true;
+
+      cupones.forEach(c=>{
+        const card = document.createElement("article");
+        card.className = "coupon" + (c.usado ? " used" : "");
+        card.innerHTML = `
+          <span class="chip" style="background:${lighten(c.color, .55)}; border-color:${lighten(c.color, .4)}">
+            <span>${c.icono}</span>
+            <strong>${c.usos === "ilimitado" ? "Ilimitado" : c.usos + " uso(s)"}</strong>
+            <span class="estado">${c.usado ? "Usado" : "Disponible"}</span>
+          </span>
+          <h3>${escapeHtml(c.titulo)}</h3>
+          <p>${escapeHtml(c.descripcion)}</p>
+        `;
+        el.lista.appendChild(card);
+      });
+    }
+
+    render();
+  </script>
+</body>
+</html>
