@@ -6,8 +6,8 @@
   --bg: #0f0f14;
   --bg-soft: #15151d;
   --card: #1b1b24;
-  --text: #e7e7ee;
-  --muted: #b9b9c7;
+  --text: #d6d6de;   /* un poco más oscuro */
+  --muted: #a7a7b5;  /* un poco más oscuro */
   --primary: #c2185b;
   --primary-2: #ad1457;
   --ring: #ffffff18;
@@ -160,6 +160,13 @@ body{
 .btn.primary{
   background: var(--btn-primary-bg);   /* antes: var(--primary) */
   border-color: #ffffff22;
+}
+
+/* Tema RO: texto principal negro */
+body.tema-ro {
+  --text: #000000;   /* texto base en negro */
+  --muted: #222222;  /* textos secundarios más oscuros */
+  color: var(--text);
 }
 
 /* Ajustes móviles */

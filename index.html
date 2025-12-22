@@ -59,6 +59,7 @@
           <h3>Reasons</h3>
           <p>Ruleta de razones.</p>
         </div>
+        <!--
       </a>
        <a class="card" href="html/lock.html">
         <div class="card-body">
@@ -103,6 +104,7 @@
           <p>Gira y decide.</p>
         </div>
       </a>
+    -->
       <a class="card" href="html/extr.html">
         <div class="card-body">
           <h3>Extras</h3>
@@ -133,20 +135,27 @@
   function aplicarTema() {
     const tema = localStorage.getItem('tema');
     const pagina = window.location.pathname.split("/").pop();
+
+    // limpiar clases previas
     document.body.classList.remove(
+      'tema-ro',
       'fondo-index-tema1', 'fondo-index-tema2',
       'fondo-contador-tema1', 'fondo-contador-tema2'
     );
+
     if (tema === 'tema1') {
+      // tema Fran (texto claro por defecto)
       if (pagina === 'index.html' || pagina === '') {
         document.body.classList.add('fondo-index-tema1');
-      } else if (pagina === 'count.html') {
+      } else if (pagina === 'count.html' || pagina === 'count2.html') {
         document.body.classList.add('fondo-contador-tema1');
       }
     } else if (tema === 'tema2') {
+      // tema Ro: texto negro
+      document.body.classList.add('tema-ro');
       if (pagina === 'index.html' || pagina === '') {
         document.body.classList.add('fondo-index-tema2');
-      } else if (pagina === 'count.html') {
+      } else if (pagina === 'count.html' || pagina === 'count2.html') {
         document.body.classList.add('fondo-contador-tema2');
       }
     }
