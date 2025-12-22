@@ -62,12 +62,12 @@ Race.prototype = {
     this.countdownNumber = 4;
     this.lastTime = getTimestamp();
     this.winShown = false;
-    this.musicStarted = false;    // flag para disparar música una sola vez
+    this.musicStarted = false; // reproducir BGM una sola vez
 
-    // Inicializar audio del motor/SFX
+    // Inicializar SFX (motor/turbo/choque)
     raceAudioInit();
 
-    // Configurar música de fondo desde archivo (una vez)
+    // Preparar música desde archivo (no reproducir aún)
     if (!window.__bgmSetup) {
       raceMusicSetSource(window.BGM_URL || 'getaway.mp3');
       window.__bgmSetup = true;
@@ -76,8 +76,61 @@ Race.prototype = {
     // raceMusicPlay();
   },
 
+  // Hook: arranca BGM al entrar en STATE_RACE
+  function startMusicIfNeeded(raceInstance) {
+    if (!raceInstance.musicStarted) {
+      raceInstance.musicStarted = true;
+      try { raceMusicPlay(); } catch(e){}
+    }
+  }
+
+  updateCountdown: function(dt) {
+    var time = getTimestamp();
+    if(time - this.lastTime > Race.COUNTDOWN_INTERVAL) {
+      this.lastTime = getTimestamp();
+      this.countdownNumber--;
+      if(this.countdownNumber <= 0) {
+        raceAudioTone(440, 1/2);
+        this.state = STATE_RACING;
+      } else {
+        raceAudioTone(220, 1/4);
+//        speak(this.countdownNumber);
+      }
+    }
+    camera.update(dt);
+
+    if (this.state === STATE_RACE) {
+      startMusicIfNeeded(this); // mismo tick que aparece “Race One”
+    }
+  },
+
+  updateRace: function(dt) {
+    var playerSegment = track.findSegment(player.z);
+    var speedPercent  = player.speedPercent;//player.speed / maxSpeed;
+    var dx            = dt * 2 * speedPercent; // at top speed, should be able to cross from left to right (-1 to 1) in 1 second
+    var startPosition = camera.z;
+  
+    for(var i = 0; i < cars.length; i++) {
+      cars[i].update(dt);//, playerSegment, player.width);
+    }
+  //  updateCars(dt, playerSegment, player.width);
+  
+//    player.update(dt);
+    camera.update(dt);
+
+
+    bgLayer3Offset  = utilIncrease(bgLayer3Offset,  bgLayer3Speed  * playerSegment.curve * (camera.z-startPosition) / Track.segmentLength, 1);
+    bgLayer2Offset = utilIncrease(bgLayer2Offset, bgLayer2Speed * playerSegment.curve * (camera.z-startPosition) / Track.segmentLength, 1);
+    bgLayer1Offset = utilIncrease(bgLayer1Offset, bgLayer1Speed * playerSegment.curve * (camera.z-startPosition) / Track.segmentLength, 1);
+
+
+    // Salvaguarda por si no entró en el hook de arriba
+    startMusicIfNeeded(this);
+  },
+
   raceOver: function() {
     this.state = STATE_RACEOVER;
+    try { raceMusicStop(); } catch(e){}
 
     // Detectar TOP-3 y mostrar overlay + redirigir
     var posStr = (cars && cars[0] && cars[0].finishPosition) || '';
@@ -262,10 +315,8 @@ Race.prototype = {
     }
     camera.update(dt);
 
-    if (this.state === STATE_RACE && !this.musicStarted) {
-      this.musicStarted = true;
-      // Dispara la música en el mismo tick que aparece “Race One”
-      raceMusicPlay();
+    if (this.state === STATE_RACE) {
+      startMusicIfNeeded(this); // mismo tick que aparece “Race One”
     }
   },
 
@@ -289,6 +340,8 @@ Race.prototype = {
     bgLayer1Offset = utilIncrease(bgLayer1Offset, bgLayer1Speed * playerSegment.curve * (camera.z-startPosition) / Track.segmentLength, 1);
 
 
+    // Salvaguarda por si no entró en el hook de arriba
+    startMusicIfNeeded(this);
   },
 
   updateRaceOver: function() {

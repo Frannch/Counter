@@ -227,10 +227,8 @@ function raceMusicSetSource(url) {
 function raceMusicPlay() {
   if (!bgmEl) return;
   // reanudar WebAudio en interacción
-  if (audioCtx && audioCtx.state === 'suspended') {
-    audioCtx.resume().catch(()=>{});
-  }
-  bgmEl.play().catch(()=>{ /* requiere interacción del usuario */ });
+  try { if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume(); } catch(e){}
+  bgmEl.play().catch(()=>{});
 }
 function raceMusicStop() {
   if (bgmEl) bgmEl.pause();
