@@ -20,29 +20,15 @@
   // IMPORTANTE: Usa el formato ISO 'YYYY-MM-DDTHH:mm:ss' para evitar errores entre navegadores.
   // Ejemplo: '2025-12-24T20:00:00' (Año-Mes-Dia T Hora:Minutos:Segundos)
   const games = [
+    
+    
     { 
-      id: 'dice', 
-      name: 'Dados', 
-      url: 'Dice.html', 
-      unlockAt: '2026-01-03T10:00:00', // EJEMPLO: Cambia esto a tu fecha real
-      letter: 'C', 
-      hint: 'Lanza y acierta.' 
-    },
-    { 
-      id: 'cartas', 
-      name: 'Cartas', 
-      url: 'cartas.html', 
-      unlockAt: '2026-01-05T10:00:00', 
-      letter: '1', 
-      hint: 'Memoria y suerte.' 
-    },
-    { 
-      id: 'lizard', 
-      name: 'Laberinto', 
-      url: '../Laberinto/lab.html', 
-      unlockAt: '2026-01-07T10:00:00', 
-      letter: '6', 
-      hint: 'Encuentra la salida.' 
+      id: 'rompe', 
+      name: 'Rompecabezas', 
+      url: '../puzzle/Rompecabezas-master/index.html', 
+      unlockAt: '2026-01-04T10:00:00', 
+      letter: 'M', 
+      hint: 'Fácil' 
     },
     { 
       id: 'ahorcado',
@@ -53,12 +39,12 @@
       hint: 'Adivina la palabra.' 
     },
     { 
-      id: 'rompe', 
-      name: 'Rompecabezas', 
-      url: '../puzzle/Rompecabezas-master/index.html', 
-      unlockAt: '2026-01-04T10:00:00', 
-      letter: 'M', 
-      hint: 'Fácil' 
+      id: 'lizard', 
+      name: 'Laberinto', 
+      url: '../Laberinto/lab.html', 
+      unlockAt: '2026-01-07T10:00:00', 
+      letter: '6', 
+      hint: 'Encuentra la salida.' 
     },
     { 
       id: 'rubik', 
@@ -67,7 +53,23 @@
       unlockAt: '2026-01-03T10:00:00', 
       letter: 'V', 
       hint: 'Ármalo, si podés.' 
-    }
+    },
+    { 
+      id: 'dice', 
+      name: 'Space Invaders', 
+      url: 'Dice.html', 
+      unlockAt: '2026-01-03T10:00:00', // EJEMPLO: Cambia esto a tu fecha real
+      letter: 'C', 
+      hint: 'Aura' 
+    },
+    { 
+      id: 'cartas', 
+      name: 'Cartas', 
+      url: 'cartas.html', 
+      unlockAt: '2026-01-05T10:00:00', 
+      letter: '1', 
+      hint: 'Memoria y suerte.' 
+    },
   ];
 
   const codeOrder = games.map((g) => ({ id: g.id, letter: g.letter }));
