@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Cupones</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="shortcut icon" href="../sprites/favicon.ico">
+  <link rel="shortcut icon" href="../sprites/favicon.ico">
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&family=Sacramento&display=swap" rel="stylesheet">
   <style>
     :root{
@@ -55,7 +55,7 @@
     .coupon{
       background:#fff; border:2px dashed var(--accent-2); border-radius:16px;
       padding:14px; position:relative; overflow:hidden;
-      transition:opacity .2s ease;
+      transition:opacity .2s ease, filter .2s ease;
     }
     .coupon::after{
       content:""; position:absolute; inset:0; pointer-events:none;
@@ -76,7 +76,7 @@
     }
     footer{text-align:center; padding:12px; color:#8a6f7c}
 
-    /* Estado usado */
+    /* Estado usado (se mantiene por si lo usas luego) */
     .coupon.used{
       background:var(--grey-1);
       border-color:var(--grey-2);
@@ -91,9 +91,23 @@
       border-color:var(--grey-2);
       color:#555a66;
     }
+
+    /* Bloqueado por progreso (tachado) */
+    .coupon.locked{
+      opacity:.65;
+      filter:saturate(.7);
+    }
+    .coupon.locked h3,
+    .coupon.locked p{
+      text-decoration: line-through;
+      color:#8a6f7c;
+    }
     .estado{
       font-size:12px; font-weight:700; margin-left:8px; padding:2px 8px; border-radius:999px;
       background:#fff3f6; border:1px solid #ffd6e3; color:#b0476a;
+    }
+    .coupon.locked .estado{
+      background:#efeff2; border-color:#dedee3; color:#6e7480;
     }
     .coupon.used .estado{
       background:#efeff2; border-color:#dedee3; color:#6e7480;
@@ -126,7 +140,10 @@
   <footer>Hecho con amor 💖</footer>
 
   <script>
-    // Cupones definidos en código sin campo 'vence'
+    // Ids de juegos del lobby (de js/lobby.js)
+    const GAME_IDS = ['rompe','ahorcado','laberinto','dice','racer','rubik'];
+
+    // Cupones
     const cupones = [
       { titulo:"Película", descripcion:"Saltea turno y elije película", icono:"🍿", color:"#ffd0df", usos:"1", usado:false },
       { titulo:"Skincare", descripcion:"Rutina de cuidado de la piel y/o pelo", icono:"🧴", color:"#ffd0df", usos:"1", usado:false },
@@ -137,19 +154,13 @@
       { titulo:"Carta para ti", descripcion:"Una carta escrita a mano", icono:"💌", color:"#ffd0df", usos:"1", usado:false },
       { titulo:"Modelo 3D", descripcion:"Imprimir modelo de hasta 50g de filamento.", icono:"🖨️", color:"#ffd0df", usos:"1", usado:false },
       { titulo:"Video tocando canción en guitarra", descripcion:"Grabo un video tocando tu canción elegida en la guitarra.", icono:"🎸", color:"#ffd0df", usos:"1", usado:false },
-       
       { titulo:"Comprar remeras/ropa igual", descripcion:"Comprar remeras o ropa igual para ambos.", icono:"👕", color:"#ffd0df", usos:"1", usado:false },
-      
       { titulo:"Video tocando canción en piano", descripcion:"Grabo un video tocando tu canción elegida en el piano.", icono:"🎹", color:"#ffd0df", usos:"1", usado:false },
-      
       { titulo:"Chocolate o Helado", descripcion:"Comprar chocolate o helado", icono:"🍫", color:"#ffd0df", usos:"1", usado:false },
-      
       { titulo:"Salir a un Restaurante", descripcion:"Salir a un restaurante juntos.", icono:"🍽️", color:"#ffd0df", usos:"1", usado:false },
-      
       { titulo:"Jugar en dispositivo o juego de mesa", descripcion:"Viciar", icono:"🎮", color:"#ffd0df", usos:"1", usado:false },
-      
       { titulo:"Pasapalabra", descripcion:"Saltea todo", icono:"-_-", color:"#ffd0df", usos:"1", usado:false },
-      ];
+    ];
 
     const el = {
       lista: document.getElementById("lista"),
@@ -168,7 +179,19 @@
       return `rgb(${mix(r)}, ${mix(g)}, ${mix(b)})`;
     }
 
+    // === Progreso de juegos => cupones desbloqueados ===
+    function countWins(){
+      return GAME_IDS.reduce((acc,id)=>acc + (localStorage.getItem(`win_${id}`)==='1' ? 1 : 0), 0);
+    }
+    function calcUnlocked(total, wins){
+      const per = wins / GAME_IDS.length; // 0..1
+      return Math.floor(total * per);     // libera 1/6 por juego
+    }
+
     function render(){
+      const wins = countWins();
+      const toUnlock = calcUnlocked(cupones.length, wins);
+
       el.lista.innerHTML = "";
       if (!cupones.length){
         el.vacio.hidden = false;
@@ -176,14 +199,15 @@
       }
       el.vacio.hidden = true;
 
-      cupones.forEach(c=>{
+      cupones.forEach((c, idx)=>{
+        const locked = idx >= toUnlock;
         const card = document.createElement("article");
-        card.className = "coupon" + (c.usado ? " used" : "");
+        card.className = "coupon" + (locked ? " locked" : "");
         card.innerHTML = `
           <span class="chip" style="background:${lighten(c.color, .55)}; border-color:${lighten(c.color, .4)}">
             <span>${c.icono}</span>
             <strong>${c.usos === "ilimitado" ? "Ilimitado" : c.usos + " uso(s)"}</strong>
-            <span class="estado">${c.usado ? "Usado" : "Disponible"}</span>
+            <span class="estado">${locked ? "Bloqueado" : "Disponible"}</span>
           </span>
           <h3>${escapeHtml(c.titulo)}</h3>
           <p>${escapeHtml(c.descripcion)}</p>
@@ -192,7 +216,13 @@
       });
     }
 
-    render();
+    // Refrescar si cambia el localStorage (por ganar en otra pestaña)
+    window.addEventListener('storage', (e)=>{
+      if (!e.key) return;
+      if (e.key.startsWith('win_')) render();
+    });
+
+    document.addEventListener('DOMContentLoaded', render);
   </script>
 </body>
 </html>
