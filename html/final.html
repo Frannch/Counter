@@ -161,7 +161,8 @@
       { titulo:"Jugar en dispositivo o juego de mesa", descripcion:"Viciar", icono:"🎮", color:"#ffd0df", usos:"1", usado:false },
       { titulo:"Pasapalabra", descripcion:"Saltea todo", icono:"-_-", color:"#ffd0df", usos:"1", usado:false },
       { titulo:"Coito", descripcion:"cococoito", icono:"🎮", color:"#ffd0df", usos:"1", usado:false },
-      { titulo:"Kiss", descripcion:"mua", icono:"🍫", color:"#ffd0df", usos:"1", usado:false }
+      { titulo:"Kiss", descripcion:"mua", icono:"🍫", color:"#ffd0df", usos:"1", usado:false },
+      { titulo:"Tiktok", descripcion:"Grabar tiktok (Nada gay)", icono:"🍿", color:"#ffd0df", usos:"1", usado:false }
     ];
 
     const el = {
@@ -186,8 +187,8 @@
       return GAME_IDS.reduce((acc,id)=>acc + (localStorage.getItem(`win_${id}`)==='1' ? 1 : 0), 0);
     }
     function calcUnlocked(total, wins){
-      const per = wins / GAME_IDS.length; // 0..1
-      return Math.floor(total * per);     // libera 1/6 por juego
+      // Siempre desbloquear todos los cupones
+      return total;
     }
 
     function render(){
