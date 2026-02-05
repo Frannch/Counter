@@ -46,12 +46,12 @@ body {
 .card {
   perspective: 1000px;
   width: 100%;
-  /* max-width: 400px; */ /* Puedes comentar o aumentar este valor */
-  min-width: 0;
-  box-sizing: border-box;
-  height: 260px; /* Ajusta según el contenido */
+  max-width: 260px;          /* tamaño visual tipo carta real */
+  aspect-ratio: 63 / 88;    /* 👈 proporción exacta Pokémon */
   position: relative;
+  cursor: pointer;
 }
+
 
 .card-inner {
   width: 100%;
@@ -67,28 +67,25 @@ body {
 
 .card-front, .card-back {
   backface-visibility: hidden;
-  background: white;
-  padding: 1rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  /* background: white; */    /* sin fondo blanco */
+  background: transparent;
+  padding: 0;                 /* sin padding para que la imagen ocupe todo */
+  border-radius: 0;
+  box-shadow: none;
   position: absolute;
+  inset: 0;                   /* top/left/right/bottom = 0 */
   width: 100%;
   height: 100%;
-  min-height: unset; /* Elimina min-height si usas height fija */
-  top: 0;
-  left: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
+  display: block;             /* no usar flex */
+  overflow: hidden;
 }
 
 .card-front img,
 .card-back img {
-  width: 350px;
-  height: 270px;         /* Altura fija para recorte */
-  object-fit: fill;     /* Recorta la imagen para llenar el área */
-  border-radius: 8px;
+  width: 100%;
+  height: 100%;               /* llenar todo el card */
+  /* aspect-ratio: 16 / 9; */ /* no necesario dentro del card */
+  object-fit: cover;          /* sin deformar */
   display: block;
   margin: 0;
   border: none;
@@ -116,10 +113,11 @@ button:hover {
 }
 
 .card-btn-container {
-  margin-top: 10px;
+  margin-top: auto; /* empuja el botón al fondo de la tarjeta */
   width: 100%;
   display: flex;
   justify-content: center;
+  display: none; /* oculta los botones y su contenedor */
 }
 
 .pagination {
@@ -157,13 +155,10 @@ button:hover {
   .card {
     max-width: 100%;
     min-width: 0;
+    /* height: 340px; */      /* usar el aspect-ratio también en móvil */
   }
   .card-front, .card-back {
-    padding: 0.5rem;
-    min-height: 60px;
-  }
-  button {
-    font-size: 1rem;
-    padding: 10px 20px;
+    padding: 0;
+    min-height: 0;
   }
 }

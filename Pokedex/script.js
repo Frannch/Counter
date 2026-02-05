@@ -1,28 +1,26 @@
 const fonemas = [
-{ nombre: "1", frente: "Hoja1/tarjeta_tarjeta_0001_0_0.png", reverso: "pokemons/back.jpg" },
-{ nombre: "2", frente: "Hoja1/tarjeta_tarjeta_0001_0_1.png", reverso: "pokemons/back.jpg" },
-{ nombre: "3", frente: "Hoja1/tarjeta_tarjeta_0001_0_2.png", reverso: "pokemons/back.jpg" },
-{ nombre: "4", frente: "Hoja1/tarjeta_tarjeta_0001_0_3.png", reverso: "pokemons/back.jpg" },
-{ nombre: "5", frente: "Hoja1/tarjeta_tarjeta_0001_0_4.png", reverso: "pokemons/back.jpg" },
-{ nombre: "6", frente: "Hoja1/tarjeta_tarjeta_0001_0_5.png", reverso: "pokemons/back.jpg" },
-{ nombre: "7", frente: "Hoja1/tarjeta_tarjeta_0001_0_6.png", reverso: "pokemons/back.jpg" },
-{ nombre: "8", frente: "Hoja1/tarjeta_tarjeta_0001_0_7.png", reverso: "pokemons/back.jpg" },
-{ nombre: "9", frente: "Hoja1/tarjeta_tarjeta_0001_0_8.png", reverso: "pokemons/back.jpg" },
-{ nombre: "10", frente: "Hoja1/tarjeta_tarjeta_0001_0_9.png", reverso: "Hoja1/tarjeta_0002_11.png" },
-{ nombre: "11", frente: "Hoja1/tarjeta_tarjeta_0001_0_10.png", reverso: "Hoja1/tarjeta_0002_10.png" },
-{ nombre: "12", frente: "Hoja1/tarjeta_tarjeta_0001_0_11.png", reverso: "Hoja1/tarjeta_0002_9.png" },
+{ nombre: "1", frente: "pokemons/1.png", reverso: "pokemons/back.jpg" },
+{ nombre: "2", frente: "pokemons/2.png", reverso: "pokemons/back.jpg" },
+{ nombre: "3", frente: "pokemons/2,5.png", reverso: "pokemons/back.jpg" },
+{ nombre: "4", frente: "pokemons/3.png", reverso: "pokemons/back.jpg" },
+{ nombre: "5", frente: "pokemons/3,5.png", reverso: "pokemons/back.jpg" },
+{ nombre: "6", frente: "pokemons/4.png", reverso: "pokemons/back.jpg" },
+{ nombre: "7", frente: "pokemons/5.png", reverso: "pokemons/back.jpg" },
+{ nombre: "8", frente: "pokemons/6.png", reverso: "pokemons/back.jpg" },
+{ nombre: "9", frente: "pokemons/7.png", reverso: "pokemons/back.jpg" },
+{ nombre: "10", frente: "pokemons/8.png", reverso: "pokemons/back.jpg" },
+{ nombre: "11", frente: "pokemons/9.png", reverso: "pokemons/back.jpg" },
+{ nombre: "12", frente: "pokemons/10.png", reverso: "pokemons/back.jpg" },
   
 //Hoja 2
-{ nombre: "13", frente: "Hoja1/tarjeta_tarjeta_0003_0_0.png", reverso: "Hoja1/tarjeta_0004_2.png" },
-{ nombre: "14", frente: "Hoja1/tarjeta_tarjeta_0003_0_1.png", reverso: "Hoja1/tarjeta_0004_1.png" },
-{ nombre: "15", frente: "Hoja1/tarjeta_tarjeta_0003_0_2.png", reverso: "Hoja1/tarjeta_0004_0.png" },
-{ nombre: "16", frente: "Hoja1/tarjeta_tarjeta_0003_0_3.png", reverso: "Hoja1/tarjeta_0004_5.png" },
-{ nombre: "17", frente: "Hoja1/tarjeta_tarjeta_0003_0_4.png", reverso: "Hoja1/tarjeta_0004_4.png" },
-{ nombre: "18", frente: "Hoja1/tarjeta_tarjeta_0003_0_5.png", reverso: "Hoja1/tarjeta_0004_3.png" },
-{ nombre: "19", frente: "Hoja1/tarjeta_tarjeta_0003_0_6.png", reverso: "Hoja1/tarjeta_0004_8.png" },
-{ nombre: "20", frente: "Hoja1/tarjeta_tarjeta_0003_0_7.png", reverso: "Hoja1/tarjeta_0004_7.png" },
-{ nombre: "21", frente: "Hoja1/tarjeta_tarjeta_0003_0_8.png", reverso: "Hoja1/tarjeta_0004_6.png" },
-{ nombre: "22", frente: "Hoja1/tarjeta_tarjeta_0003_0_9.png", reverso: "Hoja1/tarjeta_0004_11.png" }
+{ nombre: "13", frente: "pokemons/11.png", reverso: "pokemons/back.jpg" },
+{ nombre: "14", frente: "pokemons/12.png", reverso: "pokemons/back.jpg" },
+{ nombre: "15", frente: "pokemons/13.png", reverso: "pokemons/back.jpg" },
+{ nombre: "16", frente: "pokemons/14.png", reverso: "pokemons/back.jpg" },
+{ nombre: "17", frente: "pokemons/15.png", reverso: "pokemons/back.jpg" },
+{ nombre: "18", frente: "pokemons/16.png", reverso: "pokemons/back.jpg" },
+{ nombre: "19", frente: "pokemons/fran.png", reverso: "pokemons/back.jpg" },
+{ nombre: "20", frente: "pokemons/Ro.png", reverso: "pokemons/back.jpg" }
 ];
 
 const container = document.getElementById('cards-container');
@@ -88,3 +86,9 @@ search.addEventListener('input', e => {
 });
 
 mostrarFonemas();
+
+document.querySelectorAll('.card').forEach((card) => {
+  card.addEventListener('click', () => {
+    card.classList.toggle('flipped');
+  });
+});
