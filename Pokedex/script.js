@@ -1,9 +1,9 @@
 const fonemas = [
 { nombre: "1", frente: "pokemons/1.png", reverso: "pokemons/back.jpg" },
 { nombre: "2", frente: "pokemons/2.png", reverso: "pokemons/back.jpg" },
-{ nombre: "3", frente: "pokemons/2,5.png", reverso: "pokemons/back.jpg" },
+{ nombre: "3", frente: "pokemons/2-5.png", reverso: "pokemons/back.jpg" },
 { nombre: "4", frente: "pokemons/3.png", reverso: "pokemons/back.jpg" },
-{ nombre: "5", frente: "pokemons/3,5.png", reverso: "pokemons/back.jpg" },
+{ nombre: "5", frente: "pokemons/3-5.png", reverso: "pokemons/back.jpg" },
 { nombre: "6", frente: "pokemons/4.png", reverso: "pokemons/back.jpg" },
 { nombre: "7", frente: "pokemons/5.png", reverso: "pokemons/back.jpg" },
 { nombre: "8", frente: "pokemons/6.png", reverso: "pokemons/back.jpg" },
@@ -24,45 +24,47 @@ const fonemas = [
 ];
 
 const container = document.getElementById('cards-container');
-const search = document.getElementById('search');
 const pagination = document.getElementById('pagination');
 
 const porPagina = 12;
 let paginaActual = 1;
+// Marca aquí las cartas con efecto (por nombre/id)
+const holoIds = new Set(["19", "20"]); // ejemplo
 
 function crearTarjeta(fonema) {
   const card = document.createElement('div');
   card.className = 'card';
+  if (holoIds.has(fonema.nombre)) card.classList.add('holo');
+
   card.innerHTML = `
     <div class="card-inner">
       <div class="card-front">
         <img src="${fonema.frente}" alt="${fonema.nombre} frente" />
-        <div class="card-btn-container">
-          <button>Ver reverso</button>
-        </div>
       </div>
       <div class="card-back">
-        <img src="${fonema.reverso}" alt="${fonema.nombre} reverso" />
-        <div class="card-btn-container">
-          <button>Ver frente</button>
-        </div>
+        <img src="./${fonema.reverso}" alt="${fonema.nombre} reverso" />
       </div>
     </div>
   `;
-  const btns = card.querySelectorAll('button');
-  btns[0].addEventListener('click', () => card.classList.add('flipped'));
-  btns[1].addEventListener('click', () => card.classList.remove('flipped'));
+
+  card.addEventListener('click', () => {
+    card.classList.toggle('flipped');
+  });
+
+  const backImg = card.querySelector('.card-back img');
+  backImg.addEventListener('error', () => {
+    console.warn('No se encontró la imagen de reverso:', backImg.src);
+  });
+
   return card;
 }
-
-function mostrarFonemas(filtro = '', pagina = 1) {
-  const filtrados = fonemas.filter(f => f.nombre.toLowerCase().includes(filtro.toLowerCase()));
-  const totalPaginas = Math.ceil(filtrados.length / porPagina);
+function mostrarFonemas(pagina = 1) {
+  const totalPaginas = Math.ceil(fonemas.length / porPagina);
   const inicio = (pagina - 1) * porPagina;
   const fin = inicio + porPagina;
 
   container.innerHTML = '';
-  filtrados.slice(inicio, fin).forEach(fonema => {
+  fonemas.slice(inicio, fin).forEach(fonema => {
     container.appendChild(crearTarjeta(fonema));
   });
 
@@ -74,21 +76,20 @@ function mostrarFonemas(filtro = '', pagina = 1) {
     btn.disabled = i === pagina;
     btn.addEventListener('click', () => {
       paginaActual = i;
-      mostrarFonemas(search.value, i);
+      mostrarFonemas(i);
     });
     pagination.appendChild(btn);
   }
-}
 
-search.addEventListener('input', e => {
-  paginaActual = 1;
-  mostrarFonemas(e.target.value, paginaActual);
-});
+  // Subir al inicio al cambiar de página
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
 mostrarFonemas();
 
-document.querySelectorAll('.card').forEach((card) => {
-  card.addEventListener('click', () => {
-    card.classList.toggle('flipped');
-  });
-});
+// Elimina este bloque porque las tarjetas se crean dinámicamente y ya agregan su listener
+// document.querySelectorAll('.card').forEach((card) => {
+//   card.addEventListener('click', () => {
+//     card.classList.toggle('flipped');
+//   });
+// });
